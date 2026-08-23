@@ -62,8 +62,17 @@ export function Publication(props: Props) {
             ? "1px solid var(--colors-grey6)"
             : "1px solid var(--colors-grey7)",
         "&+&": {
-          borderTop: "none",
+          borderTop:
+            props.displayAs === "original"
+              ? "none"
+              : "1px solid var(--colors-grey7)",
+          marginTop: props.displayAs === "original" ? "0" : "s4",
         },
+
+        boxShadow:
+          props.displayAs === "original"
+            ? "none"
+            : "0 1px 2px hsla(0, 0%, 0%, .2)",
       })}
     >
       <PublicationTitle
