@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { getAuthorDetails, getAuthorsByLetter } from "../authors/api";
-import { AuthorDetails } from "../authors/authorDetails";
+import { getAuthorDetails } from "../authors/api";
+import { Author } from "../authors/author";
 
 export const Route = createFileRoute(
   "/authors/browse/by-letter/$letter/$author",
@@ -12,14 +12,9 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { letter, author } = Route.useParams();
   const { data, error, isPending } = useQuery({
-    queryKey: ["authorDetails", letter, author],
+    queryKey: ["authorDetails", author],
     queryFn: async () => getAuthorDetails(author),
   });
-  console.log({ letter, author, data });
 
-  return (
-    <div>
-      details: <AuthorDetails author={data} />
-    </div>
-  );
+  return <Author author={data} />;
 }

@@ -36,7 +36,14 @@ export function Author(props: { author?: AuthorDto }) {
           </ul>
         </div>
       ) : null}
-      <Publications />
+      <section>
+        <h4>Julkaisut</h4>
+        <div>
+          {props.author.publications?.map((publication) => (
+            <Publication key={publication.id} />
+          ))}
+        </div>
+      </section>
     </article>
   );
 }

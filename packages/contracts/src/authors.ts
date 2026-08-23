@@ -1,4 +1,5 @@
 import * as v from "valibot";
+import { PublicationDtoSchema } from "./publications.ts";
 
 export const AuthorDtoSchema = v.object({
   id: v.string(),
@@ -11,24 +12,13 @@ export const AuthorDtoSchema = v.object({
   language: v.optional(v.string()),
   biographicalDetails: v.optional(v.string()),
   professionalDetails: v.optional(v.string()),
+  publications: v.array(PublicationDtoSchema),
 });
 
 export type AuthorListItemDto = {
   name: string;
   yearOfBirth?: number;
   yearOfDeath?: number;
-};
-
-export type AuthorDetailsDto = {
-  id: string;
-  name: string;
-  pseudonyms?: string;
-  yearOfBirth?: number;
-  yearOfDeath?: number;
-  country?: string;
-  language?: string;
-  biographicalDetails?: string;
-  professionalDetails?: string;
 };
 
 export type GetAuthorsResponse = {

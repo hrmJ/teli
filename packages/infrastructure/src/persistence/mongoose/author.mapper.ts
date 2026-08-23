@@ -1,6 +1,7 @@
 import type { AuthorDocument } from "./author.schema.ts";
 import type { Author } from "@teliapi/domain/authors";
 import { nullToUndefined } from "@teliapi/language";
+import { publicationToDomain } from "./publication.mapper.ts";
 
 export function authorToDomain(doc: AuthorDocument): Author {
   return {
@@ -14,6 +15,6 @@ export function authorToDomain(doc: AuthorDocument): Author {
     language: nullToUndefined(doc.language),
     biographicalDetails: nullToUndefined(doc["biographical details"]),
     professionalDetails: nullToUndefined(doc["professional details"]),
-    publications: [],
+    publications: doc.publications.map(publicationToDomain),
   };
 }

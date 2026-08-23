@@ -1,4 +1,5 @@
 import { Document, Schema, model, type InferSchemaType } from "mongoose";
+import { publicationSchema } from "./publication.schema.ts";
 
 const authorSchema = new Schema({
   name: { type: String, default: "?", sparse: true },
@@ -10,7 +11,7 @@ const authorSchema = new Schema({
   language: { type: String },
   "biographical details": { type: String },
   "professional details": { type: String },
-  publications: [],
+  publications: [publicationSchema],
 });
 
 export type AuthorDocument = Document & InferSchemaType<typeof authorSchema>;

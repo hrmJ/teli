@@ -4,6 +4,7 @@ import { resetDb } from "./helpers/db.ts";
 import { AuthorModel, connectMongoose } from "@teliapi/infrastructure/mongoose";
 import { testConfig } from "./config.ts";
 import { authorFixture } from "./fixtures/authors.fixture.ts";
+import { publicationFixture } from "./fixtures/publications.fixture.ts";
 
 before(async () => {
   await connectMongoose(testConfig.mongoUrl);
@@ -57,7 +58,8 @@ test("Viewing details responds by an author's details", async () => {
     name: "Esimerkki Aino",
     pseudonyms: "Ainukka",
     country: "Finland",
-  };
+    publications: [publicationFixture()],
+  } as any;
   // Arrange
   await AuthorModel.insertMany([authorFixture(details)]);
 
@@ -65,6 +67,19 @@ test("Viewing details responds by an author's details", async () => {
   const resp = await fetch(`${testConfig.baseUrl}/authors/${details.name}`);
   const json = (await resp.json()) as any;
 
+  const expectedPublicationOutput = {
+    title: "Pitkä yksinäisyys",
+    documentType: "book",
+    englishTitle: "Solitude",
+    otherAuthors: "Alituisa Anna",
+    publicationName: "Kokoelma 1",
+    publishLocation: "Helsinki",
+    year: 1987,
+  };
+
   // Assert
-  assert.partialDeepStrictEqual(json, details);
+  assert.partialDeepStrictEqual(json, {
+    ...details,
+    publications: [expectedPublicationOutput],
+  });
 });

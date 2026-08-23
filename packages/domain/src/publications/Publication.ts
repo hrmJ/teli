@@ -1,4 +1,5 @@
 export type Publication = {
+  id: string;
   title?: string;
   englishTitle?: string;
   otherAuthors?: string;

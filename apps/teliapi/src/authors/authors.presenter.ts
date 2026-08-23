@@ -1,5 +1,5 @@
 import type {
-  AuthorDetailsDto,
+  AuthorDto,
   AuthorIndexDto,
   AuthorListItemDto,
 } from "@teliapi/contracts/authors";
@@ -19,9 +19,7 @@ export function presentAuthorIndex(result: AuthorIndexResult): AuthorIndexDto {
   };
 }
 
-export function presentAuthorDetails(
-  result: AuthorDetailsResult,
-): AuthorDetailsDto {
+export function presentAuthorDetails(result: AuthorDetailsResult): AuthorDto {
   if (!result) throw new Error("Invalid author entry");
   return {
     id: result.id,
@@ -33,6 +31,7 @@ export function presentAuthorDetails(
     pseudonyms: result.pseudonyms,
     yearOfBirth: result.yearOfBirth,
     yearOfDeath: result.yearOfDeath,
+    publications: result.publications,
   };
 }
 

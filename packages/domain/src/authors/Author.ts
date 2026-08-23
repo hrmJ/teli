@@ -1,3 +1,5 @@
+import type { Publication } from "../publications/Publication.ts";
+
 export type Author = {
   id: string;
   name: string;
@@ -9,5 +11,5 @@ export type Author = {
   language?: string;
   biographicalDetails?: string;
   professionalDetails?: string;
-  publications: string[];
+  publications: Publication[];
 };

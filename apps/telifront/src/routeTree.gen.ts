@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthorsRouteImport } from './routes/authors'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthorsBrowseRouteImport } from './routes/authors.browse'
+import { Route as AuthorsBrowseViewRouteImport } from './routes/authors.browse.view'
 import { Route as AuthorsBrowseByLetterLetterRouteImport } from './routes/authors.browse.by-letter.$letter'
 import { Route as AuthorsBrowseByLetterLetterAuthorRouteImport } from './routes/authors.browse.by-letter.$letter.$author'
 
@@ -30,6 +31,11 @@ const AuthorsBrowseRoute = AuthorsBrowseRouteImport.update({
   path: '/browse',
   getParentRoute: () => AuthorsRoute,
 } as any)
+const AuthorsBrowseViewRoute = AuthorsBrowseViewRouteImport.update({
+  id: '/view',
+  path: '/view',
+  getParentRoute: () => AuthorsBrowseRoute,
+} as any)
 const AuthorsBrowseByLetterLetterRoute =
   AuthorsBrowseByLetterLetterRouteImport.update({
     id: '/by-letter/$letter',
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/authors': typeof AuthorsRouteWithChildren
   '/authors/browse': typeof AuthorsBrowseRouteWithChildren
+  '/authors/browse/view': typeof AuthorsBrowseViewRoute
   '/authors/browse/by-letter/$letter': typeof AuthorsBrowseByLetterLetterRouteWithChildren
   '/authors/browse/by-letter/$letter/$author': typeof AuthorsBrowseByLetterLetterAuthorRoute
 }
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/authors': typeof AuthorsRouteWithChildren
   '/authors/browse': typeof AuthorsBrowseRouteWithChildren
+  '/authors/browse/view': typeof AuthorsBrowseViewRoute
   '/authors/browse/by-letter/$letter': typeof AuthorsBrowseByLetterLetterRouteWithChildren
   '/authors/browse/by-letter/$letter/$author': typeof AuthorsBrowseByLetterLetterAuthorRoute
 }
@@ -62,6 +70,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/authors': typeof AuthorsRouteWithChildren
   '/authors/browse': typeof AuthorsBrowseRouteWithChildren
+  '/authors/browse/view': typeof AuthorsBrowseViewRoute
   '/authors/browse/by-letter/$letter': typeof AuthorsBrowseByLetterLetterRouteWithChildren
   '/authors/browse/by-letter/$letter/$author': typeof AuthorsBrowseByLetterLetterAuthorRoute
 }
@@ -71,6 +80,7 @@ export interface FileRouteTypes {
     | '/'
     | '/authors'
     | '/authors/browse'
+    | '/authors/browse/view'
     | '/authors/browse/by-letter/$letter'
     | '/authors/browse/by-letter/$letter/$author'
   fileRoutesByTo: FileRoutesByTo
@@ -78,6 +88,7 @@ export interface FileRouteTypes {
     | '/'
     | '/authors'
     | '/authors/browse'
+    | '/authors/browse/view'
     | '/authors/browse/by-letter/$letter'
     | '/authors/browse/by-letter/$letter/$author'
   id:
@@ -85,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/authors'
     | '/authors/browse'
+    | '/authors/browse/view'
     | '/authors/browse/by-letter/$letter'
     | '/authors/browse/by-letter/$letter/$author'
   fileRoutesById: FileRoutesById
@@ -116,6 +128,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/authors/browse'
       preLoaderRoute: typeof AuthorsBrowseRouteImport
       parentRoute: typeof AuthorsRoute
+    }
+    '/authors/browse/view': {
+      id: '/authors/browse/view'
+      path: '/view'
+      fullPath: '/authors/browse/view'
+      preLoaderRoute: typeof AuthorsBrowseViewRouteImport
+      parentRoute: typeof AuthorsBrowseRoute
     }
     '/authors/browse/by-letter/$letter': {
       id: '/authors/browse/by-letter/$letter'
@@ -150,10 +169,12 @@ const AuthorsBrowseByLetterLetterRouteWithChildren =
   )
 
 interface AuthorsBrowseRouteChildren {
+  AuthorsBrowseViewRoute: typeof AuthorsBrowseViewRoute
   AuthorsBrowseByLetterLetterRoute: typeof AuthorsBrowseByLetterLetterRouteWithChildren
 }
 
 const AuthorsBrowseRouteChildren: AuthorsBrowseRouteChildren = {
+  AuthorsBrowseViewRoute: AuthorsBrowseViewRoute,
   AuthorsBrowseByLetterLetterRoute:
     AuthorsBrowseByLetterLetterRouteWithChildren,
 }

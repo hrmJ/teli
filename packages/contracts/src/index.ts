@@ -1,8 +1,8 @@
 export type {
   AuthorDto,
   AuthorListItemDto,
-  AuthorDetailsDto,
   GetAuthorsResponse,
 } from "./authors.ts";
 
+export { type PublicationDto } from "./publications.ts";
 export { AuthorDtoSchema } from "./authors.ts";
