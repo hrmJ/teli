@@ -13,4 +13,7 @@ test("User can browse authors", { tag: "@noauth" }, async ({ page }) => {
 
   await page.getByText("O", { exact: true }).click();
   await page.getByText("Onerva").click();
+
+  await page.getByText("Tekijän tiedot").click();
+  await expect(page.getByText("Syntymävuosi")).toBeVisible();
 });

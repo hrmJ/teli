@@ -24,6 +24,7 @@ export function presentAuthorDetails(
 ): AuthorDetailsDto {
   if (!result) throw new Error("Invalid author entry");
   return {
+    id: result.id,
     name: result.name,
     biographicalDetails: result.biographicalDetails,
     country: result.country,

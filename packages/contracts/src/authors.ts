@@ -20,6 +20,7 @@ export type AuthorListItemDto = {
 };
 
 export type AuthorDetailsDto = {
+  id: string;
   name: string;
   pseudonyms?: string;
   yearOfBirth?: number;

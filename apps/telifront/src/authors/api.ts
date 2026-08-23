@@ -27,7 +27,11 @@ export async function getAuthorDetails(name: string) {
 
   const data: unknown = await response.json();
 
-  return v.parse(AuthorDtoSchema, data);
+  const parsed = v.safeParse(AuthorDtoSchema, data);
+  if (!parsed.success) {
+    throw new Error("Invalid author data");
+  }
+  return parsed.output;
 }
 
 export async function getAuthorsByLetter(letter: string) {
