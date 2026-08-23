@@ -54,19 +54,36 @@ test("Listing by letter returns all authors' family names beginning with the giv
 });
 
 test("Viewing details responds by an author's details", async () => {
+  // Arrange
+  const receptionAuthorDetails = {
+    publications: [publicationFixture()],
+  } as any;
+
+  // Insert a publication first, then mark that as a translation
+  const receptionAuthor = await AuthorModel.insertOne(
+    authorFixture(receptionAuthorDetails),
+  );
+  const [reception] = receptionAuthor.publications;
+  const receptionId = reception._id.toString();
+
   const details = {
     name: "Esimerkki Aino",
     pseudonyms: "Ainukka",
     country: "Finland",
-    publications: [publicationFixture()],
+    publications: [
+      publicationFixture({
+        receptions: { translations: [receptionId] },
+      }),
+    ],
   } as any;
-  // Arrange
-  await AuthorModel.insertMany([authorFixture(details)]);
+
+  await AuthorModel.insertOne(authorFixture(details));
 
   // Act
   const resp = await fetch(`${testConfig.baseUrl}/authors/${details.name}`);
   const json = (await resp.json()) as any;
 
+  // Assert
   const expectedPublicationOutput = {
     title: "Pitkä yksinäisyys",
     documentType: "book",
@@ -75,11 +92,65 @@ test("Viewing details responds by an author's details", async () => {
     publicationName: "Kokoelma 1",
     publishLocation: "Helsinki",
     year: 1987,
+    receptions: {
+      translations: [receptionId],
+    },
   };
-
-  // Assert
   assert.partialDeepStrictEqual(json, {
     ...details,
     publications: [expectedPublicationOutput],
+  });
+});
+
+test("Receptions can be fetched by publication id", async () => {
+  // Arrange
+  const receptionAuthorDetails = {
+    publications: [publicationFixture()],
+  } as any;
+
+  // Insert a publication first, then mark that as a translation
+  const receptionAuthor = await AuthorModel.insertOne(
+    authorFixture(receptionAuthorDetails),
+  );
+  const [reception] = receptionAuthor.publications;
+  const receptionId = reception._id.toString();
+
+  const details = {
+    name: "Esimerkki Aino",
+    pseudonyms: "Ainukka",
+    country: "Finland",
+    publications: [
+      publicationFixture({
+        receptions: { translations: [receptionId] },
+      }),
+    ],
+  } as any;
+
+  const originalAuthor = await AuthorModel.insertOne(authorFixture(details));
+  const original = originalAuthor.publications.at(0);
+  const originalId = original?._id;
+
+  // Act
+  const resp = await fetch(
+    `${testConfig.baseUrl}/publications/${originalId}/receptions`,
+  );
+
+  // Assert
+  assert.equal(resp.status, 200);
+  const json = await resp.json();
+  assert.deepStrictEqual(json, {
+    translations: [
+      {
+        id: receptionId,
+        year: 1987,
+        documentType: "book",
+        englishTitle: "Solitude",
+        otherAuthors: "Alituisa Anna",
+      },
+    ],
+    adaptations: [],
+    articles: [],
+    other: [],
+    reviews: [],
   });
 });

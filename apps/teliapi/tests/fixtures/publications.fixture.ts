@@ -2,7 +2,7 @@ import type { PublicationDocument } from "@teliapi/infrastructure/mongoose";
 
 export function publicationFixture(
   overrides: Partial<PublicationDocument> = {},
-): PublicationDocument {
+) {
   return {
     title: "Pitkä yksinäisyys",
     "english title": "Solitude",

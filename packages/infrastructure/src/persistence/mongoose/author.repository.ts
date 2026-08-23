@@ -4,6 +4,7 @@ import { authorToDomain } from "./author.mapper.ts";
 
 type AuthorModelLike = {
   find: typeof AuthorModel.find;
+  findOne: typeof AuthorModel.findOne;
   aggregate: typeof AuthorModel.aggregate;
 };
 
@@ -35,7 +36,7 @@ export function composeMongooseAuthorRepository(deps: Deps): AuthorRepository {
     },
 
     async getDetails(name: string) {
-      const document = await AuthorModel.findOne({ name });
+      const document = await deps.AuthorModel.findOne({ name });
 
       if (!document) {
         return null;

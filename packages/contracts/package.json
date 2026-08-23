@@ -4,7 +4,9 @@
   "description": "",
   "type": "module",
   "exports": {
-    "./authors": "./src/authors.ts"
+    "./authors": "./src/authors.ts",
+    "./publications": "./src/publications.ts",
+    "./receptions": "./src/receptions.ts"
   },
   "scripts": {},
   "keywords": [],

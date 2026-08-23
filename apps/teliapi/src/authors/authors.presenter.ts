@@ -20,7 +20,7 @@ export function presentAuthorIndex(result: AuthorIndexResult): AuthorIndexDto {
 }
 
 export function presentAuthorDetails(result: AuthorDetailsResult): AuthorDto {
-  if (!result) throw new Error("Invalid author entry");
+  if (!result) throw new Error("Missing author entry");
   return {
     id: result.id,
     name: result.name,
