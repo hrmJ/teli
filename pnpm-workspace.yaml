@@ -1,0 +1,7 @@
+packages:
+  - "apps/teliapi/"
+  - "apps/telifront/"
+npmrcAuthFile:
+  - "./.npmrc"
+minimumReleaseAge: 1440
+

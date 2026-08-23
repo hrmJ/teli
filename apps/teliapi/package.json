@@ -1,0 +1,26 @@
+{
+  "name": "teliapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.ts",
+    "test:integration:watch": "node --watch  --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'  "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.1"
+  },
+  "engines": {
+    "node": "26.2.0"
+  }
+}
