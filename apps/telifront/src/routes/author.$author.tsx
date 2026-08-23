@@ -8,6 +8,8 @@ import { getAuthorDetails } from "../authors/api";
 import { Author } from "../authors/Author";
 import { css } from "../../styled-system/css";
 import { linkButtonClass } from "../utils/linkButtonClass";
+import { iconButtonClass } from "../utils/iconButtonClass";
+import { ArrowLeftIcon, BackwardIcon } from "@heroicons/react/24/solid";
 
 export const Route = createFileRoute("/author/$author")({
   component: RouteComponent,
@@ -34,9 +36,10 @@ function RouteComponent() {
       <div>
         {canGoBack ? (
           <button
-            className={linkButtonClass}
+            className={`${linkButtonClass} ${iconButtonClass} ${css({ color: "grey4" })}`}
             onClick={() => router.history.back()}
           >
+            <ArrowLeftIcon className={css({ width: "s4", height: "s4" })} />
             Takaisin
           </button>
         ) : null}

@@ -24,7 +24,9 @@ export function PublicationLink(props: Props) {
           textOverflow: "ellipsis",
         })}
       >
-        <a href={props.value}>{props.value}</a>
+        <a href={props.value} target="_blank">
+          {props.value}
+        </a>
       </p>
     </div>
   );

@@ -42,7 +42,9 @@ export function PublicationTitle({
       >
         {title}
       </button>
-      <div className={css({ color: "grey4" })}>
+      <div
+        className={css({ color: displayAs === "original" ? "grey4" : "grey5" })}
+      >
         {publisherDetails.publisher || publisherDetails.publishLocation
           ? " "
           : ""}

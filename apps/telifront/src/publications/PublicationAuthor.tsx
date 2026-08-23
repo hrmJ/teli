@@ -1,5 +1,6 @@
 import { UserIcon } from "@heroicons/react/24/solid";
 import { css } from "../../styled-system/css";
+import { Link } from "@tanstack/react-router";
 
 interface Props {
   author?: string;
@@ -17,7 +18,11 @@ export function PublicationAuthor({ author, hidden }: Props) {
       })}
     >
       <UserIcon className={css({ width: "s3", height: "s3" })} />
-      <p>{author}</p>
+      <p>
+        <Link to={"/author/$author"} params={{ author }}>
+          {author}
+        </Link>
+      </p>
     </div>
   );
 }
