@@ -1,7 +1,8 @@
 packages:
-  - "apps/teliapi/"
-  - "apps/telifront/"
+  - "apps/*"
+  - "packages/*"
 npmrcAuthFile:
   - "./.npmrc"
 minimumReleaseAge: 1440
-
+allowBuilds:
+  esbuild: false

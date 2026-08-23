@@ -1,5 +1,10 @@
+import { connectMongoose } from "@teliapi/infrastructure/mongoose";
 import { makeApp } from "./app.ts";
+import { config } from "./config.ts";
+
 const app = makeApp();
-app.listen(3000, "127.0.0.1", () => {
-  console.log("listening...");
+await connectMongoose(config.mongoUrl);
+
+app.listen(config.port, config.host, () => {
+  console.log("Teliapi is ready.");
 });

@@ -1,0 +1,16 @@
+services:
+  mongo:
+    image: mongo:8.0
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-mongo-dev.js:/docker-entrypoint-initdb.d/01-init-mongo-dev.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: telitest
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:

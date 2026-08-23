@@ -1,10 +1,14 @@
 import type { RequestHandler } from "express";
+import type { GetAuthorIndex } from "@teliapi/application/authors";
 
-type AuthorsControllerDeps = {};
+type AuthorsControllerDeps = {
+  getAuthorIndex: GetAuthorIndex;
+};
 
 export function composeAuthorsController(deps: AuthorsControllerDeps) {
   const authorIndexHandler: RequestHandler = async function (_, res) {
-    res.json(["A", "E"]);
+    const authorIndex = await deps.getAuthorIndex();
+    res.json(authorIndex.letters);
   };
 
   return {

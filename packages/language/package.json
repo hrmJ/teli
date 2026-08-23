@@ -1,0 +1,16 @@
+{
+  "name": "@teliapi/language",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "26.2.0"
+  }
+}

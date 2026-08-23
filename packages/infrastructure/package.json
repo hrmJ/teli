@@ -1,0 +1,28 @@
+{
+  "name": "@teliapi/infrastructure",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "exports": {
+    "./mongoose": "./src/persistence/mongoose/index.ts"
+  },
+  "scripts": {
+    "test:watch": "node --watch  --test --import tsx '**/*.test.ts'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "26.2.0"
+  },
+  "dependencies": {
+    "@teliapi/application": "workspace:*",
+    "@teliapi/domain": "workspace:*",
+    "@teliapi/language": "workspace:*",
+    "mongoose": "^9.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "tsx": "^4.22.4"
+  }
+}

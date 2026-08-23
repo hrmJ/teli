@@ -1,0 +1,16 @@
+{
+  "name": "@teliapi/domain",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "exports": {
+    "./authors": "./src/authors/index.ts"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "26.2.0"
+  }
+}

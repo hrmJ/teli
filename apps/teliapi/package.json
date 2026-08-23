@@ -5,21 +5,24 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "node --watch src/index.ts",
-    "test:integration:watch": "node --watch  --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'",
-    "test:integration": "node --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'"
+    "dev": "node --import tsx --watch src/index.ts",
+    "test:integration:watch": "node --watch  --import tsx  --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'",
+    "test:integration": "node --import tsx  --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "dependencies": {
+    "@teliapi/application": "workspace:*",
+    "@teliapi/infrastructure": "workspace:*",
     "express": "^5.2.1",
     "typescript": "^6.0.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "@types/node": "^25.9.1"
+    "@types/node": "^25.9.1",
+    "mongoose": "^9.7.0",
+    "tsx": "^4.22.4"
   },
   "engines": {
     "node": "26.2.0"
