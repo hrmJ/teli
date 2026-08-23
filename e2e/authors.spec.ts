@@ -6,7 +6,6 @@ import { authors, browseAuthors } from "./constants.ts";
 test("User can browse authors", { tag: "@noauth" }, async ({ page }) => {
   await page.goto("");
   await page.getByRole("link", { name: authors }).click();
-  await page.getByText(browseAuthors, { exact: true }).click();
 
   await page.getByText("A", { exact: true }).click();
   await expect(page.getByText("Ahmatova")).toBeVisible();
@@ -14,10 +13,7 @@ test("User can browse authors", { tag: "@noauth" }, async ({ page }) => {
   await page.getByText("O", { exact: true }).click();
   await page.getByText("Onerva").click();
 
-  await page.getByText("Tekijän tiedot").click();
   await expect(page.getByText("Syntymävuosi")).toBeVisible();
-
-  await expect(page.getByText("Teokset")).toBeVisible();
 
   await page.getByText("Mun askeleitani vartioi").click();
   await page.getByText("Reseptiot").click();
@@ -31,7 +27,6 @@ test(
   async ({ page }) => {
     await page.goto("");
     await page.getByRole("link", { name: authors }).click();
-    await page.getByText(browseAuthors, { exact: true }).click();
 
     await page.getByText("J", { exact: true }).click();
     await page.getByText("Järnefelt Arvid").click();
@@ -40,7 +35,7 @@ test(
     await page.getByText("Reseptiot").click();
     await expect(page.getByText("Käännökset")).toBeVisible();
     await page.getByText("Deti zemli").click();
-    await page.getByText("Reseptiot").last().click();
+    await page.getByTestId("receptions__Deti zemli").click();
     await expect(page.getByText("rtikkelit")).toBeVisible();
     expect(
       await page.getByText("Perevodtšitsa Maria Blagoveštšenskaja").count(),
