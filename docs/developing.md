@@ -26,7 +26,7 @@ docker compose -f compose/docker-compose.dev.yaml up
 ```
 
 
-2. Start the individual apps by runing run `pnpm -r run dev` 
+2. Start the individual apps by runing run `pnpm -r --parallel run dev` 
 
 
 3. You should now be able to access the frontend at http://localhost:4000

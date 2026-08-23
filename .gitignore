@@ -1,5 +1,7 @@
 node_modules
 
+mongodb_data
+
 # Playwright
 /test-results/
 /playwright-report/

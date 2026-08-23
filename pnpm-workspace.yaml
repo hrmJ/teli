@@ -1,8 +1,6 @@
 packages:
   - "apps/*"
   - "packages/*"
-npmrcAuthFile:
-  - "./.npmrc"
 minimumReleaseAge: 1440
 allowBuilds:
   esbuild: false

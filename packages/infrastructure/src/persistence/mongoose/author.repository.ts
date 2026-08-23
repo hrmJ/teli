@@ -16,7 +16,7 @@ export function composeMongooseAuthorRepository(deps: Deps): AuthorRepository {
       const letters = await deps.AuthorModel.aggregate([
         {
           $group: {
-            _id: { $toUpper: { $substr: ["$name", 0, 1] } },
+            _id: { $toUpper: { $substrCP: ["$name", 0, 1] } },
           },
         },
         {
@@ -30,7 +30,7 @@ export function composeMongooseAuthorRepository(deps: Deps): AuthorRepository {
         },
       ]);
 
-      return letters.map((item) => item.letter);
+      return letters.map((item) => item.letter).filter((item) => item.trim());
     },
   };
 }

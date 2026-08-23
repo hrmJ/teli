@@ -1,2 +1,3 @@
 - [ ] incoming data validation for the API
 - [ ] firstname + lastname separated
+- [ ] pw fixture that runs the docker based mongorestore using a bson
