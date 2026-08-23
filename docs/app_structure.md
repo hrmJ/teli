@@ -19,6 +19,7 @@ holds the persistence layer implementations (currently only for mongo).
 # ...TS packages in /packages
 ├── packages
 │   ├── application
+│   ├── contracts
 │   ├── domain
 │   ├── infrastructure
 │   └── language

@@ -1,0 +1,2 @@
+- [ ] incoming data validation for the API
+- [ ] firstname + lastname separated

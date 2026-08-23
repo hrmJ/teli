@@ -28,8 +28,8 @@ test("Indexing by letters responds with letters of the authors in the db", async
   const resp = await fetch(`${testConfig.baseUrl}/authors/index`);
 
   assert.strictEqual(200, resp.status);
-  const json = await resp.json();
+  const json = (await resp.json()) as any;
 
   // Assert
-  assert.deepEqual(["A", "E"], json);
+  assert.deepEqual({ letters: ["A", "E"] }, json);
 });

@@ -26,8 +26,12 @@ docker compose -f compose/docker-compose.dev.yaml up
 ```
 
 
-2. run `pnpm run dev` inside `apps/teliapi` and `apps/telifront/`
+2. Start the individual apps by runing run `pnpm -r run dev` 
 
 
-3. You should now be able to access the frontend at http://localhost:8080
+3. You should now be able to access the frontend at http://localhost:4000
 
+
+# Making changes to frontend code
+
+Look at apps/telifront/README.md
