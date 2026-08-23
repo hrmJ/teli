@@ -15,6 +15,7 @@
   "dependencies": {
     "@teliapi/application": "workspace:*",
     "@teliapi/contracts": "workspace:*",
+    "@teliapi/domain": "workspace:*",
     "@teliapi/infrastructure": "workspace:*",
     "cors": "^2.8.6",
     "express": "^5.2.1",

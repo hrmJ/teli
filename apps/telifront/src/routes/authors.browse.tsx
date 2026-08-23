@@ -11,13 +11,15 @@ function RouteComponent() {
     queryKey: ["authorIndex"],
     queryFn: getAuthorIndex,
   });
-  console.log({ error, isPending, data });
   return (
     <div>
+      Browsing
       <ul>
         {data?.letters.map((letter) => (
           <li key={letter}>
-            <Link to="/authors/browse/view">{letter}</Link>
+            <Link to="/authors/browse/by-letter/$letter" params={{ letter }}>
+              {letter}
+            </Link>
           </li>
         ))}
       </ul>

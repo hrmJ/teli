@@ -1,5 +1,6 @@
 import { type AuthorRepository } from "@teliapi/application/authors";
-import type { AuthorModel } from "./author.schema.ts";
+import { AuthorModel } from "./author.schema.ts";
+import { authorToDomain } from "./author.mapper.ts";
 
 type AuthorModelLike = {
   find: typeof AuthorModel.find;
@@ -31,6 +32,28 @@ export function composeMongooseAuthorRepository(deps: Deps): AuthorRepository {
       ]);
 
       return letters.map((item) => item.letter).filter((item) => item.trim());
+    },
+
+    async getDetails(name: string) {
+      const document = await AuthorModel.findOne({ name });
+
+      if (!document) {
+        return null;
+      }
+
+      return authorToDomain(document);
+    },
+
+    async list(by) {
+      if (!by.letter) {
+        throw new Error("Authors can only be listed by letter");
+      }
+
+      const authors = await deps.AuthorModel.find({
+        name: { $regex: `^${by.letter}`, $options: "i" },
+      }).sort({ name: 1 });
+
+      return authors.map(authorToDomain);
     },
   };
 }

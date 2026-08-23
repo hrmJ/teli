@@ -13,6 +13,7 @@ import { Route as AuthorsRouteImport } from './routes/authors'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthorsBrowseRouteImport } from './routes/authors.browse'
 import { Route as AuthorsBrowseViewRouteImport } from './routes/authors.browse.view'
+import { Route as AuthorsBrowseByLetterLetterRouteImport } from './routes/authors.browse.by-letter.$letter'
 
 const AuthorsRoute = AuthorsRouteImport.update({
   id: '/authors',
@@ -34,18 +35,26 @@ const AuthorsBrowseViewRoute = AuthorsBrowseViewRouteImport.update({
   path: '/view',
   getParentRoute: () => AuthorsBrowseRoute,
 } as any)
+const AuthorsBrowseByLetterLetterRoute =
+  AuthorsBrowseByLetterLetterRouteImport.update({
+    id: '/by-letter/$letter',
+    path: '/by-letter/$letter',
+    getParentRoute: () => AuthorsBrowseRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/authors': typeof AuthorsRouteWithChildren
   '/authors/browse': typeof AuthorsBrowseRouteWithChildren
   '/authors/browse/view': typeof AuthorsBrowseViewRoute
+  '/authors/browse/by-letter/$letter': typeof AuthorsBrowseByLetterLetterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/authors': typeof AuthorsRouteWithChildren
   '/authors/browse': typeof AuthorsBrowseRouteWithChildren
   '/authors/browse/view': typeof AuthorsBrowseViewRoute
+  '/authors/browse/by-letter/$letter': typeof AuthorsBrowseByLetterLetterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +62,30 @@ export interface FileRoutesById {
   '/authors': typeof AuthorsRouteWithChildren
   '/authors/browse': typeof AuthorsBrowseRouteWithChildren
   '/authors/browse/view': typeof AuthorsBrowseViewRoute
+  '/authors/browse/by-letter/$letter': typeof AuthorsBrowseByLetterLetterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/authors' | '/authors/browse' | '/authors/browse/view'
+  fullPaths:
+    | '/'
+    | '/authors'
+    | '/authors/browse'
+    | '/authors/browse/view'
+    | '/authors/browse/by-letter/$letter'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/authors' | '/authors/browse' | '/authors/browse/view'
-  id: '__root__' | '/' | '/authors' | '/authors/browse' | '/authors/browse/view'
+  to:
+    | '/'
+    | '/authors'
+    | '/authors/browse'
+    | '/authors/browse/view'
+    | '/authors/browse/by-letter/$letter'
+  id:
+    | '__root__'
+    | '/'
+    | '/authors'
+    | '/authors/browse'
+    | '/authors/browse/view'
+    | '/authors/browse/by-letter/$letter'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -97,15 +123,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorsBrowseViewRouteImport
       parentRoute: typeof AuthorsBrowseRoute
     }
+    '/authors/browse/by-letter/$letter': {
+      id: '/authors/browse/by-letter/$letter'
+      path: '/by-letter/$letter'
+      fullPath: '/authors/browse/by-letter/$letter'
+      preLoaderRoute: typeof AuthorsBrowseByLetterLetterRouteImport
+      parentRoute: typeof AuthorsBrowseRoute
+    }
   }
 }
 
 interface AuthorsBrowseRouteChildren {
   AuthorsBrowseViewRoute: typeof AuthorsBrowseViewRoute
+  AuthorsBrowseByLetterLetterRoute: typeof AuthorsBrowseByLetterLetterRoute
 }
 
 const AuthorsBrowseRouteChildren: AuthorsBrowseRouteChildren = {
   AuthorsBrowseViewRoute: AuthorsBrowseViewRoute,
+  AuthorsBrowseByLetterLetterRoute: AuthorsBrowseByLetterLetterRoute,
 }
 
 const AuthorsBrowseRouteWithChildren = AuthorsBrowseRoute._addFileChildren(

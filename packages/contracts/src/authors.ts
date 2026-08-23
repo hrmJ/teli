@@ -14,10 +14,20 @@ export const AuthorDtoSchema = v.object({
 });
 
 export type AuthorListItemDto = {
-  id: string;
   name: string;
   yearOfBirth?: number;
   yearOfDeath?: number;
+};
+
+export type AuthorDetailsDto = {
+  name: string;
+  pseudonyms?: string;
+  yearOfBirth?: number;
+  yearOfDeath?: number;
+  country?: string;
+  language?: string;
+  biographicalDetails?: string;
+  professionalDetails?: string;
 };
 
 export type GetAuthorsResponse = {
@@ -30,4 +40,11 @@ export const AuthorIndexDtoSchema = v.object({
   letters: v.array(v.string()),
 });
 
+export const AuthorListDtoSchema = v.array(
+  v.object({
+    name: v.string(),
+  }),
+);
+
 export type AuthorIndexDto = v.InferOutput<typeof AuthorIndexDtoSchema>;
+export type AuthorListDto = v.InferOutput<typeof AuthorListDtoSchema>;

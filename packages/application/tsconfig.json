@@ -9,7 +9,7 @@
     "types": [
       "node"
     ],
-    "verbatimModuleSyntax": true,
+    "verbatimModulesyntax": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "strict": true

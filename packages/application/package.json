@@ -12,5 +12,8 @@
   "license": "ISC",
   "engines": {
     "node": "26.2.0"
+  },
+  "dependencies": {
+    "@teliapi/domain": "workspace:*"
   }
 }

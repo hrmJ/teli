@@ -1,4 +1,8 @@
-import { composeGetAuthorIndex } from "@teliapi/application/authors";
+import {
+  composeGetAuthorDetails,
+  composeGetAuthorIndex,
+  composeListAuthors,
+} from "@teliapi/application/authors";
 import {
   AuthorModel,
   composeMongooseAuthorRepository,
@@ -8,4 +12,6 @@ import { composeAuthorsController } from "./authors/authors.controller.ts";
 const authorRepository = composeMongooseAuthorRepository({ AuthorModel });
 export const authorsController = composeAuthorsController({
   getAuthorIndex: composeGetAuthorIndex({ authors: authorRepository }),
+  getAuthorDetails: composeGetAuthorDetails({ authors: authorRepository }),
+  listAuthors: composeListAuthors({ authors: authorRepository }),
 });
