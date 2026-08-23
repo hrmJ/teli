@@ -8,3 +8,7 @@ mongodb_data
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+## Panda
+styled-system
+styled-system-studio

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prepare": "panda codegen",
     "dev": "vite"
   },
   "keywords": [],
@@ -19,6 +20,7 @@
     "valibot": "^1.4.2"
   },
   "devDependencies": {
+    "@pandacss/dev": "^1.12.0",
     "@tanstack/router-plugin": "^1.168.20",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",

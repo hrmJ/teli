@@ -7,7 +7,7 @@ export const Route = createFileRoute("/authors")({
 function RouteComponent() {
   return (
     <div>
-      <Link to="/authors/browse">Selaus</Link>
+      <Link to="/authors/browse">Selaa tekijöitä</Link>
       <Outlet />
     </div>
   );
