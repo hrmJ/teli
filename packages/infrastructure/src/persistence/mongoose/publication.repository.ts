@@ -25,9 +25,10 @@ export function composeMongoosePublicationRepository(
       if (!publication) {
         return null;
       }
-      return publicationToDomain(publication);
+      return publicationToDomain(publication, author?.name);
     },
     async getByIds(ids) {
+      if (!ids) return [];
       const idSet = new Set(ids.map((id) => id.toString()));
 
       const authors = await deps.AuthorModel.find({
@@ -37,7 +38,7 @@ export function composeMongoosePublicationRepository(
       return authors.flatMap((author) =>
         author.publications
           .filter((publication) => idSet.has(publication._id.toString()))
-          .map(publicationToDomain),
+          .map((pub) => publicationToDomain(pub, author.name)),
       );
     },
   };

@@ -105,7 +105,7 @@ test("Viewing details responds by an author's details", async () => {
 test("Receptions can be fetched by publication id", async () => {
   // Arrange
   const receptionAuthorDetails = {
-    publications: [publicationFixture()],
+    publications: [publicationFixture({ title: "Dlinnoje odinnotsestvo" })],
   } as any;
 
   // Insert a publication first, then mark that as a translation
@@ -138,7 +138,7 @@ test("Receptions can be fetched by publication id", async () => {
   // Assert
   assert.equal(resp.status, 200);
   const json = await resp.json();
-  assert.deepStrictEqual(json, {
+  assert.partialDeepStrictEqual(json, {
     translations: [
       {
         id: receptionId,

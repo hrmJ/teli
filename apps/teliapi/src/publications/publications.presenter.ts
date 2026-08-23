@@ -5,6 +5,7 @@ export function presentPublication(result: Publication | null): PublicationDto {
   if (!result) throw new Error("Invalid publication entry");
   return {
     title: result.title,
+    author: result.author,
     id: result.id,
     year: result.year,
     documentType: result.documentType,

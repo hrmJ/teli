@@ -3,7 +3,7 @@ import { authors, browseAuthors } from "./constants.ts";
 
 // use {tag: @mutate} for mutating tests
 
-test.only("User can browse authors", { tag: "@noauth" }, async ({ page }) => {
+test("User can browse authors", { tag: "@noauth" }, async ({ page }) => {
   await page.goto("");
   await page.getByRole("link", { name: authors }).click();
   await page.getByText(browseAuthors, { exact: true }).click();
@@ -34,14 +34,20 @@ test(
     await page.getByText(browseAuthors, { exact: true }).click();
 
     await page.getByText("J", { exact: true }).click();
-    await page.getByText("Jansson").click();
+    await page.getByText("Järnefelt Arvid").click();
 
-    await page.getByText("Pappan och havet").click();
-    await expect(page.getByText("Käännökset")).toBeVisible();
-    await page.getByText("Papa i more_R").click();
+    await page.getByText("Maaemon lapsia").click();
     await page.getByText("Reseptiot").click();
-    await expect(page.getByText("Arvostelut")).toBeVisible();
-
-    await expect(page.getByText("Saint Petersburg")).toBeVisible();
+    await expect(page.getByText("Käännökset")).toBeVisible();
+    await page.getByText("Deti zemli").click();
+    await page.getByText("Reseptiot").last().click();
+    await expect(page.getByText("rtikkelit")).toBeVisible();
+    expect(
+      await page.getByText("Perevodtšitsa Maria Blagoveštšenskaja").count(),
+    ).toEqual(2);
+    await page
+      .getByText("Perevodtšitsa Maria Blagoveštšenskaja ")
+      .first()
+      .click();
   },
 );

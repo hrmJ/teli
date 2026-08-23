@@ -2,9 +2,13 @@ import type { Publication } from "@teliapi/domain/publications";
 import type { PublicationDocument } from "./publication.schema.ts";
 import { nullToUndefined } from "@teliapi/language";
 
-export function publicationToDomain(doc: PublicationDocument): Publication {
+export function publicationToDomain(
+  doc: PublicationDocument,
+  authorName?: string,
+): Publication {
   return {
     id: doc._id.toString(),
+    author: authorName ?? "unknown",
     title: nullToUndefined(doc["title"]),
     documentType: nullToUndefined(doc["document type"]),
     englishTitle: nullToUndefined(doc["english title"]),

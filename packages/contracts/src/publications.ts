@@ -2,6 +2,7 @@ import * as v from "valibot";
 
 export const PublicationDtoSchema = v.object({
   id: v.string(),
+  author: v.string(),
   title: v.optional(v.string()),
   englishTitle: v.optional(v.string()),
   otherAuthors: v.optional(v.string()),

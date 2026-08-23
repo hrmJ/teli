@@ -15,6 +15,8 @@ export function authorToDomain(doc: AuthorDocument): Author {
     language: nullToUndefined(doc.language),
     biographicalDetails: nullToUndefined(doc["biographical details"]),
     professionalDetails: nullToUndefined(doc["professional details"]),
-    publications: doc.publications.map(publicationToDomain),
+    publications: doc.publications.map((pub) =>
+      publicationToDomain(pub, doc.name),
+    ),
   };
 }
