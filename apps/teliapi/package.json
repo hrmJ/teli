@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch src/index.ts",
-    "test:integration:watch": "node --watch  --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'  "
+    "test:integration:watch": "node --watch  --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'",
+    "test:integration": "node --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'"
   },
   "keywords": [],
   "author": "",
