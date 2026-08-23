@@ -1,7 +1,7 @@
 # Tekstit liikkeessä (teli)
 
-This repository contains the source code an infrastructure for running the 
-Tekstit liikkeessä database.
+This repository contains the source code and infrastructure for running the 
+Tekstit liikkeessä (teli) database.
 
 To find out more, look at:
 

@@ -3,7 +3,7 @@
 ### Pre-requirements
 
 - Docker (e.g. via [docker desktop](https://www.docker.com/products/docker-desktop/) or [rancher desktop](https://rancherdesktop.io/))
-- nodejs. Check the required version from the `engine` section of the root package.json at `.`
+- nodejs. Check the required version from the `engine` section of the root package.json.
 - pnpm (https://pnpm.io)
 
 ### Installing dependencies
