@@ -17,5 +17,13 @@ export function publicationToDomain(
     publishLocation: nullToUndefined(doc["publish location"]),
     year: nullToUndefined(doc["year"]),
     receptions: nullToUndefined(doc.receptions),
+    publisher: nullToUndefined(doc.publisher),
+    date: nullToUndefined(doc.date),
+    genre: nullToUndefined(doc.genre),
+    language: nullToUndefined(doc.language),
+    link: nullToUndefined(doc.link),
+    note: nullToUndefined(doc.note),
+    reference: nullToUndefined(doc.reference),
+    source: nullToUndefined(doc.source),
   };
 }

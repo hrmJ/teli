@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "lib": [
-      "dom"
+      "dom",
+      "ESNext"
     ],
     "jsx": "react-jsx"
   }

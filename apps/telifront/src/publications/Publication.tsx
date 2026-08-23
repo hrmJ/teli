@@ -1,12 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
 import { PublicationDto } from "../../../../packages/contracts/src/publications";
-import { Entry } from "../utils/Entry";
+import { PublicationEntry } from "./PublicationEntry";
 import { useState } from "react";
 import { getReceptions } from "./api";
 import { Receptions } from "./Receptions";
+import { PublicationTitle } from "./PublicationTitle";
+import { PublicationLanguage } from "./PublicationLanguage";
+import { css } from "../../styled-system/css";
+import { PublicationType } from "./PublicationType";
+import { PublicationLink } from "./PublicationLink";
+import { PublicationAuthor } from "./PublicationAuthor";
+import { linkButtonClass } from "../utils/linkButtonClass";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { iconButtonClass } from "../utils/iconButtonClass";
+import { type DisplayAs } from "../utils/sharedTypes";
+import { hasReceptions, numberOfReceptions } from "./receptionHelpers";
 
 interface Props {
   publication: PublicationDto;
+  displayAs: DisplayAs;
 }
 
 export function Publication(props: Props) {
@@ -42,39 +54,76 @@ export function Publication(props: Props) {
   });
 
   return (
-    <article>
-      <button onClick={() => setIsOpen(!isOpen)}>{title}</button>
+    <article
+      className={css({
+        padding: "s5",
+        border:
+          props.displayAs === "original"
+            ? "1px solid var(--colors-grey6)"
+            : "1px solid var(--colors-grey7)",
+        "&+&": {
+          borderTop: "none",
+        },
+      })}
+    >
+      <PublicationTitle
+        onClick={() => setIsOpen(!isOpen)}
+        title={title}
+        year={year}
+        publisherDetails={{ publisher, publishLocation }}
+        displayAs={props.displayAs}
+      />
       {isOpen ? (
         <div>
-          <ul>
-            <Entry value={title} label="Title" />
-            <Entry value={author} label="Author" />
-            <Entry value={documentType} label="Document type" />
-            <Entry value={englishTitle} label="English title" />
-            <Entry value={otherAuthors} label="Other authors" />
-            <Entry value={publicationName} label="Publication name" />
-            <Entry value={year} label="Year" />
-            <Entry value={date} label="Date" />
-            <Entry value={genre} label="Genre" />
-            <Entry value={language} label="Language" />
-            <Entry value={link} label="Link" />
-            <Entry value={source} label="Source" />
-            <Entry value={publisher} label="Publisher" />
-            <Entry value={publishLocation} label="Publish location" />
-            <Entry value={reference} label="Reference" />
-            <Entry value={note} label="Notes" />
-          </ul>
-          <section>
-            <button
-              onClick={() => setReceptionsOpen(!receptionsOpen)}
-              data-testid={`receptions__${title}`}
-            >
-              Reseptiot
-            </button>
-            {!receptionsPending ? (
-              <Receptions {...receptions} hidden={!receptionsOpen} />
-            ) : null}
+          <section
+            className={css({
+              padding: "s3",
+              "& p": {
+                color: "grey3",
+                fontSize: "s3",
+              },
+            })}
+          >
+            <PublicationAuthor
+              author={author}
+              hidden={props.displayAs === "original"}
+            />
+            <PublicationLanguage language={language} />
+            <PublicationType genre={genre} documentType={documentType} />
+            <PublicationLink value={link} />
+            <ul className={css({ marginTop: "s4" })}>
+              <PublicationEntry value={englishTitle} label="English title" />
+              <PublicationEntry value={otherAuthors} label="Other authors" />
+              <PublicationEntry
+                value={publicationName}
+                label="Publication name"
+              />
+              <PublicationEntry value={date} label="Date" />
+              <PublicationEntry value={source} label="Source" />
+              <PublicationEntry value={reference} label="Reference" />
+              <PublicationEntry value={note} label="Notes" />
+            </ul>
           </section>
+          {!receptionsPending && hasReceptions(receptions) ? (
+            <section className={css({ marginTop: "s5" })}>
+              <button
+                onClick={() => setReceptionsOpen(!receptionsOpen)}
+                data-testid={`receptions__${title}`}
+                className={`${linkButtonClass} ${css({
+                  color: props.displayAs === "original" ? "grey3" : "grey4",
+                  fontSize: "s5",
+                })} ${iconButtonClass}`}
+              >
+                {receptionsOpen ? (
+                  <MinusIcon className={css({ width: "s4", height: "s4" })} />
+                ) : (
+                  <PlusIcon className={css({ width: "s4", height: "s4" })} />
+                )}
+                Reseptiot ({numberOfReceptions(receptions)})
+              </button>
+              <Receptions {...receptions} hidden={!receptionsOpen} />
+            </section>
+          ) : null}
         </div>
       ) : null}
     </article>
