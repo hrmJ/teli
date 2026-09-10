@@ -3,7 +3,7 @@ import type {
   GetAuthorDetails,
   GetAuthorIndex,
   ListAuthors,
-} from "@teliapi/application/authors";
+} from "@teli/application/authors";
 import {
   presentAuthorDetails,
   presentAuthorIndex,

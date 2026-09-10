@@ -1,5 +1,5 @@
-import type { PublicationDto } from "@teliapi/contracts/publications";
-import type { Publication } from "@teliapi/domain/publications";
+import type { PublicationDto } from "@teli/contracts/publications";
+import type { Publication } from "@teli/domain/publications";
 
 export function presentPublication(result: Publication | null): PublicationDto {
   if (!result) throw new Error("Invalid publication entry");

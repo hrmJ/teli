@@ -4,7 +4,7 @@ import {
   AuthorDtoSchema,
   AuthorIndexDtoSchema,
   AuthorListDtoSchema,
-} from "@teliapi/contracts/authors";
+} from "@teli/contracts/authors";
 
 export async function getAuthorIndex() {
   const response = await fetch(`${config.apiUrl}/authors/letters`);

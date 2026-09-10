@@ -1,6 +1,6 @@
 import type { AuthorDocument } from "./author.schema.ts";
-import type { Author } from "@teliapi/domain/authors";
-import { nullToUndefined } from "@teliapi/language";
+import type { Author } from "@teli/domain/authors";
+import { nullToUndefined } from "@teli/language";
 import { publicationToDomain } from "./publication.mapper.ts";
 
 export function authorToDomain(doc: AuthorDocument): Author {

@@ -1,4 +1,4 @@
-import { type PublicationRepository } from "./publicationRepository.ts";
+import type { PublicationRepository } from "./publicationRepository.ts";
 
 type Deps = {
   publications: PublicationRepository;

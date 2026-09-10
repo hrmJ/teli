@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import test, { beforeEach, before } from "node:test";
 import { resetDb } from "./helpers/db.ts";
-import { AuthorModel, connectMongoose } from "@teliapi/infrastructure/mongoose";
+import { AuthorModel, connectMongoose } from "@teli/infrastructure/mongoose";
 import { testConfig } from "./config.ts";
 import { authorFixture } from "./fixtures/authors.fixture.ts";
 import { publicationFixture } from "./fixtures/publications.fixture.ts";

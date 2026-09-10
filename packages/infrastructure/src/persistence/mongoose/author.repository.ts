@@ -1,4 +1,4 @@
-import { type AuthorRepository } from "@teliapi/application/authors";
+import type { AuthorRepository } from "@teli/application/authors";
 import { AuthorModel } from "./author.schema.ts";
 import { authorToDomain } from "./author.mapper.ts";
 

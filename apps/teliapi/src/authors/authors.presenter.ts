@@ -2,12 +2,12 @@ import type {
   AuthorDto,
   AuthorIndexDto,
   AuthorListItemDto,
-} from "@teliapi/contracts/authors";
+} from "@teli/contracts/authors";
 import type {
   GetAuthorDetails,
   GetAuthorIndex,
   ListAuthors,
-} from "@teliapi/application/authors";
+} from "@teli/application/authors";
 
 type AuthorIndexResult = Awaited<ReturnType<GetAuthorIndex>>;
 type AuthorDetailsResult = Awaited<ReturnType<GetAuthorDetails>>;

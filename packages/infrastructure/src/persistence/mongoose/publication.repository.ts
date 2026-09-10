@@ -1,6 +1,6 @@
 import type { AuthorModel } from "./author.schema.ts";
 import { publicationToDomain } from "./publication.mapper.ts";
-import type { PublicationRepository } from "@teliapi/application/publications";
+import type { PublicationRepository } from "@teli/application/publications";
 import type { PublicationModel } from "./publication.schema.ts";
 
 type AuthorModelLike = {

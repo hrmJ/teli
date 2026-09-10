@@ -1,5 +1,5 @@
 export const config = {
-  mongoUrl: "mongodb://teliuser:telipass@127.0.0.1:27017/telitest",
+  mongoUrl: `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DBNAME}`,
   port: 3000,
-  host: "127.0.0.1",
+  host: process.env.API_HOST ?? "127.0.0.1",
 };

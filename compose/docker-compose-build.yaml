@@ -1,0 +1,14 @@
+services:
+  api:
+    image: "${DOCKERHUB_USERNAME}/teli-api:${IMAGE_TAG}"
+    build:
+      context: ../
+      dockerfile: apps/teliapi/Dockerfile
+
+  front:
+    image: "${DOCKERHUB_USERNAME}/teli-front:${IMAGE_TAG}"
+    build:
+      context: ../
+      dockerfile: apps/telifront/Dockerfile
+      args:
+        VITE_API_URL: "${TELI_API_URL:?TELI_API_URL must be set}"

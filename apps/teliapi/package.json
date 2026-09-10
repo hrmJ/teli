@@ -1,11 +1,11 @@
 {
-  "name": "teliapi",
+  "name": "@teli/api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "node --import tsx --watch src/index.ts",
+    "dev": "node --watch src/index.ts",
     "test:integration:watch": "node --watch  --import tsx  --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'",
     "test:integration": "node --import tsx  --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'"
   },
@@ -13,10 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@teliapi/application": "workspace:*",
-    "@teliapi/contracts": "workspace:*",
-    "@teliapi/domain": "workspace:*",
-    "@teliapi/infrastructure": "workspace:*",
+    "@teli/application": "workspace:*",
+    "@teli/contracts": "workspace:*",
+    "@teli/domain": "workspace:*",
+    "@teli/infrastructure": "workspace:*",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "typescript": "^6.0.3"

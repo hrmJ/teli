@@ -1,4 +1,4 @@
-import { PublicationDto } from "@teliapi/contracts/publications";
+import { PublicationDto } from "@teli/contracts/publications";
 import { ReceptionsByType } from "./ReceptionsByType";
 
 interface Props {

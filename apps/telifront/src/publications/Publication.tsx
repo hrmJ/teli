@@ -13,7 +13,7 @@ import { PublicationAuthor } from "./PublicationAuthor";
 import { linkButtonClass } from "../utils/linkButtonClass";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { iconButtonClass } from "../utils/iconButtonClass";
-import { type DisplayAs } from "../utils/sharedTypes";
+import type { DisplayAs } from "../utils/sharedTypes";
 import { hasReceptions, numberOfReceptions } from "./receptionHelpers";
 
 interface Props {

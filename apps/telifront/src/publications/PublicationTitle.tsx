@@ -1,5 +1,5 @@
 import { css } from "../../styled-system/css";
-import { type DisplayAs } from "../utils/sharedTypes";
+import type { DisplayAs } from "../utils/sharedTypes";
 import { Publisher } from "./Publisher";
 
 interface Props {

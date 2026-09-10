@@ -1,0 +1,1 @@
+import{o as e,t}from"./link-AWh9wPVu.js";var n=e();function r(){return(0,n.jsx)(`div`,{children:(0,n.jsx)(t,{to:`/authors`,children:`Tekijät`})})}export{r as component};

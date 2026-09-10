@@ -1,4 +1,4 @@
-import { connectMongoose } from "@teliapi/infrastructure/mongoose";
+import { connectMongoose } from "@teli/infrastructure/mongoose";
 import { makeApp } from "./app.ts";
 import { config } from "./config.ts";
 

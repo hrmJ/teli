@@ -1,4 +1,4 @@
-import { ReceptionDto } from "@teliapi/contracts/receptions";
+import { ReceptionDto } from "@teli/contracts/receptions";
 
 export function hasReceptions(receptions?: ReceptionDto) {
   if (!receptions) return false;

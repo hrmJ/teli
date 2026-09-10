@@ -1,4 +1,4 @@
-import { AuthorModel } from "@teliapi/infrastructure/mongoose";
+import { AuthorModel } from "@teli/infrastructure/mongoose";
 import mongoose from "mongoose";
 
 export async function resetDb() {

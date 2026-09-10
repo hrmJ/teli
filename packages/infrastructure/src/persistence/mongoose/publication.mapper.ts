@@ -1,6 +1,6 @@
-import type { Publication } from "@teliapi/domain/publications";
+import type { Publication } from "@teli/domain/publications";
 import type { PublicationDocument } from "./publication.schema.ts";
-import { nullToUndefined } from "@teliapi/language";
+import { nullToUndefined } from "@teli/language";
 
 export function publicationToDomain(
   doc: PublicationDocument,

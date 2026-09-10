@@ -1,4 +1,4 @@
-import { type AuthorDto } from "@teliapi/contracts/authors";
+import type { AuthorDto } from "@teli/contracts/authors";
 import { AuthorEntry } from "./AuthorEntry";
 import { Publication } from "../publications/Publication";
 import { css } from "../../styled-system/css";

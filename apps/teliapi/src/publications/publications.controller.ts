@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import { presentPublication } from "./publications.presenter.ts";
-import type { GetReceptions } from "@teliapi/application/publications";
+import type { GetReceptions } from "@teli/application/publications";
 
 type PublicationsControllerDeps = {
   getReceptions: GetReceptions;

@@ -1,4 +1,4 @@
-import type { Author } from "@teliapi/domain/authors";
+import type { Author } from "@teli/domain/authors";
 import assert from "node:assert";
 import { describe, it } from "node:test";
 import { authorToDomain } from "./author.mapper.ts";

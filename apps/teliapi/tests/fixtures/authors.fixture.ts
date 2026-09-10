@@ -1,4 +1,4 @@
-import type { AuthorDocument } from "@teliapi/infrastructure/mongoose";
+import type { AuthorDocument } from "@teli/infrastructure/mongoose";
 
 export function authorFixture(overrides: Partial<AuthorDocument> = {}) {
   return {

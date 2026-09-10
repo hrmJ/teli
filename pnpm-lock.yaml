@@ -216,16 +216,16 @@ importers:
 
   apps/teliapi:
     dependencies:
-      '@teliapi/application':
+      '@teli/application':
         specifier: workspace:*
         version: link:../../packages/application
-      '@teliapi/contracts':
+      '@teli/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
-      '@teliapi/domain':
+      '@teli/domain':
         specifier: workspace:*
         version: link:../../packages/domain
-      '@teliapi/infrastructure':
+      '@teli/infrastructure':
         specifier: workspace:*
         version: link:../../packages/infrastructure
       cors:
@@ -265,7 +265,7 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.170.18
         version: 1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@teliapi/contracts':
+      '@teli/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
       react:
@@ -299,7 +299,7 @@ importers:
 
   packages/application:
     dependencies:
-      '@teliapi/domain':
+      '@teli/domain':
         specifier: workspace:*
         version: link:../domain
 
@@ -313,13 +313,13 @@ importers:
 
   packages/infrastructure:
     dependencies:
-      '@teliapi/application':
+      '@teli/application':
         specifier: workspace:*
         version: link:../application
-      '@teliapi/domain':
+      '@teli/domain':
         specifier: workspace:*
         version: link:../domain
-      '@teliapi/language':
+      '@teli/language':
         specifier: workspace:*
         version: link:../language
       mongoose:

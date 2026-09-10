@@ -1,4 +1,4 @@
-import { PublicationDto } from "@teliapi/contracts/publications";
+import { PublicationDto } from "@teli/contracts/publications";
 import { Publication } from "./Publication";
 import { css } from "../../styled-system/css";
 import { iconButtonClass } from "../utils/iconButtonClass";

@@ -1,0 +1,17 @@
+services:
+  api:
+    image: ${API_IMAGE}
+    restart: unless-stopped
+
+  frontend:
+    image: ${FRONTEND_IMAGE}
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

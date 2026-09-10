@@ -1,4 +1,4 @@
-import type { Author } from "@teliapi/domain/authors";
+import type { Author } from "@teli/domain/authors";
 
 export type AuthorRepository = {
   listLetters: () => Promise<string[]>;

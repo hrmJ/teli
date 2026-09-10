@@ -1,4 +1,4 @@
-import type { PublicationDocument } from "@teliapi/infrastructure/mongoose";
+import type { PublicationDocument } from "@teli/infrastructure/mongoose";
 
 export function publicationFixture(
   overrides: Partial<PublicationDocument> = {},

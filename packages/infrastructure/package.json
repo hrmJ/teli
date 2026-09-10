@@ -1,5 +1,5 @@
 {
-  "name": "@teliapi/infrastructure",
+  "name": "@teli/infrastructure",
   "version": "1.0.0",
   "description": "",
   "type": "module",
@@ -16,9 +16,9 @@
     "node": "26.2.0"
   },
   "dependencies": {
-    "@teliapi/application": "workspace:*",
-    "@teliapi/domain": "workspace:*",
-    "@teliapi/language": "workspace:*",
+    "@teli/application": "workspace:*",
+    "@teli/domain": "workspace:*",
+    "@teli/language": "workspace:*",
     "mongoose": "^9.7.0"
   },
   "devDependencies": {

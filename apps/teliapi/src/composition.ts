@@ -2,15 +2,15 @@ import {
   composeGetAuthorDetails,
   composeGetAuthorIndex,
   composeListAuthors,
-} from "@teliapi/application/authors";
+} from "@teli/application/authors";
 import {
   AuthorModel,
   composeMongooseAuthorRepository,
   composeMongoosePublicationRepository,
-} from "@teliapi/infrastructure/mongoose";
+} from "@teli/infrastructure/mongoose";
 import { composeAuthorsController } from "./authors/authors.controller.ts";
 import { composePublicationsController } from "./publications/publications.controller.ts";
-import { composeGetReceptions } from "@teliapi/application/publications";
+import { composeGetReceptions } from "@teli/application/publications";
 
 const authorRepository = composeMongooseAuthorRepository({ AuthorModel });
 const publicationRepository = composeMongoosePublicationRepository({
