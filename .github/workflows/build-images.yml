@@ -19,13 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: docker/login-action@v3
+      - uses: docker/login-action@v4
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build images
-        run: docker compose -f docker/compose.build.yml build
+        run: docker compose -f compose/docker-compose-build.yaml build
 
       - name: Push images
-        run: docker compose -f docker/compose.build.yml push
+        run: docker compose -f compose/docker-compose-build.yaml push
