@@ -12,3 +12,4 @@ services:
       dockerfile: apps/telifront/Dockerfile
       args:
         VITE_API_URL: "${TELI_API_URL:?TELI_API_URL must be set}"
+        VITE_BASE_PATH: "${TELI_BASE_PATH:?Required}"
