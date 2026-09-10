@@ -1,17 +1,33 @@
 services:
   api:
-    image: ${API_IMAGE}
+    image: ${API_IMAGE:?Required}
     restart: unless-stopped
+    environment:
+      API_HOST: "0.0.0.0"
+      MONGO_USER: ${TELIAPI_MONGO_USER:?Required}
+      MONGO_PASSWORD: ${TELIAPI_MONGO_PASSWORD:?Required}
+      MONGO_HOST: mongo
+      MONGO_PORT: 27017
+      MONGO_DBNAME: teliapi2
 
-  frontend:
-    image: ${FRONTEND_IMAGE}
+  front:
+    image: ${FRONTEND_IMAGE:?Required}
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:5002:80"
 
   mongo:
     image: mongo:7
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:?Required}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:?Required}
+      TELIAPI_MONGO_USER: ${TELIAPI_MONGO_USER:?Required}
+      TELIAPI_MONGO_PASSWORD: ${TELIAPI_MONGO_PASSWORD:?Required}
     volumes:
       - mongo_data:/data/db
-    restart: unless-stopped
+      - ./init-mongo-prod.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
 volumes:
   mongo_data:
+

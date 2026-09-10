@@ -1,3 +1,5 @@
+[![Build and push images](https://github.com/hrmJ/teli/actions/workflows/build-images.yml/badge.svg)](https://github.com/hrmJ/teli/actions/workflows/build-images.yml)
+
 # Tekstit liikkeessä (teli)
 
 This repository contains the source code and infrastructure for running the 
