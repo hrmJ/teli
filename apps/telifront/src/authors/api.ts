@@ -5,8 +5,10 @@ import {
   AuthorIndexDtoSchema,
   AuthorListDtoSchema,
 } from "@teli/contracts/authors";
+import { keycloak } from "../main";
 
 export async function getAuthorIndex() {
+  // await keycloak.updateToken(30);
   const response = await fetch(`${config.apiUrl}/authors/letters`);
 
   if (!response.ok) {
