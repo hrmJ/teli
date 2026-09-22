@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch src/index.ts",
-    "test:integration:watch": "node --watch  --import tsx  --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'",
-    "test:integration": "node --import tsx  --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'"
+    "test:integration:watch": "node --watch --test-concurrency=1  --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'",
+    "test:integration": "node --test-concurrency=1 --test-global-setup tests/setup.ts --test '**/*.test.integration.ts'"
   },
   "keywords": [],
   "author": "",

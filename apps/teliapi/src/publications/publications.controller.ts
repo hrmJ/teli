@@ -1,6 +1,7 @@
 import type { RequestHandler } from "express";
 import { presentPublication } from "./publications.presenter.ts";
 import type { GetReceptions } from "@teli/application/publications";
+import { validatePublicationId } from "./publications.validator.ts";
 
 type PublicationsControllerDeps = {
   getReceptions: GetReceptions;
@@ -9,7 +10,8 @@ type PublicationsControllerDeps = {
 export function composePublicationsController(
   deps: PublicationsControllerDeps,
 ) {
-  const receptionHandler: RequestHandler = async function (req, res) {
+  const viewReceptionsHandler: RequestHandler = async function (req, res) {
+    validatePublicationId(req, res);
     const id = req.params.id;
     if (!id || typeof id !== "string") {
       res.status(400).json({ error: "Missing publication id" });
@@ -25,7 +27,18 @@ export function composePublicationsController(
       reviews: receptions?.reviews.map(presentPublication) ?? [],
     });
   };
+
+  const updateReceptionsHandler: RequestHandler = async function (req, res) {
+    const id = req.params.id;
+    if (!id || typeof id !== "string") {
+      res.status(400).json({ error: "Missing publication id" });
+      return;
+    }
+    res.status(201).json({ status: "ok" });
+  };
+
   return {
-    receptionHandler,
+    viewReceptionsHandler,
+    updateReceptionsHandler,
   };
 }

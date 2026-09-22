@@ -1,13 +1,21 @@
 import assert from "node:assert";
-import test, { beforeEach, before } from "node:test";
+import test, { beforeEach, before, after } from "node:test";
 import { resetDb } from "./helpers/db.ts";
-import { AuthorModel, connectMongoose } from "@teli/infrastructure/mongoose";
+import {
+  AuthorModel,
+  connectMongoose,
+  disconnectMongoose,
+} from "@teli/infrastructure/mongoose";
 import { testConfig } from "./config.ts";
 import { authorFixture } from "./fixtures/authors.fixture.ts";
 import { publicationFixture } from "./fixtures/publications.fixture.ts";
 
 before(async () => {
   await connectMongoose(testConfig.mongoUrl);
+});
+
+after(async () => {
+  await disconnectMongoose();
 });
 
 beforeEach(async () => {

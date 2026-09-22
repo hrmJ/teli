@@ -5,4 +5,4 @@ export {
   PublicationModel,
   type PublicationDocument,
 } from "./publication.schema.ts";
-export { connectMongoose } from "./connection.ts";
+export { connectMongoose, disconnectMongoose } from "./connection.ts";
