@@ -17,6 +17,7 @@ export const AuthorDtoSchema = v.object({
 
 export type AuthorListItemDto = {
   name: string;
+  id: string;
   yearOfBirth?: number;
   yearOfDeath?: number;
 };
@@ -34,6 +35,7 @@ export const AuthorIndexDtoSchema = v.object({
 export const AuthorListDtoSchema = v.array(
   v.object({
     name: v.string(),
+    id: v.string(),
   }),
 );
 

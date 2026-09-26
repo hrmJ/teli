@@ -11,3 +11,8 @@ export {
 export { composeListAuthors, type ListAuthors } from "./authorList.query.ts";
 
 export { type AuthorRepository } from "./authorRepository.ts";
+
+export {
+  type ListAuthorNames,
+  composeListAuthorNames,
+} from "./authorListAllNames.query.ts";

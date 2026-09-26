@@ -40,5 +40,6 @@ export function presentAuthorList(
 ): AuthorListItemDto[] {
   return result.map((entry) => ({
     name: entry.name,
+    id: entry.id,
   }));
 }

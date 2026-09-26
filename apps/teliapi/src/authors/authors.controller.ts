@@ -2,6 +2,7 @@ import type { RequestHandler } from "express";
 import type {
   GetAuthorDetails,
   GetAuthorIndex,
+  ListAuthorNames,
   ListAuthors,
 } from "@teli/application/authors";
 import {
@@ -14,6 +15,7 @@ type AuthorsControllerDeps = {
   getAuthorIndex: GetAuthorIndex;
   getAuthorDetails: GetAuthorDetails;
   listAuthors: ListAuthors;
+  listAuthorNames: ListAuthorNames;
 };
 
 export function composeAuthorsController(deps: AuthorsControllerDeps) {
@@ -46,9 +48,16 @@ export function composeAuthorsController(deps: AuthorsControllerDeps) {
     res.json(dto);
   };
 
+  const authorNameListHandler: RequestHandler = async function (_, res) {
+    const authors = await deps.listAuthorNames();
+    const dto = presentAuthorList(authors);
+    res.json(dto);
+  };
+
   return {
     authorIndexHandler,
     authorDetailsHandler,
     authorListHandler,
+    authorNameListHandler,
   };
 }

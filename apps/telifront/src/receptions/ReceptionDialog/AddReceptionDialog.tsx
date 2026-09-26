@@ -28,7 +28,11 @@ export function AddReceptionDialog({ to }: Props) {
       {isOpen ? (
         <Dialog
           close={() => setIsOpen(false)}
-          styles={css.raw({ width: "s18" })}
+          styles={css.raw({
+            width: "s18",
+            maxHeight: "80vh",
+            overflow: "auto",
+          })}
         >
           <AddReceptionForm to={to} />
         </Dialog>

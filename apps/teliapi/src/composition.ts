@@ -1,6 +1,7 @@
 import {
   composeGetAuthorDetails,
   composeGetAuthorIndex,
+  composeListAuthorNames,
   composeListAuthors,
 } from "@teli/application/authors";
 import {
@@ -23,6 +24,7 @@ export const authorsController = composeAuthorsController({
   getAuthorIndex: composeGetAuthorIndex({ authors: authorRepository }),
   getAuthorDetails: composeGetAuthorDetails({ authors: authorRepository }),
   listAuthors: composeListAuthors({ authors: authorRepository }),
+  listAuthorNames: composeListAuthorNames({ authors: authorRepository }),
 });
 
 export const publicationsController = composePublicationsController({

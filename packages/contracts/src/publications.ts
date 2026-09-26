@@ -21,3 +21,9 @@ export const PublicationDtoSchema = v.object({
 });
 
 export type PublicationDto = v.InferOutput<typeof PublicationDtoSchema>;
+
+export const PublicationListDtoSchema = v.object({
+  publications: v.array(PublicationDtoSchema),
+});
+
+export type PublicationListDto = v.InferOutput<typeof PublicationListDtoSchema>;

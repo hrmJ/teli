@@ -5,7 +5,8 @@ import {
   AuthorIndexDtoSchema,
   AuthorListDtoSchema,
 } from "@teli/contracts/authors";
-import { keycloak } from "../main";
+
+import { keycloak } from "../auth/keycloak";
 
 export async function getAuthorIndex() {
   // await keycloak.updateToken(30);
@@ -41,6 +42,18 @@ export async function getAuthorsByLetter(letter: string) {
 
   if (!response.ok) {
     throw new Error(`Failed to load author: ${response.status}`);
+  }
+
+  const data: unknown = await response.json();
+
+  return v.parse(AuthorListDtoSchema, data);
+}
+
+export async function getAuthorList() {
+  const response = await fetch(`${config.apiUrl}/authors/names`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to load author name list: ${response.status}`);
   }
 
   const data: unknown = await response.json();

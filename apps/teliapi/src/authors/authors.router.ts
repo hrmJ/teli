@@ -4,6 +4,7 @@ import { authorsController } from "../composition.ts";
 export function composeAuthorRouter() {
   return Router()
     .get("/letters", authorsController.authorIndexHandler)
+    .get("/names", authorsController.authorNameListHandler)
     .get("/", authorsController.authorListHandler)
     .get("/:name", authorsController.authorDetailsHandler);
 }

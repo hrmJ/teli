@@ -14,6 +14,7 @@ export function AddReceptionForm({ to }: Props) {
   const steps = [
     { element: <ReceptionType />, label: "Määritä tyyppi" },
     { element: <SelectPublication />, label: "Valitse teos" },
+    { element: <div>Yhteenveto</div>, label: "Tarkista tiedot" },
   ] as const;
   const [activeStep, setActiveStep] = useState(0);
 

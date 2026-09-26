@@ -20,3 +20,20 @@ export function authorToDomain(doc: AuthorDocument): Author {
     ),
   };
 }
+
+export function authorToDomainWithoutPublication(
+  doc: AuthorDocument,
+): Omit<Author, "publications"> {
+  return {
+    id: doc._id.toString(),
+    name: doc.name,
+    pseudonyms: nullToUndefined(doc.pseudonyms),
+    otherNames: nullToUndefined(doc["other names"]),
+    yearOfBirth: nullToUndefined(doc["year of birth"]),
+    yearOfDeath: nullToUndefined(doc["year of death"]),
+    country: nullToUndefined(doc.country),
+    language: nullToUndefined(doc.language),
+    biographicalDetails: nullToUndefined(doc["biographical details"]),
+    professionalDetails: nullToUndefined(doc["professional details"]),
+  };
+}
