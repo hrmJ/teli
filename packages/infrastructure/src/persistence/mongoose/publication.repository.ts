@@ -1,7 +1,8 @@
+import { escapeRegex } from "@teli/language";
 import type { AuthorModel } from "./author.schema.ts";
 import { publicationToDomain } from "./publication.mapper.ts";
 import type { PublicationRepository } from "@teli/application/publications";
-import type { PublicationModel } from "./publication.schema.ts";
+import type { Publication } from "@teli/domain/publications";
 
 type AuthorModelLike = {
   find: typeof AuthorModel.find;
@@ -39,6 +40,25 @@ export function composeMongoosePublicationRepository(
         author.publications
           .filter((publication) => idSet.has(publication._id.toString()))
           .map((pub) => publicationToDomain(pub, author.name)),
+      );
+    },
+
+    async searchByTitle(title: string): Promise<Publication[]> {
+      const authors = await deps.AuthorModel.find({
+        "publications.title": {
+          $regex: escapeRegex(title),
+          $options: "i",
+        },
+      });
+
+      return authors.flatMap((author) =>
+        author.publications
+          .filter((publication) =>
+            publication.title?.toLowerCase().includes(title.toLowerCase()),
+          )
+          .map((pub) => {
+            return publicationToDomain(pub, author.name);
+          }),
       );
     },
   };

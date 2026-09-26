@@ -1,10 +1,14 @@
 import type { RequestHandler } from "express";
 import { presentPublication } from "./publications.presenter.ts";
-import type { GetReceptions } from "@teli/application/publications";
+import type {
+  GetPublications,
+  GetReceptions,
+} from "@teli/application/publications";
 import { validatePublicationId } from "./publications.validator.ts";
 
 type PublicationsControllerDeps = {
   getReceptions: GetReceptions;
+  getPublications: GetPublications;
 };
 
 export function composePublicationsController(
@@ -37,8 +41,21 @@ export function composePublicationsController(
     res.status(201).json({ status: "ok" });
   };
 
+  const viewPublicationsHandler: RequestHandler = async function (req, res) {
+    const title = req.query.title;
+    if (!title || typeof title !== "string") {
+      res.status(400).json({ error: "No search params in query" });
+      return;
+    }
+    const publicationsRaw = await deps.getPublications(title);
+    const publications = publicationsRaw.publications.map(presentPublication);
+
+    res.status(200).json({ publications });
+  };
+
   return {
     viewReceptionsHandler,
     updateReceptionsHandler,
+    viewPublicationsHandler,
   };
 }

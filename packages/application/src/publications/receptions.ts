@@ -18,7 +18,6 @@ export function composeGetReceptions({ publications }: Deps) {
         publications.getByIds(parent.receptions.reviews),
         publications.getByIds(parent.receptions.other),
       ]);
-    console.log({ translations, adaptations, articles, reviews, other });
     return { translations, adaptations, articles, reviews, other };
   };
 }

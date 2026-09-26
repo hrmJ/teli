@@ -10,7 +10,10 @@ import {
 } from "@teli/infrastructure/mongoose";
 import { composeAuthorsController } from "./authors/authors.controller.ts";
 import { composePublicationsController } from "./publications/publications.controller.ts";
-import { composeGetReceptions } from "@teli/application/publications";
+import {
+  composeGetPublications,
+  composeGetReceptions,
+} from "@teli/application/publications";
 
 const authorRepository = composeMongooseAuthorRepository({ AuthorModel });
 const publicationRepository = composeMongoosePublicationRepository({
@@ -24,4 +27,7 @@ export const authorsController = composeAuthorsController({
 
 export const publicationsController = composePublicationsController({
   getReceptions: composeGetReceptions({ publications: publicationRepository }),
+  getPublications: composeGetPublications({
+    publications: publicationRepository,
+  }),
 });
