@@ -2,6 +2,8 @@ import type { AuthorDto } from "@teli/contracts/authors";
 import { AuthorEntry } from "./AuthorEntry";
 import { Publication } from "../publications/Publication";
 import { css } from "../../styled-system/css";
+import { DocumentPlusIcon } from "@heroicons/react/24/solid";
+import { iconBtn } from "../styles/button";
 
 export function Author(props: { author?: AuthorDto }) {
   if (!props.author) return;
@@ -39,6 +41,19 @@ export function Author(props: { author?: AuthorDto }) {
         <AuthorEntry value={yearOfBirth} label="Syntymävuosi" />
         <AuthorEntry value={yearOfDeath} label="Kuolinvuosi" />
       </ul>
+
+      <button
+        className={css(iconBtn, {
+          color: "yellow.600",
+          fontSize: "s3",
+          marginTop: "s4",
+          padding: "s2",
+        })}
+      >
+        <DocumentPlusIcon className={css({ width: "s3", height: "s3" })} />
+        <div>Lisää teos</div>
+      </button>
+
       <section>
         <div className={css({ marginTop: "s8" })}>
           {props.author.publications.map((publication) => (

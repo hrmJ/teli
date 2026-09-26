@@ -10,11 +10,16 @@ import { css } from "../../styled-system/css";
 import { PublicationType } from "./PublicationType";
 import { PublicationLink } from "./PublicationLink";
 import { PublicationAuthor } from "./PublicationAuthor";
-import { linkButtonClass } from "../utils/linkButtonClass";
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
-import { iconButtonClass } from "../utils/iconButtonClass";
+import {
+  LinkIcon,
+  MinusIcon,
+  PlusIcon,
+  SquaresPlusIcon,
+} from "@heroicons/react/24/solid";
 import type { DisplayAs } from "../utils/sharedTypes";
 import { hasReceptions, numberOfReceptions } from "./receptionHelpers";
+import { iconBtn, linkBtn } from "../styles/button";
+import { AddReceptionDialog } from "../receptions/ReceptionDialog/AddReceptionDialog";
 
 interface Props {
   publication: PublicationDto;
@@ -118,10 +123,10 @@ export function Publication(props: Props) {
               <button
                 onClick={() => setReceptionsOpen(!receptionsOpen)}
                 data-testid={`receptions__${title}`}
-                className={`${linkButtonClass} ${css({
+                className={css(iconBtn, {
                   color: props.displayAs === "original" ? "grey3" : "grey4",
                   fontSize: "s5",
-                })} ${iconButtonClass}`}
+                })}
               >
                 {receptionsOpen ? (
                   <MinusIcon className={css({ width: "s4", height: "s4" })} />
@@ -133,6 +138,8 @@ export function Publication(props: Props) {
               <Receptions {...receptions} hidden={!receptionsOpen} />
             </section>
           ) : null}
+
+          <AddReceptionDialog to={title ?? "?"} />
         </div>
       ) : null}
     </article>

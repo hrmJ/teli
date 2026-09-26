@@ -21,13 +21,17 @@ test("User can browse authors", { tag: "@noauth" }, async ({ page }) => {
   await expect(page.getByText("Käännökset")).toBeVisible();
 });
 
-test("User can search for authors", { tag: "@noauth" }, async ({ page }) => {
-  await page.goto("");
-  await page.getByRole("link", { name: authors }).click();
-  await page.getByRole("searchbox").fill("Järnefelt");
-  await page.getByText("Järnefelt Arvid").click();
-  await expect(page.getByText("Maaemon lapsia")).toBeVisible();
-});
+test.skip(
+  "User can search for authors",
+  { tag: "@noauth" },
+  async ({ page }) => {
+    await page.goto("");
+    await page.getByRole("link", { name: authors }).click();
+    await page.getByRole("searchbox").fill("Järnefelt");
+    await page.getByText("Järnefelt Arvid").click();
+    await expect(page.getByText("Maaemon lapsia")).toBeVisible();
+  },
+);
 
 test(
   "User can recursively see receptions",

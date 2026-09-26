@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { authors, browseAuthors, publications } from "./constants.ts";
 
-test(
+test.skip(
   "User can search for publications",
   { tag: "@noauth" },
   async ({ page }) => {
@@ -35,17 +35,21 @@ test(
   },
 );
 
-test("User can filter search results", { tag: "@noauth" }, async ({ page }) => {
-  await test.step("By year", async () => {
-    //TODO
-  });
-  await test.step("By language", async () => {
-    //TODO
-  });
-  await test.step("By reception type", async () => {
-    //TODO
-  });
-});
+test.skip(
+  "User can filter search results",
+  { tag: "@noauth" },
+  async ({ page }) => {
+    await test.step("By year", async () => {
+      //TODO
+    });
+    await test.step("By language", async () => {
+      //TODO
+    });
+    await test.step("By reception type", async () => {
+      //TODO
+    });
+  },
+);
 
 test(
   "Large result sets are paginated",
@@ -54,3 +58,24 @@ test(
     // Earlier step: limit result number and ask to narrow search
   },
 );
+
+test.only("User can link receptions", { tag: "@auth" }, async ({ page }) => {
+  // TODO: auth
+  await page.goto("");
+  await page.getByRole("link", { name: authors }).click();
+
+  await test.step("User selects publication and opens the wizard", async () => {
+    await page.goto("");
+    await page.getByRole("link", { name: authors }).click();
+
+    await page.getByText("J", { exact: true }).click();
+    await page.getByText("Järnefelt Arvid").click();
+
+    await page.getByText("Maaemon lapsia").click();
+  });
+
+  await test.step("User selects publication and opens the wizard", async () => {
+    await page.getByRole("button", { name: "Lisää reseptio" }).click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+  });
+});

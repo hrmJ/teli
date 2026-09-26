@@ -24,6 +24,7 @@ export function PublicationTitle({
       className={css({
         display: "flex",
         alignItems: "center",
+        justifyContent: "space-between",
       })}
     >
       <button
