@@ -69,7 +69,17 @@ export function SelectPublication(props: Props) {
             setSearchVal={setSearchVal}
           />
           <Spinner enabled={fetchStatus === "fetching"} />
-          <ul>
+          <ul
+            className={css({
+              "& > li + li": { marginTop: "s3" },
+              marginTop: "s3",
+              paddingTop: "s4",
+              color: "grey4",
+              fontSize: "s3",
+              maxHeight: "s16",
+              overflow: "auto",
+            })}
+          >
             {publications?.map((publication) => (
               <li key={publication.id} className={css(labelContainer)}>
                 <input
