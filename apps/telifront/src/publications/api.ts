@@ -1,10 +1,7 @@
 import { config } from "../config";
 import * as v from "valibot";
 import { ReceptionDtoSchema } from "@teli/contracts/receptions";
-import {
-  PublicationDtoSchema,
-  PublicationListDtoSchema,
-} from "@teli/contracts/publications";
+import { PublicationListDtoSchema } from "@teli/contracts/publications";
 
 export async function getReceptions(originalId: string) {
   const response = await fetch(

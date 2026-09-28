@@ -1,20 +1,47 @@
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ArrowUpTrayIcon,
+} from "@heroicons/react/24/solid";
 import { css } from "../../../styled-system/css";
 import { iconBtnPill } from "../../styles/button";
 import { ReceptionType } from "./ReceptionType";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { numberCircle } from "../../styles/numbercircle";
 import { SelectPublication } from "./SelectPublication";
+import { receptionFormReducer } from "./receptionFormReducer";
+import { Summary } from "./Summary";
 
 interface Props {
   to: string;
 }
 
 export function AddReceptionForm({ to }: Props) {
+  const [state, dispatch] = useReducer(receptionFormReducer, {
+    receptionType: "translation",
+    createNewPublication: false,
+    newOrExistingPublication: "existing",
+  });
+
   const steps = [
-    { element: <ReceptionType />, label: "Määritä tyyppi" },
-    { element: <SelectPublication />, label: "Valitse teos" },
-    { element: <div>Yhteenveto</div>, label: "Tarkista tiedot" },
+    {
+      element: (
+        <ReceptionType dispatch={dispatch} selectedType={state.receptionType} />
+      ),
+      label: "Määritä tyyppi",
+    },
+    {
+      element: (
+        <SelectPublication
+          dispatch={dispatch}
+          existingOrNew={state.newOrExistingPublication}
+          newPublication={state.newPublication}
+          existingPublication={state.existingPublication}
+        />
+      ),
+      label: "Valitse teos",
+    },
+    { element: <Summary to={to} data={state} />, label: "Tarkista tiedot" },
   ] as const;
   const [activeStep, setActiveStep] = useState(0);
 
@@ -117,6 +144,28 @@ export function AddReceptionForm({ to }: Props) {
           >
             Jatka
             <ArrowRightIcon className={css({ width: "s4", height: "s4" })} />
+          </button>
+        ) : null}
+
+        {activeStep === steps.length - 1 ? (
+          <button
+            className={css(iconBtnPill, {
+              fontSize: "s3",
+              background: "green.600",
+              color: "white",
+            })}
+            onClick={(e) => {
+              e.preventDefault();
+              setActiveStep(activeStep + 1);
+            }}
+          >
+            <ArrowUpTrayIcon
+              className={css({
+                width: "s4",
+                height: "s4",
+              })}
+            />
+            Tallenna
           </button>
         ) : null}
       </div>

@@ -1,30 +1,46 @@
-import { useState } from "react";
+import { ActionDispatch, useEffect, useState } from "react";
 import { css } from "../../../styled-system/css";
 import { labelContainer } from "../../styles/label";
 import { useQuery } from "@tanstack/react-query";
 import { getPublications } from "../../publications/api";
 import { Spinner } from "../../components/Spinner";
 import { SearchBar } from "../../components/SearchBar";
-import { NewPublication } from "../../publications/NewPublication";
+import { PublicationForm } from "../../publications/form/PublicationForm";
+import { ReceptionFormAction } from "./receptionFormReducer";
 
 interface Props {
-  placeholder?: string;
+  existingOrNew: "existing" | "new";
+  existingPublication?: { title: string; id: string };
+  dispatch: ActionDispatch<[action: ReceptionFormAction]>;
+  newPublication?: Record<string, unknown>;
 }
 
-export function SelectPublication(props: Props) {
-  const [pubType, setPubType] = useState("old");
-  const [searchVal, setSearchVal] = useState("");
+export function SelectPublication({
+  existingOrNew,
+  existingPublication,
+  newPublication,
+  dispatch,
+}: Props) {
+  const [searchVal, setSearchVal] = useState(existingPublication?.title ?? "");
 
   const {
     data: publications,
     error,
     refetch,
     fetchStatus,
+    isFetched,
   } = useQuery({
     enabled: false,
     queryKey: ["publications", searchVal],
     queryFn: async () => getPublications(searchVal),
   });
+
+  useEffect(() => {
+    if (existingPublication?.title && !publications && searchVal.length > 2) {
+      console.log("UE refe", { publications, isFetched });
+      refetch();
+    }
+  }, [publications]);
 
   return (
     <div>
@@ -41,8 +57,13 @@ export function SelectPublication(props: Props) {
             id="oldPub"
             name="selectedPub"
             value="old"
-            onChange={() => setPubType("old")}
-            checked={pubType === "old"}
+            onChange={() =>
+              dispatch({
+                type: "useNewOrExistingPublication",
+                newOrExisting: "existing",
+              })
+            }
+            checked={existingOrNew === "existing"}
           />
           <label htmlFor="oldPub">Tietokannasta</label>
         </div>
@@ -53,16 +74,22 @@ export function SelectPublication(props: Props) {
             id="newPub"
             name="selectedPub"
             value="new"
-            onChange={() => setPubType("new")}
-            checked={pubType === "new"}
+            onChange={() => {
+              dispatch({
+                type: "useNewOrExistingPublication",
+                newOrExisting: "new",
+              });
+            }}
+            checked={existingOrNew === "new"}
           />
           <label htmlFor="newPub">Uusi</label>
         </div>
       </fieldset>
-      {pubType === "old" ? (
+      {existingOrNew === "existing" ? (
         <div>
           <SearchBar
             searchFunction={async () => {
+              dispatch({ type: "clearExistingPublication" });
               await refetch();
             }}
             searchVal={searchVal}
@@ -86,7 +113,15 @@ export function SelectPublication(props: Props) {
                   type="radio"
                   id={publication.id}
                   name="selectedExistingPub"
-                  value="new"
+                  value={publication.id}
+                  checked={existingPublication?.id === publication.id}
+                  onChange={() =>
+                    dispatch({
+                      type: "existingPublicationAsReception",
+                      id: publication.id,
+                      title: publication.title ?? "?",
+                    })
+                  }
                 />
                 <label htmlFor={publication.id}>
                   {publication.title} ({publication.author} {publication.year})
@@ -96,7 +131,12 @@ export function SelectPublication(props: Props) {
           </ul>
         </div>
       ) : (
-        <NewPublication />
+        <PublicationForm
+          dispatch={(field, value) =>
+            dispatch({ type: "updateNewPublicationField", field, value })
+          }
+          publication={newPublication}
+        />
       )}
     </div>
   );
