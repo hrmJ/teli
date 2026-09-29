@@ -1,4 +1,4 @@
-import { NewPublicationDto } from "@teli/contracts/publications";
+import { NewPublicationDtoSchema } from "@teli/contracts/publications";
 import { ChangeEvent, InputHTMLAttributes, useState } from "react";
 import { css } from "../../../styled-system/css";
 import { baseInpt } from "../../styles/input";
@@ -12,7 +12,7 @@ function updateField(dispatch: DispatchFn) {
 }
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
-  name: keyof NewPublicationDto;
+  name: keyof NewPublicationDtoSchema;
   label: string;
   publication?: Record<string, unknown>;
   dispatch: DispatchFn;

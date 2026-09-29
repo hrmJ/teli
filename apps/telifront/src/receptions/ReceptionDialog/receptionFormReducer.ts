@@ -1,11 +1,11 @@
 import {
-  NewPublicationDto,
+  NewPublicationDtoSchema,
   PublicationDto,
 } from "@teli/contracts/publications";
 import * as v from "valibot";
 
 function validatePublication(data: unknown) {
-  const parsed = v.safeParse(NewPublicationDto, data);
+  const parsed = v.safeParse(NewPublicationDtoSchema, data);
   if (!parsed.success) {
     console.log(parsed.issues);
     throw new Error("Invalid reception data");

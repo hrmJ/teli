@@ -1,8 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
 import { css } from "../../../styled-system/css";
-import { getAuthorList } from "../../authors/api";
-import { Spinner } from "../../components/Spinner";
-import { useMemo } from "react";
 import { PublicationInput } from "./PublicationInput";
 import { validateAuthor } from "./validators";
 
@@ -11,28 +7,16 @@ type DispatchFn = (fieldName: string, value: unknown) => void;
 interface Props {
   dispatch: DispatchFn;
   publication?: Record<string, unknown>;
+  authorMap: Map<string, { name: string; id: string }>;
+  authors: { name: string; id: string }[];
 }
 
-export function PublicationForm({ dispatch, publication }: Props) {
-  const {
-    data: authors,
-    error,
-    fetchStatus,
-  } = useQuery({
-    queryKey: ["authorNames"],
-    queryFn: async () => getAuthorList(),
-  });
-
-  const authorMap = useMemo(() => {
-    const map = new Map<string, { name: string; id: string }>();
-    for (const author of authors ?? []) {
-      map.set(author.name, { id: author.id, name: author.name });
-    }
-    return map;
-  }, [authors]);
-
-  if (fetchStatus === "fetching" && !authors) return <Spinner />;
-
+export function PublicationForm({
+  dispatch,
+  publication,
+  authorMap,
+  authors,
+}: Props) {
   const inputConsts = { publication, dispatch };
 
   return (

@@ -22,4 +22,11 @@ export const iconBtnPill: Styles = css.raw({
   background: "grey8",
   padding: "s1",
   fontSize: "s3",
+  _disabled: {
+    color: "grey6",
+    _hover: {
+      cursor: "not-allowed",
+      textDecoration: "none",
+    },
+  },
 });
