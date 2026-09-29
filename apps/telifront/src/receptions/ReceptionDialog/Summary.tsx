@@ -14,7 +14,7 @@ function formatTitle(data: ReceptionForm) {
   const title =
     typeof data.newPublication?.title === "string"
       ? data.newPublication.title
-      : "?";
+      : "Reseptio ilman otsikkoa";
   return title;
 }
 
