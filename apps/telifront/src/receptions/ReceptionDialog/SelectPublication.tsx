@@ -135,14 +135,23 @@ export function SelectPublication({
           </ul>
         </div>
       ) : (
-        <PublicationForm
-          dispatch={(field, value) =>
-            dispatch({ type: "updateNewPublicationField", field, value })
-          }
-          publication={newPublication}
-          authorMap={authorMap}
-          authors={authors}
-        />
+        <div
+          className={css({
+            maxHeight: "s16",
+            overflow: "auto",
+            paddingRight: "s4",
+            paddingLeft: "s1",
+          })}
+        >
+          <PublicationForm
+            dispatch={(field, value) =>
+              dispatch({ type: "updateNewPublicationField", field, value })
+            }
+            publication={newPublication}
+            authorMap={authorMap}
+            authors={authors}
+          />
+        </div>
       )}
     </div>
   );

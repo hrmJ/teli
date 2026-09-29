@@ -1,7 +1,6 @@
-import { ArrowRightIcon, CheckBadgeIcon } from "@heroicons/react/24/solid";
+import { ArrowDownIcon } from "@heroicons/react/24/solid";
 import { css } from "../../../styled-system/css";
 import { ReceptionForm } from "./receptionFormReducer";
-import { iconBtn, iconBtnPill } from "../../styles/button";
 
 interface Props {
   data: ReceptionForm;
@@ -28,20 +27,24 @@ const translations = {
 };
 
 export function Summary({ data, to }: Props) {
-  return (
-    <div
-      className={css({
-        display: "flex",
-        alignItems: "center",
-        gap: "s1",
-        color: "grey4",
-      })}
-    >
-      <div>{to}</div>
-      <ArrowRightIcon className={css({ width: "s4", height: "s4" })} />
-      <div>
-        {formatTitle(data)} ({translations[data.receptionType]})
+  {
+    return (
+      <div
+        className={css({
+          display: "flex",
+          alignItems: "center",
+          gap: "s1",
+          color: "grey4",
+          flexDir: "column",
+          padding: "s4",
+        })}
+      >
+        <div>{to}</div>
+        <ArrowDownIcon className={css({ width: "s6", height: "s6" })} />
+        <div>{translations[data.receptionType]}</div>
+        <ArrowDownIcon className={css({ width: "s6", height: "s6" })} />
+        <div className={css({})}>{formatTitle(data)}</div>
       </div>
-    </div>
-  );
+    );
+  }
 }

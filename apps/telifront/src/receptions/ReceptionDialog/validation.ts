@@ -20,7 +20,7 @@ function validateStep2(
       );
       return ["Tarkista uuden teoksen tiedot."];
     }
-    if (!authorMap.has(parsed.output.author)) {
+    if (!parsed.output.author || !authorMap.has(parsed.output.author)) {
       return ["Uudelta teokselta puuttuu tekijä tai tekijää ei löydy"];
     }
     return;

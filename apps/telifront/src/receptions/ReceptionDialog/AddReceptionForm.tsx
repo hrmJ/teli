@@ -121,8 +121,22 @@ export function AddReceptionForm({ to }: Props) {
                 })}
               >
                 <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const allValidationErrors = steps
+                      .flatMap((_, validatedIdx) => {
+                        if (validatedIdx >= idx) return;
+                        return validateStep(validatedIdx, state, authorMap);
+                      })
+                      .filter(Boolean);
+                    if (!allValidationErrors.length) {
+                      setValidationErrors(undefined);
+                      setActiveStep(idx);
+                    }
+                  }}
                   className={css(numberCircle, {
                     borderColor: idx === activeStep ? "grey3" : "grey5",
+                    _hover: { cursor: "pointer" },
                   })}
                 >
                   {idx + 1}
@@ -143,6 +157,20 @@ export function AddReceptionForm({ to }: Props) {
         </div>
         {steps[activeStep].element}
       </form>
+
+      {validationErrors?.length ? (
+        <ul
+          className={css({
+            padding: "s3",
+            borderRadius: "sm",
+            background: "rose.100",
+          })}
+        >
+          {validationErrors?.map((err) => (
+            <li key={err}>{err}</li>
+          ))}
+        </ul>
+      ) : null}
 
       <div
         className={css({
@@ -194,7 +222,6 @@ export function AddReceptionForm({ to }: Props) {
             })}
             onClick={(e) => {
               e.preventDefault();
-              setActiveStep(activeStep + 1);
             }}
           >
             <ArrowUpTrayIcon className={css({ width: "s4", height: "s4" })} />
@@ -202,19 +229,6 @@ export function AddReceptionForm({ to }: Props) {
           </button>
         ) : null}
       </div>
-      {validationErrors?.length ? (
-        <ul
-          className={css({
-            padding: "s3",
-            borderRadius: "sm",
-            background: "rose.100",
-          })}
-        >
-          {validationErrors?.map((err) => (
-            <li key={err}>{err}</li>
-          ))}
-        </ul>
-      ) : null}
     </div>
   );
 }
