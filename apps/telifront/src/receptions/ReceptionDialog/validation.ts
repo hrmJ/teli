@@ -21,7 +21,9 @@ function validateStep2(
       return ["Tarkista uuden teoksen tiedot."];
     }
     if (!parsed.output.author || !authorMap.has(parsed.output.author)) {
-      return ["Uudelta teokselta puuttuu tekijä tai tekijää ei löydy"];
+      return [
+        "Uudelta teokselta puuttuu tekijä tai tekijää ei löydy. Huom! Voit lisätä uuden tekijän yläreunan linkistä.",
+      ];
     }
     return;
   }

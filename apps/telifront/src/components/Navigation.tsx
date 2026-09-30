@@ -6,6 +6,7 @@ export function Navigation() {
     <nav
       className={css({
         display: "flex",
+        fontSize: "s4",
         background: "grey6",
         justifyContent: "space-between",
         padding: "s3",

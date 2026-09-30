@@ -1,6 +1,9 @@
+import { UserPlusIcon } from "@heroicons/react/24/solid";
 import { css } from "../../../styled-system/css";
+import { iconBtn } from "../../styles/button";
 import { PublicationInput } from "./PublicationInput";
 import { validateAuthor } from "./validators";
+import { AddReceptionDialog } from "../../receptions/ReceptionDialog/AddReceptionDialog";
 
 type DispatchFn = (fieldName: string, value: unknown) => void;
 
@@ -26,7 +29,6 @@ export function PublicationForm({
         name="author"
         label="Tekijä"
         list="authors-list"
-        validate={(value) => validateAuthor(authorMap, value)}
         required
       />
       <datalist id="authors-list">
@@ -36,6 +38,21 @@ export function PublicationForm({
           </option>
         ))}
       </datalist>
+      {validateAuthor(authorMap, publication?.author) ? (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+          }}
+          className={css(iconBtn, {
+            color: "yellow.600",
+            fontSize: "s2",
+            marginBottom: "s4",
+          })}
+        >
+          <UserPlusIcon className={css({ width: "s3", height: "s3" })} />
+          <div>Lisää uusi tekijä</div>
+        </button>
+      ) : null}
       <PublicationInput {...inputConsts} name="title" label="Otsikko (title)" />
       <PublicationInput
         {...inputConsts}
