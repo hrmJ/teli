@@ -24,7 +24,6 @@ export interface ReceptionForm {
   receptionType: ReceptionType;
   newPublication?: Record<string, unknown>;
   existingPublication?: { title: string; id: string };
-  createNewPublication: boolean;
   newOrExistingPublication: "new" | "existing";
 }
 

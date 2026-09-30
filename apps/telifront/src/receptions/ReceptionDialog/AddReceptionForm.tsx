@@ -23,7 +23,6 @@ interface Props {
 export function AddReceptionForm({ to }: Props) {
   const [state, dispatch] = useReducer(receptionFormReducer, {
     receptionType: "translation",
-    createNewPublication: false,
     newOrExistingPublication: "existing",
   });
 

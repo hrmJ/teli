@@ -3,7 +3,6 @@ import { css } from "../../../styled-system/css";
 import { iconBtn } from "../../styles/button";
 import { PublicationInput } from "./PublicationInput";
 import { validateAuthor } from "./validators";
-import { AddReceptionDialog } from "../../receptions/ReceptionDialog/AddReceptionDialog";
 
 type DispatchFn = (fieldName: string, value: unknown) => void;
 
