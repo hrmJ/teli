@@ -19,7 +19,7 @@ export const publicationSchema = new Schema({
   reception_type: { type: String }, // Just for importing receptions from excel
   target: { type: String }, // Just for importing receptions from excel
   receptions: { type: Object },
-  receptionOf: { type: Array },
+  receptionOf: [{ type: String }],
 });
 
 export type PublicationDocument = Document &

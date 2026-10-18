@@ -18,6 +18,7 @@ export function publicationToDomain(
     year: nullToUndefined(doc["year"]),
     receptions: nullToUndefined(doc.receptions),
     publisher: nullToUndefined(doc.publisher),
+    receptionOf: doc.receptionOf,
     date: nullToUndefined(doc.date),
     genre: nullToUndefined(doc.genre),
     language: nullToUndefined(doc.language),
@@ -25,5 +26,27 @@ export function publicationToDomain(
     note: nullToUndefined(doc.note),
     reference: nullToUndefined(doc.reference),
     source: nullToUndefined(doc.source),
+  };
+}
+
+export function publicationToPersistence(pub: Publication) {
+  return {
+    title: pub.title,
+    "english title": pub.englishTitle,
+    "other authors": pub.otherAuthors,
+    "document type": pub.documentType,
+    genre: pub.genre,
+    language: pub.language,
+    publisher: pub.publisher,
+    "publication name": pub.publicationName,
+    source: pub.source,
+    "publish location": pub.publishLocation,
+    year: pub.year,
+    date: pub.date,
+    reference: pub.reference,
+    note: pub.note,
+    link: pub.link,
+    receptions: pub.receptions,
+    receptionOf: pub.receptionOf,
   };
 }

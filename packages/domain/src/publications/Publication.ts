@@ -16,6 +16,7 @@ export type Publication = {
   reference?: string;
   note?: string;
   link?: string;
+  receptionOf?: string[];
   receptions?: {
     translations: string[];
     reviews: string[];

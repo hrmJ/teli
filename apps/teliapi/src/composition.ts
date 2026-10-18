@@ -12,6 +12,8 @@ import {
 import { composeAuthorsController } from "./authors/authors.controller.ts";
 import { composePublicationsController } from "./publications/publications.controller.ts";
 import {
+  composeAddPublicationReceptions,
+  composeGetPublicationById,
   composeGetPublications,
   composeGetReceptions,
 } from "@teli/application/publications";
@@ -30,6 +32,12 @@ export const authorsController = composeAuthorsController({
 export const publicationsController = composePublicationsController({
   getReceptions: composeGetReceptions({ publications: publicationRepository }),
   getPublications: composeGetPublications({
+    publications: publicationRepository,
+  }),
+  getById: composeGetPublicationById({
+    publications: publicationRepository,
+  }),
+  addPublicationReception: composeAddPublicationReceptions({
     publications: publicationRepository,
   }),
 });

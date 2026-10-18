@@ -31,6 +31,4 @@ export async function authMiddleware(
   } catch {
     res.status(401).json({ error: "unauthenticated" });
   }
-
-  next();
 }

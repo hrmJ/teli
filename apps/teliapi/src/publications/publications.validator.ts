@@ -1,4 +1,6 @@
+import { NewReceptionDataSchema } from "@teli/contracts/receptions";
 import type { Request, Response } from "express";
+import * as v from "valibot";
 
 export function validatePublicationId(request: Request, response: Response) {
   const id = request.params.id;
@@ -6,4 +8,13 @@ export function validatePublicationId(request: Request, response: Response) {
     response.status(400).json({ error: "Missing publication id" });
     return;
   }
+}
+
+export function validateNewReception(data: unknown) {
+  const parsed = v.safeParse(NewReceptionDataSchema, data);
+  if (!parsed.success) {
+    console.log(parsed.issues);
+    throw new Error("Invalid reception data");
+  }
+  return parsed.output;
 }

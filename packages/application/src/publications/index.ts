@@ -3,4 +3,8 @@ export { composeGetReceptions, type GetReceptions } from "./receptions.ts";
 export {
   composeGetPublications,
   type GetPublications,
+  composeGetPublicationById,
+  type GetPublicationById,
+  composeAddPublicationReceptions,
+  type AddPublicationReceptions,
 } from "./publications.ts";

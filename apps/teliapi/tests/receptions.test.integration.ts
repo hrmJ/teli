@@ -9,11 +9,7 @@ import {
 import { testConfig } from "./config.ts";
 import { publicationFixture } from "./fixtures/publications.fixture.ts";
 import { authorFixture } from "./fixtures/authors.fixture.ts";
-import {
-  loginTestUser,
-  logoutTestUser,
-  type KeycloakTokens,
-} from "./helpers/auth.ts";
+import { loginTestUser, logoutTestUser } from "./helpers/auth.ts";
 
 let originalId: string | undefined;
 let originalAuthorId: string | undefined;
@@ -31,7 +27,9 @@ beforeEach(async () => {
   await resetDb();
 
   const author = await AuthorModel.insertOne(
-    authorFixture({ publications: [publicationFixture()] } as any),
+    authorFixture({
+      publications: [publicationFixture({ title: "Alkuperaisteos" })],
+    } as any),
   );
 
   originalAuthorId = author._id.toString();
@@ -48,9 +46,12 @@ test("Unauthenticated users cant link receptions", async () => {
   assert.equal(resp.status, 401);
 });
 
-test("Authenticated users can link existing works as receptions", async () => {
+test.only("Authenticated users can link existing works as receptions", async () => {
   const receptionAuthor = await AuthorModel.insertOne(
-    authorFixture({ publications: [publicationFixture()] } as any),
+    authorFixture({
+      name: "Ralph Receptoff",
+      publications: [publicationFixture({ title: "My reactions" })],
+    } as any),
   );
   const receptionAuthorId = receptionAuthor._id.toString();
   const receptionId = receptionAuthor.publications.at(0)?._id.toString();
@@ -68,23 +69,32 @@ test("Authenticated users can link existing works as receptions", async () => {
           newOrExistingPublication: "existing",
         }),
         headers: {
+          "Content-Type": "application/json",
           authorization: `Bearer ${tokens.access_token}`,
         },
       },
     );
 
     // Assert
-    assert.equal(resp.status, 201);
+    assert.equal(resp.status, 204);
     const updatedOriginalAuthor = await AuthorModel.findById(originalAuthorId);
     const updatedReceptions =
       updatedOriginalAuthor?.publications.at(0)?.receptions;
-    assert.strictEqual(updatedReceptions, { translations: [receptionId] });
+
+    assert.deepStrictEqual(updatedReceptions, {
+      translations: [receptionId],
+      adaptations: [],
+      articles: [],
+      reviews: [],
+      other: [],
+    });
 
     const updatedReceptionAuthor =
       await AuthorModel.findById(receptionAuthorId);
+
     const updatedReceptionsOf =
       updatedReceptionAuthor?.publications.at(0)?.receptionOf;
-    assert.strictEqual(updatedReceptionsOf, [originalId]);
+    assert.deepStrictEqual(updatedReceptionsOf, [originalId]);
   } finally {
     await logoutTestUser(tokens.refresh_token);
   }
