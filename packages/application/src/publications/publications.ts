@@ -1,3 +1,4 @@
+import { type Publication } from "@teli/domain/publications";
 import type { PublicationRepository } from "./publicationRepository.ts";
 import {
   type ReceptionType,
@@ -28,49 +29,107 @@ export function composeGetPublicationById({ publications }: Deps) {
   };
 }
 
-export function composeAddPublicationReceptions({ publications }: Deps) {
-  return async function addPublicationReceptions(
-    targetId: string,
-    receptionType: ReceptionType,
-    existingPublicationId?: string,
-  ) {
-    const targetPublication = await publications.getById(targetId);
-    const receptionCategory = receptionTypeAsCategory(receptionType);
-    const existingPublication = existingPublicationId
-      ? await publications.getById(existingPublicationId)
-      : null;
+/**
+ * Form the new receptionsOf dictionary with the updated target publication
+ * included
+ */
+function withUpdatedReceptionsOf(
+  reception: Publication,
+  targetId: string,
+): Publication {
+  const receptionOf = reception?.receptionOf ?? [];
+  const updatedReceptionOf = [...receptionOf, targetId];
+  return {
+    ...reception,
+    receptionOf: [...new Set(updatedReceptionOf)],
+  };
+}
 
-    if (!targetPublication) {
-      throw new Error("Unable to find target publication");
-    }
+/**
+ * Form the new receptions dictionary with the updated receptions
+ * and return the whole target publication
+ *
+ */
+function withUpdatedReceptions(
+  reception: Publication,
+  targetPublication: Publication,
+  receptionCategory: ReturnType<typeof receptionTypeAsCategory>,
+): Publication {
+  const receptions = targetPublication.receptions ?? {
+    translations: [],
+    adaptations: [],
+    articles: [],
+    reviews: [],
+    other: [],
+  };
 
-    const receptions = targetPublication.receptions ?? {
-      translations: [],
-      adaptations: [],
-      articles: [],
-      reviews: [],
-      other: [],
-    };
-
-    if (existingPublication) {
-      const receptionOf = existingPublication?.receptionOf ?? [];
-      const updatedReceptionOf = [...receptionOf, targetId];
-      await publications.updateById(existingPublication.id, {
-        ...existingPublication,
-        receptionOf: updatedReceptionOf,
-      });
-    }
-
-    const updatedReceptions = {
+  return {
+    ...targetPublication,
+    receptions: {
       ...receptions,
       [receptionCategory]: [
-        ...receptions[receptionCategory],
-        existingPublicationId,
+        ...new Set([...receptions[receptionCategory], reception.id]),
       ],
-    };
-    await publications.updateById(targetId, {
-      ...targetPublication,
-      receptions: updatedReceptions,
-    });
+    },
+  };
+}
+
+type ReceptionSource = {
+  existingPublicationId?: string;
+  publication?: Omit<Publication, "id">;
+};
+
+type AddReceptionArgs = {
+  targetId: string;
+  receptionType: ReceptionType;
+} & ReceptionSource;
+
+export function composeAddPublicationReceptions({ publications }: Deps) {
+  /**
+   * If this is a new publication, create it first,
+   * return that or an existing publication to be used as a reception
+   */
+  async function resolveReception(args: ReceptionSource) {
+    if (args.existingPublicationId) {
+      return args.existingPublicationId;
+    }
+    if (args.publication) {
+      const res = await publications.create(args.publication);
+      return res.id;
+    }
+    throw new Error("Didnt receive new or existing publication");
+  }
+
+  /**
+   *
+   * Adds a new or an existing publication as a reception
+   * for another publication
+   *
+   */
+  return async function addPublicationReceptions({
+    targetId,
+    receptionType,
+    ...receptionSource
+  }: AddReceptionArgs) {
+    const targetPublication = await publications.getById(targetId);
+    const receptionCategory = receptionTypeAsCategory(receptionType);
+    const receptionId = await resolveReception(receptionSource);
+    const reception = await publications.getById(receptionId);
+
+    if (!reception) {
+      throw new Error("Unable to find the reception to link");
+    }
+    if (!targetPublication) {
+      throw new Error("Unable to find the target publication");
+    }
+
+    await publications.updateById(
+      receptionId,
+      withUpdatedReceptionsOf(reception, targetId),
+    );
+    await publications.updateById(
+      targetId,
+      withUpdatedReceptions(reception, targetPublication, receptionCategory),
+    );
   };
 }

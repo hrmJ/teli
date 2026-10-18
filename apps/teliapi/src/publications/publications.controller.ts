@@ -46,18 +46,15 @@ export function composePublicationsController(
       return;
     }
 
-    const {
-      receptionType,
-      existingPublication,
-      newPublication,
-      newOrExistingPublication,
-    } = validateNewReception(req.body);
+    const { receptionType, existingPublication, newPublication } =
+      validateNewReception(req.body);
 
-    await deps.addPublicationReception(
+    await deps.addPublicationReception({
       targetId,
       receptionType,
-      existingPublication?.id,
-    );
+      publication: newPublication,
+      existingPublicationId: existingPublication?.id,
+    });
 
     res.sendStatus(204);
   };

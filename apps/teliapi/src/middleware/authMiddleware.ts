@@ -27,8 +27,9 @@ export async function authMiddleware(
 
   try {
     await jwtVerify(authorization.slice("Bearer ".length), jwks, { issuer });
-    next();
   } catch {
     res.status(401).json({ error: "unauthenticated" });
   }
+
+  next();
 }

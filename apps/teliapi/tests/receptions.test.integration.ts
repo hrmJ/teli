@@ -46,7 +46,7 @@ test("Unauthenticated users cant link receptions", async () => {
   assert.equal(resp.status, 401);
 });
 
-test.only("Authenticated users can link existing works as receptions", async () => {
+test("Authenticated users can link existing works as receptions", async () => {
   const receptionAuthor = await AuthorModel.insertOne(
     authorFixture({
       name: "Ralph Receptoff",
