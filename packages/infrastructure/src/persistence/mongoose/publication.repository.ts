@@ -85,5 +85,21 @@ export function composeMongoosePublicationRepository(
           }),
       );
     },
+
+    async create(publication) {
+      const author = await deps.AuthorModel.findOne({
+        name: publication.author,
+      });
+
+      if (!author) {
+        throw new Error("Author not found");
+      }
+
+      author.publications.push(publicationToPersistence(publication));
+
+      await author.save();
+      const created = author.publications.at(-1)!;
+      return publicationToDomain(created);
+    },
   };
 }

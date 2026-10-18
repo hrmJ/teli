@@ -99,3 +99,59 @@ test("Authenticated users can link existing works as receptions", async () => {
     await logoutTestUser(tokens.refresh_token);
   }
 });
+
+test("Authenticated users can link new works as receptions", async () => {
+  const receptionAuthor = await AuthorModel.insertOne(
+    authorFixture({
+      name: "Ralph Receptoff",
+      publications: [],
+    } as any),
+  );
+  const receptionAuthorId = receptionAuthor._id.toString();
+
+  const tokens = await loginTestUser();
+  try {
+    const resp = await fetch(
+      `${testConfig.baseUrl}/publications/${originalId}/receptions`,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          receptionType: "translation",
+          newOrExistingPublication: "new",
+          newPublication: {
+            author: receptionAuthor.name,
+            title: "some new reception",
+          },
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${tokens.access_token}`,
+        },
+      },
+    );
+
+    // Assert
+    assert.equal(resp.status, 204);
+    const updatedOriginalAuthor = await AuthorModel.findById(originalAuthorId);
+
+    const updatedReceptionAuthor =
+      await AuthorModel.findById(receptionAuthorId);
+
+    const updatedReceptions =
+      updatedOriginalAuthor?.publications.at(0)?.receptions;
+
+    const newPubId = updatedReceptionAuthor?.publications
+      ?.at(0)
+      ?._id.toString();
+
+    assert.deepStrictEqual(updatedReceptions, {
+      translations: [newPubId],
+      adaptations: [],
+      articles: [],
+      reviews: [],
+      other: [],
+    });
+  } finally {
+    await logoutTestUser(tokens.refresh_token);
+  }
+});

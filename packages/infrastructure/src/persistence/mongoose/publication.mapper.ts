@@ -29,7 +29,7 @@ export function publicationToDomain(
   };
 }
 
-export function publicationToPersistence(pub: Publication) {
+export function publicationToPersistence(pub: Omit<Publication, "id">) {
   return {
     title: pub.title,
     "english title": pub.englishTitle,
