@@ -35,7 +35,7 @@ with `source local-dev.env`.
 
 
 3. You should now be able to access the frontend at http://localhost:4000 using the dummy 
-local dev credentials `testuser:test-password`.
+local dev credentials `test:test-password`.
 
 
 ## Making changes to frontend code

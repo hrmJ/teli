@@ -12,7 +12,7 @@ import { SelectPublication } from "./SelectPublication";
 import { receptionFormReducer } from "./receptionFormReducer";
 import { Summary } from "./Summary";
 import { validateStep } from "./validation";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getAuthorList } from "../../authors/api";
 import { Spinner } from "../../components/Spinner";
 
@@ -24,6 +24,11 @@ export function AddReceptionForm({ to }: Props) {
   const [state, dispatch] = useReducer(receptionFormReducer, {
     receptionType: "translation",
     newOrExistingPublication: "existing",
+  });
+  const mutation = useMutation({
+    mutationFn: (receptionData) => {
+      return axios.post("/todos", newTodo);
+    },
   });
 
   const {
@@ -221,6 +226,7 @@ export function AddReceptionForm({ to }: Props) {
             })}
             onClick={(e) => {
               e.preventDefault();
+              //SAVE
             }}
           >
             <ArrowUpTrayIcon className={css({ width: "s4", height: "s4" })} />
