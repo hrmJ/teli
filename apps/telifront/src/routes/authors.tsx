@@ -3,8 +3,8 @@ import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { getAuthorIndex } from "../authors/api";
 import { css } from "../../styled-system/css";
 import { iconBtn } from "../styles/button";
-import { UserPlusIcon } from "@heroicons/react/24/solid";
 import { SearchBar } from "../components/SearchBar";
+import { AddAuthorDialog } from "../authors/AuthorDialog/AddAuthorDialog";
 
 export const Route = createFileRoute("/authors")({
   component: RouteComponent,
@@ -32,8 +32,7 @@ function RouteComponent() {
           marginBottom: "s4",
         })}
       >
-        <UserPlusIcon className={css({ width: "s3", height: "s3" })} />
-        <div>Lisää tekijä</div>
+        <AddAuthorDialog />
       </button>
       <div className={css({ maxWidth: "s22" })}>
         <ul

@@ -25,11 +25,11 @@ export function AddReceptionForm({ to }: Props) {
     receptionType: "translation",
     newOrExistingPublication: "existing",
   });
-  const mutation = useMutation({
-    mutationFn: (receptionData) => {
-      return axios.post("/todos", newTodo);
-    },
-  });
+  // const mutation = useMutation({
+  //   mutationFn: (receptionData) => {
+  //     return axios.post("/todos", newTodo);
+  //   },
+  // });
 
   const {
     data: authors,
