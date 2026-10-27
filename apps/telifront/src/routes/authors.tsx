@@ -1,11 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { getAuthorIndex, getAuthorList } from "../authors/api";
+import { getAuthorIndex } from "../authors/api";
 import { css } from "../../styled-system/css";
-import { iconBtn } from "../styles/button";
 import { SearchBar } from "../components/SearchBar";
 import { AddAuthorDialog } from "../authors/AuthorDialog/AddAuthorDialog";
-import { AuthorContext } from "../authors/AuthorContext";
 
 export const Route = createFileRoute("/authors")({
   component: RouteComponent,
@@ -58,11 +56,7 @@ function RouteComponent() {
               marginBottom: "s2",
             })}
           >
-            <SearchBar
-              searchVal={""}
-              setSearchVal={() => null}
-              searchFunction={async () => {}}
-            />
+            <SearchBar searchVal={""} setSearchVal={() => null} searchFunction={async () => {}} />
           </div>
         ) : null}
       </div>

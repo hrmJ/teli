@@ -21,7 +21,6 @@ type Props<T> = InputHTMLAttributes<HTMLInputElement> & {
 
 function compileInputValue(value: unknown) {
   if (value instanceof Date) return value.toISOString();
-  console.log(typeof value, value);
   if (typeof value === "string" || typeof value === "number") return value;
   return;
 }

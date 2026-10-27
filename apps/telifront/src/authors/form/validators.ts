@@ -15,7 +15,6 @@ export function validateNewAuthorName(
 }
 
 export function validateNewAuthor(data: unknown): string[] {
-  console.log({ data });
   const parsed = v.safeParse(NewAuthorDtoSchema, data);
   if (!parsed.success) {
     return parsed.issues.map((issue) => issue.message);

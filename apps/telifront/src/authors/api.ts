@@ -18,12 +18,16 @@ export async function getAuthorIndex() {
 }
 
 export async function saveNewAuthor(data: NewAuthorDto) {
+  if (!keycloak.token) throw new Error("Unauthenticated");
+  await keycloak.updateToken(30);
   const response = await fetch(`${config.apiUrl}/authors`, {
     method: "POST",
     body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${keycloak.token}`,
+    },
   });
-
-  console.log(response, "🍁");
 
   if (!response.ok) {
     throw new Error(`Failed to create author: ${response.status}`);

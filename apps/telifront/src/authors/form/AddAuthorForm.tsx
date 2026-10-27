@@ -7,21 +7,34 @@ import { validateNewAuthor, validateNewAuthorName } from "./validators";
 import { authorFormReducer } from "./authorFormReducer";
 import { iconBtnPill } from "../../styles/button";
 import { ArrowUpTrayIcon } from "@heroicons/react/24/solid";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveNewAuthor } from "../api";
 import { Spinner } from "../../components/Spinner";
+import { redirect, useNavigate } from "@tanstack/react-router";
 
 const Input = InputBase<NewAuthorDto>;
 
-export function AddAuthorForm() {
+export function AddAuthorForm({ onSuccess }: { onSuccess: () => void }) {
   const [data, dispatch] = useReducer(authorFormReducer, {
     firstName: "",
     lastName: "",
   });
 
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (newAuthor: NewAuthorDto) => {
       return saveNewAuthor(newAuthor);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["authorIndex"] });
+      onSuccess();
+      navigate({
+        to: `/author/$author`,
+        params: { author: `${data.lastName.trim()} ${data.firstName.trim()}` },
+        search: { newAuthorSaved: true },
+      });
     },
   });
 
@@ -49,12 +62,6 @@ export function AddAuthorForm() {
         {mutation.isError ? (
           <div className={css({ padding: "s3", borderRadius: "sm", background: "rose.100", marginBottom: "s2" })}>
             Tallennus epäonnistui.
-          </div>
-        ) : null}
-
-        {mutation.isSuccess ? (
-          <div className={css({ padding: "s3", borderRadius: "sm", background: "green.100", marginBottom: "s2" })}>
-            Tallennus onnistui.
           </div>
         ) : null}
 

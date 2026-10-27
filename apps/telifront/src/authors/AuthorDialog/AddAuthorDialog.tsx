@@ -4,24 +4,27 @@ import { iconBtn } from "../../styles/button";
 import { UserPlusIcon } from "@heroicons/react/24/solid";
 import { Dialog } from "../../components/Dialog";
 import { AddAuthorForm } from "../form/AddAuthorForm";
+import { keycloak } from "../../auth/keycloak";
 
 export function AddAuthorDialog() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className={css(iconBtn, {
-          color: "yellow.600",
-          fontSize: "s2",
-          marginTop: "s4",
-          padding: "s2",
-          paddingLeft: "0",
-        })}
-      >
-        <UserPlusIcon className={css({ width: "s3", height: "s3" })} />
-        <div>Lisää tekijä</div>
-      </button>
+      {keycloak.authenticated ? (
+        <button
+          onClick={() => setIsOpen(true)}
+          className={css(iconBtn, {
+            color: "yellow.600",
+            fontSize: "s2",
+            marginTop: "s4",
+            padding: "s2",
+            paddingLeft: "0",
+          })}
+        >
+          <UserPlusIcon className={css({ width: "s3", height: "s3" })} />
+          <div>Lisää tekijä</div>
+        </button>
+      ) : null}
       {isOpen ? (
         <Dialog
           close={() => setIsOpen(false)}
@@ -31,7 +34,11 @@ export function AddAuthorDialog() {
             overflow: "auto",
           })}
         >
-          <AddAuthorForm />
+          <AddAuthorForm
+            onSuccess={() => {
+              setIsOpen(false);
+            }}
+          />
         </Dialog>
       ) : null}
     </>
