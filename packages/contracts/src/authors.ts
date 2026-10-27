@@ -16,8 +16,8 @@ export const AuthorDtoSchema = v.object({
 });
 
 export const NewAuthorDtoSchema = v.object({
-  firstName: v.string(),
-  lastName: v.string(),
+  firstName: v.message(v.pipe(v.string(), v.nonEmpty()), "Etunimi puuttuu"),
+  lastName: v.message(v.pipe(v.string(), v.nonEmpty()), "Sukunimi puuttuu"),
   pseudonyms: v.optional(v.string()),
   otherNames: v.optional(v.string()),
   yearOfBirth: v.optional(v.number()),

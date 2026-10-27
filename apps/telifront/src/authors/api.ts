@@ -1,10 +1,6 @@
 import * as v from "valibot";
 import { config } from "../config";
-import {
-  AuthorDtoSchema,
-  AuthorIndexDtoSchema,
-  AuthorListDtoSchema,
-} from "@teli/contracts/authors";
+import { AuthorDtoSchema, AuthorIndexDtoSchema, AuthorListDtoSchema, NewAuthorDto } from "@teli/contracts/authors";
 
 import { keycloak } from "../auth/keycloak";
 
@@ -19,6 +15,19 @@ export async function getAuthorIndex() {
   const data: unknown = await response.json();
 
   return v.parse(AuthorIndexDtoSchema, data);
+}
+
+export async function saveNewAuthor(data: NewAuthorDto) {
+  const response = await fetch(`${config.apiUrl}/authors`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+  console.log(response, "🍁");
+
+  if (!response.ok) {
+    throw new Error(`Failed to create author: ${response.status}`);
+  }
 }
 
 export async function getAuthorDetails(name: string) {
