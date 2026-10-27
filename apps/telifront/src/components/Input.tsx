@@ -21,17 +21,12 @@ type Props<T> = InputHTMLAttributes<HTMLInputElement> & {
 
 function compileInputValue(value: unknown) {
   if (value instanceof Date) return value.toISOString();
+  console.log(typeof value, value);
   if (typeof value === "string" || typeof value === "number") return value;
   return;
 }
 
-export function Input<T>({
-  data,
-  label,
-  dispatch,
-  validate,
-  ...attributes
-}: Props<T>) {
+export function Input<T>({ data, label, dispatch, validate, ...attributes }: Props<T>) {
   const onChange = updateField(dispatch);
   const value = compileInputValue(data?.[attributes.name]);
   const [error, setError] = useState("");

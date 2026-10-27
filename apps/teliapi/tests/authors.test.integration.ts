@@ -1,14 +1,11 @@
 import assert from "node:assert";
 import test, { beforeEach, before, after } from "node:test";
 import { resetDb } from "./helpers/db.ts";
-import {
-  AuthorModel,
-  connectMongoose,
-  disconnectMongoose,
-} from "@teli/infrastructure/mongoose";
+import { AuthorModel, connectMongoose, disconnectMongoose } from "@teli/infrastructure/mongoose";
 import { testConfig } from "./config.ts";
 import { authorFixture } from "./fixtures/authors.fixture.ts";
 import { publicationFixture } from "./fixtures/publications.fixture.ts";
+import { loginTestUser, logoutTestUser } from "./helpers/auth.ts";
 
 before(async () => {
   await connectMongoose(testConfig.mongoUrl);
@@ -68,9 +65,7 @@ test("Viewing details responds by an author's details", async () => {
   } as any;
 
   // Insert a publication first, then mark that as a translation
-  const receptionAuthor = await AuthorModel.insertOne(
-    authorFixture(receptionAuthorDetails),
-  );
+  const receptionAuthor = await AuthorModel.insertOne(authorFixture(receptionAuthorDetails));
   const [reception] = receptionAuthor.publications;
   const receptionId = reception._id.toString();
 
@@ -117,9 +112,7 @@ test("Receptions can be fetched by publication id", async () => {
   } as any;
 
   // Insert a publication first, then mark that as a translation
-  const receptionAuthor = await AuthorModel.insertOne(
-    authorFixture(receptionAuthorDetails),
-  );
+  const receptionAuthor = await AuthorModel.insertOne(authorFixture(receptionAuthorDetails));
   const [reception] = receptionAuthor.publications;
   const receptionId = reception._id.toString();
 
@@ -139,9 +132,7 @@ test("Receptions can be fetched by publication id", async () => {
   const originalId = original?._id;
 
   // Act
-  const resp = await fetch(
-    `${testConfig.baseUrl}/publications/${originalId}/receptions`,
-  );
+  const resp = await fetch(`${testConfig.baseUrl}/publications/${originalId}/receptions`);
 
   // Assert
   assert.equal(resp.status, 200);
@@ -161,4 +152,44 @@ test("Receptions can be fetched by publication id", async () => {
     other: [],
     reviews: [],
   });
+});
+
+test("Authenticated users can add new authors", async () => {
+  const tokens = await loginTestUser();
+
+  const yearOfBirth = 1999;
+  const pseudonyms = "unikko";
+  try {
+    const resp = await fetch(`${testConfig.baseUrl}/authors`, {
+      method: "POST",
+      body: JSON.stringify({ firstName: "Uuno", lastName: "Uusinen", yearOfBirth, pseudonyms }),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${tokens.access_token}`,
+      },
+    });
+
+    // Assert
+    assert.equal(resp.status, 201);
+    const newAuthor = await AuthorModel.findOne({ name: "Uusinen Uuno" });
+
+    assert.equal("Uusinen Uuno", newAuthor?.name);
+    assert.equal(yearOfBirth, newAuthor?.["year of birth"]);
+    assert.equal(pseudonyms, newAuthor?.pseudonyms);
+  } finally {
+    await logoutTestUser(tokens.refresh_token);
+  }
+});
+
+test("Unauthenticated users cannot add new authors", async () => {
+  const resp = await fetch(`${testConfig.baseUrl}/authors`, {
+    method: "POST",
+    body: JSON.stringify({ firstName: "Uuno", lastName: "Uusinen" }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  // Assert
+  assert.equal(resp.status, 401);
 });

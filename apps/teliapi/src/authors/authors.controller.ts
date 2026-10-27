@@ -1,21 +1,14 @@
 import type { RequestHandler } from "express";
-import type {
-  GetAuthorDetails,
-  GetAuthorIndex,
-  ListAuthorNames,
-  ListAuthors,
-} from "@teli/application/authors";
-import {
-  presentAuthorDetails,
-  presentAuthorIndex,
-  presentAuthorList,
-} from "./authors.presenter.ts";
+import type { CreateAuthor, GetAuthorDetails, GetAuthorIndex, ListAuthorNames, ListAuthors } from "@teli/application/authors";
+import { presentAuthorDetails, presentAuthorIndex, presentAuthorList } from "./authors.presenter.ts";
+import { validateNewAuthor } from "./authors.validator.ts";
 
 type AuthorsControllerDeps = {
   getAuthorIndex: GetAuthorIndex;
   getAuthorDetails: GetAuthorDetails;
   listAuthors: ListAuthors;
   listAuthorNames: ListAuthorNames;
+  createAuthor: CreateAuthor;
 };
 
 export function composeAuthorsController(deps: AuthorsControllerDeps) {
@@ -54,10 +47,17 @@ export function composeAuthorsController(deps: AuthorsControllerDeps) {
     res.json(dto);
   };
 
+  const createAuthorHandler: RequestHandler = async function (req, res) {
+    const newAuthor = validateNewAuthor(req.body);
+    const savedAuthor = await deps.createAuthor(newAuthor);
+    res.status(201).json({ id: savedAuthor });
+  };
+
   return {
     authorIndexHandler,
     authorDetailsHandler,
     authorListHandler,
     authorNameListHandler,
+    createAuthorHandler,
   };
 }

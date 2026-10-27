@@ -3,9 +3,7 @@ import { type Request, type Response, type NextFunction } from "express";
 
 const issuer = "http://localhost:8080/realms/teli";
 
-const jwks = createRemoteJWKSet(
-  new URL(`${issuer}/protocol/openid-connect/certs`),
-);
+const jwks = createRemoteJWKSet(new URL(`${issuer}/protocol/openid-connect/certs`));
 
 /**
  * Simple authn check without authz check:
@@ -13,11 +11,7 @@ const jwks = createRemoteJWKSet(
  * with a valid jwt payload
  *
  */
-export async function authMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const authorization = req.header("authorization");
 
   if (!authorization?.startsWith("Bearer ")) {
@@ -29,6 +23,7 @@ export async function authMiddleware(
     await jwtVerify(authorization.slice("Bearer ".length), jwks, { issuer });
   } catch {
     res.status(401).json({ error: "unauthenticated" });
+    return;
   }
 
   next();

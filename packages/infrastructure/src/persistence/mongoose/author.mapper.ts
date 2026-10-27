@@ -15,15 +15,11 @@ export function authorToDomain(doc: AuthorDocument): Author {
     language: nullToUndefined(doc.language),
     biographicalDetails: nullToUndefined(doc["biographical details"]),
     professionalDetails: nullToUndefined(doc["professional details"]),
-    publications: doc.publications.map((pub) =>
-      publicationToDomain(pub, doc.name),
-    ),
+    publications: doc.publications.map((pub) => publicationToDomain(pub, doc.name)),
   };
 }
 
-export function authorToDomainWithoutPublication(
-  doc: AuthorDocument,
-): Omit<Author, "publications"> {
+export function authorToDomainWithoutPublication(doc: AuthorDocument): Omit<Author, "publications"> {
   return {
     id: doc._id.toString(),
     name: doc.name,
@@ -35,5 +31,20 @@ export function authorToDomainWithoutPublication(
     language: nullToUndefined(doc.language),
     biographicalDetails: nullToUndefined(doc["biographical details"]),
     professionalDetails: nullToUndefined(doc["professional details"]),
+  };
+}
+
+export function authorToPersistence(author: Omit<Author, "id">) {
+  return {
+    name: author.name,
+    pseudonyms: author.pseudonyms,
+    "other names": author.otherNames,
+    "year of birth": author.yearOfBirth,
+    "year of death": author.yearOfDeath,
+    country: author.country,
+    language: author.language,
+    "biographical details": author.biographicalDetails,
+    "professional details": author.professionalDetails,
+    publications: [],
   };
 }

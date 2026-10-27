@@ -113,9 +113,12 @@ export function AddAuthorForm() {
             ev.preventDefault();
             const nameError = validateNewAuthorName(authorMap, { firstName, lastName });
             const nameErrors = nameError ? [nameError] : [];
-            const errors = [...nameErrors, ...validateNewAuthor(data)];
+            const yearOfBirth = data.yearOfBirth ? Number(data.yearOfBirth) : undefined;
+            const yearOfDeath = data.yearOfDeath ? Number(data.yearOfDeath) : undefined;
+            const finalData = { ...data, yearOfBirth, yearOfDeath };
+            const errors = [...nameErrors, ...validateNewAuthor(finalData)];
             if (!errors.length) {
-              mutation.mutate(data);
+              mutation.mutate(finalData);
               return;
             }
             setValidationErrors(errors);

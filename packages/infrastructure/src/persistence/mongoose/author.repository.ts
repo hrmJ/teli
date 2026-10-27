@@ -1,14 +1,13 @@
 import type { AuthorRepository } from "@teli/application/authors";
 import { AuthorModel } from "./author.schema.ts";
-import {
-  authorToDomain,
-  authorToDomainWithoutPublication,
-} from "./author.mapper.ts";
+import { authorToDomain, authorToDomainWithoutPublication, authorToPersistence } from "./author.mapper.ts";
+import type { Author } from "@teli/domain/authors";
 
 type AuthorModelLike = {
   find: typeof AuthorModel.find;
   findOne: typeof AuthorModel.findOne;
   aggregate: typeof AuthorModel.aggregate;
+  create: typeof AuthorModel.create;
 };
 
 type Deps = {
@@ -63,6 +62,11 @@ export function composeMongooseAuthorRepository(deps: Deps): AuthorRepository {
     async listAllNames() {
       const authors = await deps.AuthorModel.find({}).sort({ name: 1 });
       return authors.map(authorToDomainWithoutPublication);
+    },
+
+    async create(author: Omit<Author, "id">): Promise<Author> {
+      const created = await deps.AuthorModel.create(authorToPersistence(author));
+      return authorToDomain(created);
     },
   };
 }
