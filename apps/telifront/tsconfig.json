@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
     "lib": [
       "dom",
       "ESNext"

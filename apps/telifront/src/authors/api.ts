@@ -58,5 +58,14 @@ export async function getAuthorList() {
 
   const data: unknown = await response.json();
 
-  return v.parse(AuthorListDtoSchema, data);
+  const authors = v.parse(AuthorListDtoSchema, data);
+
+  const authorMap = new Map<string, { name: string; id: string }>();
+  for (const author of authors ?? []) {
+    authorMap.set(author.name.toLowerCase().trim(), {
+      id: author.id,
+      name: author.name,
+    });
+  }
+  return { authors, authorMap };
 }

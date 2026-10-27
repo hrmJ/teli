@@ -1,29 +1,28 @@
 import { UserPlusIcon } from "@heroicons/react/24/solid";
 import { css } from "../../../styled-system/css";
 import { iconBtn } from "../../styles/button";
-import { PublicationInput } from "./PublicationInput";
+import { Input as InputBase } from "../../components/Input";
 import { validateAuthor } from "./validators";
+import type { NewPublicationDtoSchema } from "@teli/contracts/publications";
+import { use } from "react";
+import { AuthorContext } from "../../authors/AuthorContext";
 
-type DispatchFn = (fieldName: string, value: unknown) => void;
+const Input = InputBase<NewPublicationDtoSchema>;
 
 interface Props {
-  dispatch: DispatchFn;
+  dispatch: (fieldName: string, value: unknown) => void;
   publication?: Record<string, unknown>;
-  authorMap: Map<string, { name: string; id: string }>;
-  authors: { name: string; id: string }[];
 }
 
-export function PublicationForm({
-  dispatch,
-  publication,
-  authorMap,
-  authors,
-}: Props) {
-  const inputConsts = { publication, dispatch };
+export function PublicationForm({ dispatch, publication }: Props) {
+  const data = { ...publication, author: publication?.author ?? "" };
 
+  const inputConsts = { data, dispatch };
+
+  const { authorMap, authors } = use(AuthorContext);
   return (
     <div className={css({ "& > * + *": { marginTop: "s2" }, color: "grey4" })}>
-      <PublicationInput
+      <Input
         {...inputConsts}
         name="author"
         label="Tekijä"
@@ -37,7 +36,7 @@ export function PublicationForm({
           </option>
         ))}
       </datalist>
-      {validateAuthor(authorMap, publication?.author) ? (
+      {validateAuthor(authorMap, data?.author) ? (
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -52,45 +51,23 @@ export function PublicationForm({
           <div>Lisää uusi tekijä</div>
         </button>
       ) : null}
-      <PublicationInput {...inputConsts} name="title" label="Otsikko (title)" />
-      <PublicationInput
+      <Input {...inputConsts} name="title" label="Otsikko (title)" />
+      <Input
         {...inputConsts}
         name="englishTitle"
         label="Englanninkielinen otsikko"
       />
-      <PublicationInput {...inputConsts} name="publisher" label="Kustantaja" />
-      <PublicationInput
-        {...inputConsts}
-        name="publishLocation"
-        label="Julkaisupaikka"
-      />
-      <PublicationInput
-        {...inputConsts}
-        name="year"
-        label="Julkaisuvuosi"
-        type="number"
-      />
-      <PublicationInput
-        {...inputConsts}
-        name="date"
-        label="Julkaisupäivä"
-        type="date"
-      />
-      <PublicationInput
-        {...inputConsts}
-        name="publicationName"
-        label="Julkaisu"
-      />
-      <PublicationInput
-        {...inputConsts}
-        name="documentType"
-        label="Documentin tyyppi"
-      />
-      <PublicationInput {...inputConsts} name="genre" label="Genre" />
-      <PublicationInput {...inputConsts} name="language" label="Kieli" />
-      <PublicationInput {...inputConsts} name="link" label="Linkki" />
-      <PublicationInput {...inputConsts} name="source" label="Lähde" />
-      <PublicationInput {...inputConsts} name="note" label="Huomioita" />
+      <Input {...inputConsts} name="publisher" label="Kustantaja" />
+      <Input {...inputConsts} name="publishLocation" label="Julkaisupaikka" />
+      <Input {...inputConsts} name="year" label="Julkaisuvuosi" type="number" />
+      <Input {...inputConsts} name="date" label="Julkaisupäivä" type="date" />
+      <Input {...inputConsts} name="publicationName" label="Julkaisu" />
+      <Input {...inputConsts} name="documentType" label="Documentin tyyppi" />
+      <Input {...inputConsts} name="genre" label="Genre" />
+      <Input {...inputConsts} name="language" label="Kieli" />
+      <Input {...inputConsts} name="link" label="Linkki" />
+      <Input {...inputConsts} name="source" label="Lähde" />
+      <Input {...inputConsts} name="note" label="Huomioita" />
     </div>
   );
 }

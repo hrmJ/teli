@@ -15,6 +15,21 @@ export const AuthorDtoSchema = v.object({
   publications: v.array(PublicationDtoSchema),
 });
 
+export const NewAuthorDtoSchema = v.object({
+  firstName: v.string(),
+  lastName: v.string(),
+  pseudonyms: v.optional(v.string()),
+  otherNames: v.optional(v.string()),
+  yearOfBirth: v.optional(v.number()),
+  yearOfDeath: v.optional(v.number()),
+  country: v.optional(v.string()),
+  language: v.optional(v.string()),
+  biographicalDetails: v.optional(v.string()),
+  professionalDetails: v.optional(v.string()),
+});
+
+export type NewAuthorDto = v.InferOutput<typeof NewAuthorDtoSchema>;
+
 export type AuthorListItemDto = {
   name: string;
   id: string;

@@ -13,8 +13,6 @@ interface Props {
   existingPublication?: { title: string; id: string };
   dispatch: ActionDispatch<[action: ReceptionFormAction]>;
   newPublication?: Record<string, unknown>;
-  authors: { id: string; name: string }[];
-  authorMap: Map<string, { id: string; name: string }>;
 }
 
 export function SelectPublication({
@@ -22,8 +20,6 @@ export function SelectPublication({
   existingPublication,
   newPublication,
   dispatch,
-  authorMap,
-  authors,
 }: Props) {
   const [searchVal, setSearchVal] = useState(existingPublication?.title ?? "");
 
@@ -148,8 +144,6 @@ export function SelectPublication({
               dispatch({ type: "updateNewPublicationField", field, value })
             }
             publication={newPublication}
-            authorMap={authorMap}
-            authors={authors}
           />
         </div>
       )}

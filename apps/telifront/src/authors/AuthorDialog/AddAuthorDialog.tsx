@@ -3,13 +3,9 @@ import { css } from "../../../styled-system/css";
 import { iconBtn } from "../../styles/button";
 import { UserPlusIcon } from "@heroicons/react/24/solid";
 import { Dialog } from "../../components/Dialog";
-import { AddAuthorForm } from "./AddAuthorForm";
+import { AddAuthorForm } from "../form/AddAuthorForm";
 
-interface Props {
-  placeholder?: string;
-}
-
-export function AddAuthorDialog(props: Props) {
+export function AddAuthorDialog() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>

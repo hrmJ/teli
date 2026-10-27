@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { getAuthorIndex } from "../authors/api";
+import { getAuthorIndex, getAuthorList } from "../authors/api";
 import { css } from "../../styled-system/css";
 import { iconBtn } from "../styles/button";
 import { SearchBar } from "../components/SearchBar";
 import { AddAuthorDialog } from "../authors/AuthorDialog/AddAuthorDialog";
+import { AuthorContext } from "../authors/AuthorContext";
 
 export const Route = createFileRoute("/authors")({
   component: RouteComponent,
@@ -17,6 +18,7 @@ function RouteComponent() {
     queryKey: ["authorIndex"],
     queryFn: getAuthorIndex,
   });
+
   return (
     <div
       className={css({
@@ -24,16 +26,7 @@ function RouteComponent() {
         paddingLeft: "s10",
       })}
     >
-      <button
-        onClick={() => null}
-        className={css(iconBtn, {
-          color: "yellow.600",
-          fontSize: "s2",
-          marginBottom: "s4",
-        })}
-      >
-        <AddAuthorDialog />
-      </button>
+      <AddAuthorDialog />
       <div className={css({ maxWidth: "s22" })}>
         <ul
           className={css({

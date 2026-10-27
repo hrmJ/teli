@@ -6,15 +6,13 @@ import {
 import { css } from "../../../styled-system/css";
 import { iconBtnPill } from "../../styles/button";
 import { ReceptionType } from "./ReceptionType";
-import { useMemo, useReducer, useState } from "react";
+import { use, useReducer, useState } from "react";
 import { numberCircle } from "../../styles/numbercircle";
 import { SelectPublication } from "./SelectPublication";
 import { receptionFormReducer } from "./receptionFormReducer";
 import { Summary } from "./Summary";
 import { validateStep } from "./validation";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getAuthorList } from "../../authors/api";
-import { Spinner } from "../../components/Spinner";
+import { AuthorContext } from "../../authors/AuthorContext";
 
 interface Props {
   to: string;
@@ -30,27 +28,14 @@ export function AddReceptionForm({ to }: Props) {
   //     return axios.post("/todos", newTodo);
   //   },
   // });
-
-  const {
-    data: authors,
-    error,
-    fetchStatus,
-  } = useQuery({
-    queryKey: ["authorNames"],
-    queryFn: async () => getAuthorList(),
-  });
-
-  const authorMap = useMemo(() => {
-    const map = new Map<string, { name: string; id: string }>();
-    for (const author of authors ?? []) {
-      map.set(author.name, { id: author.id, name: author.name });
-    }
-    return map;
-  }, [authors]);
+  //
+  // const
 
   const [validationErrors, setValidationErrors] = useState<
     string[] | undefined
   >(undefined);
+
+  const { authorMap } = use(AuthorContext);
 
   const steps = [
     {
@@ -66,8 +51,6 @@ export function AddReceptionForm({ to }: Props) {
           existingOrNew={state.newOrExistingPublication}
           newPublication={state.newPublication}
           existingPublication={state.existingPublication}
-          authors={authors ?? []}
-          authorMap={authorMap}
         />
       ),
       label: "Valitse teos",
@@ -75,8 +58,6 @@ export function AddReceptionForm({ to }: Props) {
     { element: <Summary to={to} data={state} />, label: "Tarkista tiedot" },
   ] as const;
   const [activeStep, setActiveStep] = useState(0);
-
-  if (fetchStatus === "fetching" && !authors) return <Spinner />;
 
   return (
     <div
