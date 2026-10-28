@@ -15,6 +15,17 @@ interface Props {
   disableAuthor?: boolean;
 }
 
+function formatDate(pub: Record<string, unknown> | undefined) {
+  if (!pub) return;
+  if (pub.date instanceof Date) {
+    const year = pub.date.getFullYear();
+    const month = String(pub.date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const day = String(pub.date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+    return formattedDate;
+  }
+}
+
 export function PublicationForm({ dispatch, publication, disableAuthor }: Props) {
   const data = { ...publication, author: publication?.author ?? "" };
 
@@ -51,7 +62,7 @@ export function PublicationForm({ dispatch, publication, disableAuthor }: Props)
       <Input {...inputConsts} name="publisher" label="Kustantaja" />
       <Input {...inputConsts} name="publishLocation" label="Julkaisupaikka" />
       <Input {...inputConsts} name="year" label="Julkaisuvuosi" type="number" />
-      <Input {...inputConsts} name="date" label="Julkaisupäivä" type="date" />
+      <Input {...inputConsts} value={formatDate(publication)} name="date" label="Julkaisupäivä" type="date" />
       <Input {...inputConsts} name="publicationName" label="Julkaisu" />
       <Input {...inputConsts} name="documentType" label="Documentin tyyppi" />
       <Input {...inputConsts} name="genre" label="Genre" />

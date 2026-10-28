@@ -4,10 +4,15 @@ import { baseInpt } from "../styles/input";
 
 type DispatchFn = (fieldName: string, value: unknown) => void;
 
+function valueByTpe(e: ChangeEvent<HTMLInputElement, HTMLInputElement>, type?: React.InputHTMLAttributes<HTMLInputElement>["type"]) {
+  if (type === "number") return e.target.valueAsNumber;
+  if (type === "date") return e.target.valueAsDate;
+  return e.target.value;
+}
+
 function updateField(dispatch: DispatchFn, type?: React.InputHTMLAttributes<HTMLInputElement>["type"]) {
   return (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
-    const value = type === "number" ? e.target.valueAsNumber : e.target.value;
-    dispatch(e.target.name, value);
+    dispatch(e.target.name, valueByTpe(e, type));
   };
 }
 

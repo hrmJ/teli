@@ -21,7 +21,6 @@ export function AddAuthorForm({ onSuccess }: { onSuccess: () => void }) {
   });
 
   const navigate = useNavigate();
-
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (newAuthor: NewAuthorDto) => {
@@ -33,7 +32,6 @@ export function AddAuthorForm({ onSuccess }: { onSuccess: () => void }) {
       navigate({
         to: `/author/$author`,
         params: { author: `${data.lastName.trim()} ${data.firstName.trim()}` },
-        search: { newAuthorSaved: true },
       });
     },
   });

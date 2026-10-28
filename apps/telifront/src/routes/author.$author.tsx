@@ -8,11 +8,6 @@ import { iconBtn } from "../styles/button";
 
 export const Route = createFileRoute("/author/$author")({
   component: RouteComponent,
-  validateSearch: (search: Record<string, unknown>) => {
-    return {
-      newAuthorSaved: search.newAuthorSaved ? true : false,
-    };
-  },
 });
 
 function RouteComponent() {
@@ -23,7 +18,6 @@ function RouteComponent() {
     queryKey: ["authorDetails", author],
     queryFn: async () => getAuthorDetails(author),
   });
-  const { newAuthorSaved } = Route.useSearch();
 
   return (
     <div
@@ -34,12 +28,6 @@ function RouteComponent() {
         gap: "s5",
       })}
     >
-      {newAuthorSaved ? (
-        <div className={css({ padding: "s3", borderRadius: "sm", background: "green.100", marginBottom: "s2" })}>
-          Tallennus onnistui.
-        </div>
-      ) : null}
-
       <div>
         {canGoBack ? (
           <button className={css(iconBtn, { color: "grey4" })} onClick={() => router.history.back()}>

@@ -14,7 +14,14 @@ export const PublicationDtoSchema = v.object({
   source: v.optional(v.string()),
   publishLocation: v.optional(v.string()),
   year: v.optional(v.number()),
-  date: v.optional(v.date()),
+  date: v.optional(
+    v.pipe(
+      v.string(),
+      v.isoTimestamp(),
+      v.transform((date) => date.slice(0, 10)),
+    ),
+  ),
+
   reference: v.optional(v.string()),
   note: v.optional(v.string()),
   link: v.optional(v.string()),
