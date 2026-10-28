@@ -10,15 +10,10 @@ import { css } from "../../styled-system/css";
 import { PublicationType } from "./PublicationType";
 import { PublicationLink } from "./PublicationLink";
 import { PublicationAuthor } from "./PublicationAuthor";
-import {
-  LinkIcon,
-  MinusIcon,
-  PlusIcon,
-  SquaresPlusIcon,
-} from "@heroicons/react/24/solid";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import type { DisplayAs } from "../utils/sharedTypes";
 import { hasReceptions, numberOfReceptions } from "./receptionHelpers";
-import { iconBtn, linkBtn } from "../styles/button";
+import { iconBtn } from "../styles/button";
 import { AddReceptionDialog } from "../receptions/ReceptionDialog/AddReceptionDialog";
 
 interface Props {
@@ -62,22 +57,13 @@ export function Publication(props: Props) {
     <article
       className={css({
         padding: "s5",
-        border:
-          props.displayAs === "original"
-            ? "1px solid var(--colors-grey6)"
-            : "1px solid var(--colors-grey7)",
+        border: props.displayAs === "original" ? "1px solid var(--colors-grey6)" : "1px solid var(--colors-grey7)",
         "&+&": {
-          borderTop:
-            props.displayAs === "original"
-              ? "none"
-              : "1px solid var(--colors-grey7)",
+          borderTop: props.displayAs === "original" ? "none" : "1px solid var(--colors-grey7)",
           marginTop: props.displayAs === "original" ? "0" : "s4",
         },
 
-        boxShadow:
-          props.displayAs === "original"
-            ? "none"
-            : "0 1px 2px hsla(0, 0%, 0%, .2)",
+        boxShadow: props.displayAs === "original" ? "none" : "0 1px 2px hsla(0, 0%, 0%, .2)",
       })}
     >
       <PublicationTitle
@@ -98,20 +84,14 @@ export function Publication(props: Props) {
               },
             })}
           >
-            <PublicationAuthor
-              author={author}
-              hidden={props.displayAs === "original"}
-            />
+            <PublicationAuthor author={author} hidden={props.displayAs === "original"} />
             <PublicationLanguage language={language} />
             <PublicationType genre={genre} documentType={documentType} />
             <PublicationLink value={link} />
             <ul className={css({ marginTop: "s4" })}>
               <PublicationEntry value={englishTitle} label="English title" />
               <PublicationEntry value={otherAuthors} label="Other authors" />
-              <PublicationEntry
-                value={publicationName}
-                label="Publication name"
-              />
+              <PublicationEntry value={publicationName} label="Publication name" />
               <PublicationEntry value={date} label="Date" />
               <PublicationEntry value={source} label="Source" />
               <PublicationEntry value={reference} label="Reference" />
@@ -139,7 +119,7 @@ export function Publication(props: Props) {
             </section>
           ) : null}
 
-          <AddReceptionDialog to={title ?? "?"} />
+          <AddReceptionDialog to={title ?? "?"} originalId={id} />
         </div>
       ) : null}
     </article>

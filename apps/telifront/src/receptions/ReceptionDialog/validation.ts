@@ -17,7 +17,7 @@ function validateStep2(data: ReceptionForm, authorMap: Map<string, { name: strin
       );
       return ["Tarkista uuden teoksen tiedot."];
     }
-    if (!parsed.output.author || !authorMap.has(parsed.output.author.toLowerCase())) {
+    if (!parsed.output.author || !authorMap.has(parsed.output.author.toLowerCase().trim())) {
       return ["Uudelta teokselta puuttuu tekijä tai tekijää ei löydy. Huom! Voit lisätä uuden tekijän yläreunan linkistä."];
     }
     return;

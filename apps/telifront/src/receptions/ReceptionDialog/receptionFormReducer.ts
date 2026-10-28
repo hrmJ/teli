@@ -46,7 +46,6 @@ export function receptionFormReducer(state: ReceptionForm, action: ReceptionForm
     case "clearExistingPublication":
       return { ...state, existingPublication: undefined };
     case "updateNewPublicationField":
-      console.log(action.field, action.value, "moro");
       const newPublication = validatePublication({
         ...state.newPublication,
         [action.field]: action.value,

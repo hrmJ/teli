@@ -1,47 +1,32 @@
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  ArrowUpTrayIcon,
-} from "@heroicons/react/24/solid";
+import { ArrowLeftIcon, ArrowRightIcon, ArrowUpTrayIcon } from "@heroicons/react/24/solid";
 import { css } from "../../../styled-system/css";
 import { iconBtnPill } from "../../styles/button";
 import { ReceptionType } from "./ReceptionType";
 import { use, useReducer, useState } from "react";
 import { numberCircle } from "../../styles/numbercircle";
 import { SelectPublication } from "./SelectPublication";
-import { receptionFormReducer } from "./receptionFormReducer";
+import { ReceptionForm, receptionFormReducer } from "./receptionFormReducer";
 import { Summary } from "./Summary";
 import { validateStep } from "./validation";
 import { AuthorContext } from "../../authors/AuthorContext";
 
 interface Props {
   to: string;
+  onSave: (data: ReceptionForm) => void;
 }
 
-export function AddReceptionForm({ to }: Props) {
+export function AddReceptionForm({ to, onSave }: Props) {
   const [state, dispatch] = useReducer(receptionFormReducer, {
     receptionType: "translation",
     newOrExistingPublication: "existing",
   });
-  // const mutation = useMutation({
-  //   mutationFn: (receptionData) => {
-  //     return axios.post("/todos", newTodo);
-  //   },
-  // });
-  //
-  // const
-
-  const [validationErrors, setValidationErrors] = useState<
-    string[] | undefined
-  >(undefined);
+  const [validationErrors, setValidationErrors] = useState<string[] | undefined>(undefined);
 
   const { authorMap } = use(AuthorContext);
 
   const steps = [
     {
-      element: (
-        <ReceptionType dispatch={dispatch} selectedType={state.receptionType} />
-      ),
+      element: <ReceptionType dispatch={dispatch} selectedType={state.receptionType} />,
       label: "Määritä tyyppi",
     },
     {
@@ -72,9 +57,7 @@ export function AddReceptionForm({ to }: Props) {
       })}
     >
       <form className={css({})}>
-        <h2 className={css({ fontSize: "s8", color: "grey3" })}>
-          Uusi reseptio
-        </h2>
+        <h2 className={css({ fontSize: "s8", color: "grey3" })}>Uusi reseptio</h2>
         <p
           className={css({
             fontSize: "s4",
@@ -181,11 +164,7 @@ export function AddReceptionForm({ to }: Props) {
             className={css(iconBtnPill, { fontSize: "s3" })}
             onClick={(e) => {
               e.preventDefault();
-              const validationErrors = validateStep(
-                activeStep,
-                state,
-                authorMap,
-              );
+              const validationErrors = validateStep(activeStep, state, authorMap);
               setValidationErrors(validationErrors);
               if (!validationErrors) {
                 setValidationErrors(undefined);
@@ -207,7 +186,7 @@ export function AddReceptionForm({ to }: Props) {
             })}
             onClick={(e) => {
               e.preventDefault();
-              //SAVE
+              onSave(state);
             }}
           >
             <ArrowUpTrayIcon className={css({ width: "s4", height: "s4" })} />
