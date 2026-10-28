@@ -1,9 +1,6 @@
 import { type Publication } from "@teli/domain/publications";
 import type { PublicationRepository } from "./publicationRepository.ts";
-import {
-  type ReceptionType,
-  receptionTypeAsCategory,
-} from "@teli/domain/receptions";
+import { type ReceptionType, receptionTypeAsCategory } from "@teli/domain/receptions";
 
 type Deps = {
   publications: PublicationRepository;
@@ -11,9 +8,7 @@ type Deps = {
 
 export type GetPublications = ReturnType<typeof composeGetPublications>;
 export type GetPublicationById = ReturnType<typeof composeGetPublicationById>;
-export type AddPublicationReceptions = ReturnType<
-  typeof composeAddPublicationReceptions
->;
+export type AddPublicationReceptions = ReturnType<typeof composeAddPublicationReceptions>;
 
 export function composeGetPublications({ publications }: Deps) {
   return async function getPublications(title: string) {
@@ -33,10 +28,7 @@ export function composeGetPublicationById({ publications }: Deps) {
  * Form the new receptionsOf dictionary with the updated target publication
  * included
  */
-function withUpdatedReceptionsOf(
-  reception: Publication,
-  targetId: string,
-): Publication {
+function withUpdatedReceptionsOf(reception: Publication, targetId: string): Publication {
   const receptionOf = reception?.receptionOf ?? [];
   const updatedReceptionOf = [...receptionOf, targetId];
   return {
@@ -67,16 +59,14 @@ function withUpdatedReceptions(
     ...targetPublication,
     receptions: {
       ...receptions,
-      [receptionCategory]: [
-        ...new Set([...receptions[receptionCategory], reception.id]),
-      ],
+      [receptionCategory]: [...new Set([...receptions[receptionCategory], reception.id])],
     },
   };
 }
 
 type ReceptionSource = {
   existingPublicationId?: string;
-  publication?: Omit<Publication, "id">;
+  publication?: Omit<Publication, "id" | "author"> & { authorId: string };
 };
 
 type AddReceptionArgs = {
@@ -94,7 +84,8 @@ export function composeAddPublicationReceptions({ publications }: Deps) {
       return args.existingPublicationId;
     }
     if (args.publication) {
-      const res = await publications.create(args.publication);
+      const { authorId, ...rest } = args.publication;
+      const res = await publications.create(rest, authorId);
       return res.id;
     }
     throw new Error("Didnt receive new or existing publication");
@@ -106,11 +97,7 @@ export function composeAddPublicationReceptions({ publications }: Deps) {
    * for another publication
    *
    */
-  return async function addPublicationReceptions({
-    targetId,
-    receptionType,
-    ...receptionSource
-  }: AddReceptionArgs) {
+  return async function addPublicationReceptions({ targetId, receptionType, ...receptionSource }: AddReceptionArgs) {
     const targetPublication = await publications.getById(targetId);
     const receptionCategory = receptionTypeAsCategory(receptionType);
     const receptionId = await resolveReception(receptionSource);
@@ -123,13 +110,7 @@ export function composeAddPublicationReceptions({ publications }: Deps) {
       throw new Error("Unable to find the target publication");
     }
 
-    await publications.updateById(
-      receptionId,
-      withUpdatedReceptionsOf(reception, targetId),
-    );
-    await publications.updateById(
-      targetId,
-      withUpdatedReceptions(reception, targetPublication, receptionCategory),
-    );
+    await publications.updateById(receptionId, withUpdatedReceptionsOf(reception, targetId));
+    await publications.updateById(targetId, withUpdatedReceptions(reception, targetPublication, receptionCategory));
   };
 }

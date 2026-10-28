@@ -5,5 +5,5 @@ export type PublicationRepository = {
   updateById(id: string, publication: Publication): Promise<boolean>;
   getByIds(ids: string[]): Promise<Publication[]>;
   searchByTitle(title: string): Promise<Publication[]>;
-  create(publication: Omit<Publication, "id">): Promise<Publication>;
+  create(publication: Omit<Publication, "id" | "author">, authorId: string): Promise<Publication>;
 };

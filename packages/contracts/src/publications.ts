@@ -26,9 +26,7 @@ export const PublicationListDtoSchema = v.object({
   publications: v.array(PublicationDtoSchema),
 });
 
-export const NewPublicationDtoSchema = v.omit(PublicationDtoSchema, ["id"]);
-export type NewPublicationDtoSchema = v.InferOutput<
-  typeof NewPublicationDtoSchema
->;
+export const NewPublicationDtoSchema = v.omit(PublicationDtoSchema, ["id", "author"]);
+export type NewPublicationDtoSchema = v.InferOutput<typeof NewPublicationDtoSchema>;
 
 export type PublicationListDto = v.InferOutput<typeof PublicationListDtoSchema>;

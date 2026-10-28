@@ -1,5 +1,7 @@
 import {
+  composeAddPublication,
   composeCreateAuthor,
+  composeGetAuthorById,
   composeGetAuthorDetails,
   composeGetAuthorIndex,
   composeListAuthorNames,
@@ -19,6 +21,7 @@ const authorRepository = composeMongooseAuthorRepository({ AuthorModel });
 const publicationRepository = composeMongoosePublicationRepository({
   AuthorModel,
 });
+
 export const authorsController = composeAuthorsController({
   getAuthorIndex: composeGetAuthorIndex({ authors: authorRepository }),
   getAuthorDetails: composeGetAuthorDetails({ authors: authorRepository }),
@@ -29,13 +32,9 @@ export const authorsController = composeAuthorsController({
 
 export const publicationsController = composePublicationsController({
   getReceptions: composeGetReceptions({ publications: publicationRepository }),
-  getPublications: composeGetPublications({
-    publications: publicationRepository,
-  }),
-  getById: composeGetPublicationById({
-    publications: publicationRepository,
-  }),
-  addPublicationReception: composeAddPublicationReceptions({
-    publications: publicationRepository,
-  }),
+  getPublications: composeGetPublications({ publications: publicationRepository }),
+  getById: composeGetPublicationById({ publications: publicationRepository }),
+  addPublicationReception: composeAddPublicationReceptions({ publications: publicationRepository }),
+  getAuthorById: composeGetAuthorById({ authors: authorRepository }),
+  addPublication: composeAddPublication({ authors: authorRepository }),
 });

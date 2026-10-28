@@ -1,15 +1,13 @@
 import { escapeRegex } from "@teli/language";
 import type { AuthorModel } from "./author.schema.ts";
-import {
-  publicationToDomain,
-  publicationToPersistence,
-} from "./publication.mapper.ts";
+import { publicationToDomain, publicationToPersistence } from "./publication.mapper.ts";
 import type { PublicationRepository } from "@teli/application/publications";
 import type { Publication } from "@teli/domain/publications";
 
 type AuthorModelLike = {
   find: typeof AuthorModel.find;
   findOne: typeof AuthorModel.findOne;
+  findById: typeof AuthorModel.findById;
   aggregate: typeof AuthorModel.aggregate;
   findByIdAndUpdate: typeof AuthorModel.findByIdAndUpdate;
 };
@@ -18,9 +16,7 @@ type Deps = {
   AuthorModel: AuthorModelLike;
 };
 
-export function composeMongoosePublicationRepository(
-  deps: Deps,
-): PublicationRepository {
+export function composeMongoosePublicationRepository(deps: Deps): PublicationRepository {
   return {
     async getById(id) {
       const author = await deps.AuthorModel.findOne({
@@ -77,25 +73,21 @@ export function composeMongoosePublicationRepository(
 
       return authors.flatMap((author) =>
         author.publications
-          .filter((publication) =>
-            publication.title?.toLowerCase().includes(title.toLowerCase()),
-          )
+          .filter((publication) => publication.title?.toLowerCase().includes(title.toLowerCase()))
           .map((pub) => {
             return publicationToDomain(pub, author.name);
           }),
       );
     },
 
-    async create(publication) {
-      const author = await deps.AuthorModel.findOne({
-        name: publication.author,
-      });
+    async create(publication, authorId) {
+      const author = await deps.AuthorModel.findById(authorId);
 
       if (!author) {
         throw new Error("Author not found");
       }
 
-      author.publications.push(publicationToPersistence(publication));
+      author.publications.push(publicationToPersistence({ ...publication, author: author.name }));
 
       await author.save();
       const created = author.publications.at(-1)!;

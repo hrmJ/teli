@@ -7,4 +7,4 @@ export {
   type GetPublicationById,
   composeAddPublicationReceptions,
   type AddPublicationReceptions,
-} from "./publications.ts";
+} from "./addPublicationReceptions.query.ts";

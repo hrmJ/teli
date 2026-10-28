@@ -1,26 +1,19 @@
 import type { RequestHandler } from "express";
 import { presentPublication } from "./publications.presenter.ts";
-import type {
-  AddPublicationReceptions,
-  GetPublicationById,
-  GetPublications,
-  GetReceptions,
-} from "@teli/application/publications";
-import {
-  validateNewReception,
-  validatePublicationId,
-} from "./publications.validator.ts";
+import type { AddPublicationReceptions, GetPublicationById, GetPublications, GetReceptions } from "@teli/application/publications";
+import type { AddPublication, GetAuthorById } from "@teli/application/authors";
+import { formatDate, validateNewPublication, validateNewReception, validatePublicationId } from "./publications.validator.ts";
 
 type PublicationsControllerDeps = {
   getReceptions: GetReceptions;
   getPublications: GetPublications;
   getById: GetPublicationById;
   addPublicationReception: AddPublicationReceptions;
+  getAuthorById: GetAuthorById;
+  addPublication: AddPublication;
 };
 
-export function composePublicationsController(
-  deps: PublicationsControllerDeps,
-) {
+export function composePublicationsController(deps: PublicationsControllerDeps) {
   const viewReceptionsHandler: RequestHandler = async function (req, res) {
     validatePublicationId(req, res);
     const id = req.params.id;
@@ -46,8 +39,7 @@ export function composePublicationsController(
       return;
     }
 
-    const { receptionType, existingPublication, newPublication } =
-      validateNewReception(req.body);
+    const { receptionType, existingPublication, newPublication } = validateNewReception(req.body);
 
     await deps.addPublicationReception({
       targetId,
@@ -71,9 +63,23 @@ export function composePublicationsController(
     res.status(200).json({ publications });
   };
 
+  const createPublicationHandler: RequestHandler = async function (req, res) {
+    const { publication, authorId } = req.body;
+    const author = await deps.getAuthorById(authorId);
+    if (!author) {
+      res.status(422).json({ error: "Invalid author" });
+      return;
+    }
+    const date = formatDate(publication.date);
+    const newPublication = validateNewPublication({ ...publication, date });
+    await deps.addPublication(authorId, newPublication);
+    res.status(201).json({ status: "success" });
+  };
+
   return {
     viewReceptionsHandler,
     updateReceptionsHandler,
     viewPublicationsHandler,
+    createPublicationHandler,
   };
 }

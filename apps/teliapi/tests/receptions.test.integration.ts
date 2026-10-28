@@ -1,11 +1,7 @@
 import assert from "node:assert";
 import test, { beforeEach, before, after } from "node:test";
 import { resetDb } from "./helpers/db.ts";
-import {
-  AuthorModel,
-  connectMongoose,
-  disconnectMongoose,
-} from "@teli/infrastructure/mongoose";
+import { AuthorModel, connectMongoose, disconnectMongoose } from "@teli/infrastructure/mongoose";
 import { testConfig } from "./config.ts";
 import { publicationFixture } from "./fixtures/publications.fixture.ts";
 import { authorFixture } from "./fixtures/authors.fixture.ts";
@@ -38,10 +34,7 @@ beforeEach(async () => {
 
 test("Unauthenticated users cant link receptions", async () => {
   // Act
-  const resp = await fetch(
-    `${testConfig.baseUrl}/publications/${originalId}/receptions`,
-    { method: "PUT", body: "" },
-  );
+  const resp = await fetch(`${testConfig.baseUrl}/publications/${originalId}/receptions`, { method: "PUT", body: "" });
   // Assert
   assert.equal(resp.status, 401);
 });
@@ -59,27 +52,23 @@ test("Authenticated users can link existing works as receptions", async () => {
 
   const tokens = await loginTestUser();
   try {
-    const resp = await fetch(
-      `${testConfig.baseUrl}/publications/${originalId}/receptions`,
-      {
-        method: "PUT",
-        body: JSON.stringify({
-          receptionType: "translation",
-          existingPublication: { title: receptionTitle, id: receptionId },
-          newOrExistingPublication: "existing",
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${tokens.access_token}`,
-        },
+    const resp = await fetch(`${testConfig.baseUrl}/publications/${originalId}/receptions`, {
+      method: "PUT",
+      body: JSON.stringify({
+        receptionType: "translation",
+        existingPublication: { title: receptionTitle, id: receptionId },
+        newOrExistingPublication: "existing",
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${tokens.access_token}`,
       },
-    );
+    });
 
     // Assert
     assert.equal(resp.status, 204);
     const updatedOriginalAuthor = await AuthorModel.findById(originalAuthorId);
-    const updatedReceptions =
-      updatedOriginalAuthor?.publications.at(0)?.receptions;
+    const updatedReceptions = updatedOriginalAuthor?.publications.at(0)?.receptions;
 
     assert.deepStrictEqual(updatedReceptions, {
       translations: [receptionId],
@@ -89,11 +78,9 @@ test("Authenticated users can link existing works as receptions", async () => {
       other: [],
     });
 
-    const updatedReceptionAuthor =
-      await AuthorModel.findById(receptionAuthorId);
+    const updatedReceptionAuthor = await AuthorModel.findById(receptionAuthorId);
 
-    const updatedReceptionsOf =
-      updatedReceptionAuthor?.publications.at(0)?.receptionOf;
+    const updatedReceptionsOf = updatedReceptionAuthor?.publications.at(0)?.receptionOf;
     assert.deepStrictEqual(updatedReceptionsOf, [originalId]);
   } finally {
     await logoutTestUser(tokens.refresh_token);
@@ -111,38 +98,31 @@ test("Authenticated users can link new works as receptions", async () => {
 
   const tokens = await loginTestUser();
   try {
-    const resp = await fetch(
-      `${testConfig.baseUrl}/publications/${originalId}/receptions`,
-      {
-        method: "PUT",
-        body: JSON.stringify({
-          receptionType: "translation",
-          newOrExistingPublication: "new",
-          newPublication: {
-            author: receptionAuthor.name,
-            title: "some new reception",
-          },
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${tokens.access_token}`,
+    const resp = await fetch(`${testConfig.baseUrl}/publications/${originalId}/receptions`, {
+      method: "PUT",
+      body: JSON.stringify({
+        receptionType: "translation",
+        newOrExistingPublication: "new",
+        newPublication: {
+          authorId: receptionAuthor.id,
+          title: "some new reception",
         },
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${tokens.access_token}`,
       },
-    );
+    });
 
     // Assert
     assert.equal(resp.status, 204);
     const updatedOriginalAuthor = await AuthorModel.findById(originalAuthorId);
 
-    const updatedReceptionAuthor =
-      await AuthorModel.findById(receptionAuthorId);
+    const updatedReceptionAuthor = await AuthorModel.findById(receptionAuthorId);
 
-    const updatedReceptions =
-      updatedOriginalAuthor?.publications.at(0)?.receptions;
+    const updatedReceptions = updatedOriginalAuthor?.publications.at(0)?.receptions;
 
-    const newPubId = updatedReceptionAuthor?.publications
-      ?.at(0)
-      ?._id.toString();
+    const newPubId = updatedReceptionAuthor?.publications?.at(0)?._id.toString();
 
     assert.deepStrictEqual(updatedReceptions, {
       translations: [newPubId],

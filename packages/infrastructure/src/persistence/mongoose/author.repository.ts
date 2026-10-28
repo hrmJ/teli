@@ -2,10 +2,13 @@ import type { AuthorRepository } from "@teli/application/authors";
 import { AuthorModel } from "./author.schema.ts";
 import { authorToDomain, authorToDomainWithoutPublication, authorToPersistence } from "./author.mapper.ts";
 import type { Author } from "@teli/domain/authors";
+import type { Publication } from "@teli/domain/publications";
+import { publicationToPersistence } from "./publication.mapper.ts";
 
 type AuthorModelLike = {
   find: typeof AuthorModel.find;
   findOne: typeof AuthorModel.findOne;
+  findById: typeof AuthorModel.findById;
   aggregate: typeof AuthorModel.aggregate;
   create: typeof AuthorModel.create;
 };
@@ -64,9 +67,24 @@ export function composeMongooseAuthorRepository(deps: Deps): AuthorRepository {
       return authors.map(authorToDomainWithoutPublication);
     },
 
-    async create(author: Omit<Author, "id">): Promise<Author> {
+    async create(author: Omit<Author, "id" | "publications">): Promise<Author> {
       const created = await deps.AuthorModel.create(authorToPersistence(author));
       return authorToDomain(created);
+    },
+
+    async getById(id: string) {
+      const author = await deps.AuthorModel.findById(id);
+      if (!author) {
+        return null;
+      }
+      return authorToDomain(author);
+    },
+
+    async addPublication(id: string, publication: Omit<Publication, "id" | "author">) {
+      const author = await deps.AuthorModel.findById(id);
+      author?.publications.push(publicationToPersistence({ ...publication, author: author.name }));
+      await author?.save();
+      return true;
     },
   };
 }

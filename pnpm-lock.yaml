@@ -314,6 +314,10 @@ importers:
       '@teli/domain':
         specifier: workspace:*
         version: link:../domain
+    devDependencies:
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
 
   packages/contracts:
     dependencies:

@@ -34,7 +34,7 @@ export function authorToDomainWithoutPublication(doc: AuthorDocument): Omit<Auth
   };
 }
 
-export function authorToPersistence(author: Omit<Author, "id">) {
+export function authorToPersistence(author: Omit<Author, "id" | "publications">) {
   return {
     name: author.name,
     pseudonyms: author.pseudonyms,

@@ -2,10 +2,7 @@ import type { Publication } from "@teli/domain/publications";
 import type { PublicationDocument } from "./publication.schema.ts";
 import { nullToUndefined } from "@teli/language";
 
-export function publicationToDomain(
-  doc: PublicationDocument,
-  authorName?: string,
-): Publication {
+export function publicationToDomain(doc: PublicationDocument, authorName?: string): Publication {
   return {
     id: doc._id.toString(),
     author: authorName ?? "unknown",
