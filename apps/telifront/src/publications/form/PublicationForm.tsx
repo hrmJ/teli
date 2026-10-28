@@ -7,14 +7,15 @@ import type { NewPublicationDtoSchema } from "@teli/contracts/publications";
 import { use } from "react";
 import { AuthorContext } from "../../authors/AuthorContext";
 
-const Input = InputBase<NewPublicationDtoSchema>;
+const Input = InputBase<NewPublicationDtoSchema & { author: string }>;
 
 interface Props {
   dispatch: (fieldName: string, value: unknown) => void;
   publication?: Record<string, unknown>;
+  disableAuthor?: boolean;
 }
 
-export function PublicationForm({ dispatch, publication }: Props) {
+export function PublicationForm({ dispatch, publication, disableAuthor }: Props) {
   const data = { ...publication, author: publication?.author ?? "" };
 
   const inputConsts = { data, dispatch };
@@ -22,13 +23,7 @@ export function PublicationForm({ dispatch, publication }: Props) {
   const { authorMap, authors } = use(AuthorContext);
   return (
     <div className={css({ "& > * + *": { marginTop: "s2" }, color: "grey4" })}>
-      <Input
-        {...inputConsts}
-        name="author"
-        label="Tekijä"
-        list="authors-list"
-        required
-      />
+      <Input {...inputConsts} name="author" label="Tekijä" list="authors-list" required disabled={disableAuthor} />
       <datalist id="authors-list">
         {authors?.map((author) => (
           <option key={author.id} value={author.name}>
@@ -36,7 +31,7 @@ export function PublicationForm({ dispatch, publication }: Props) {
           </option>
         ))}
       </datalist>
-      {validateAuthor(authorMap, data?.author) ? (
+      {!disableAuthor && validateAuthor(authorMap, data?.author) ? (
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -52,11 +47,7 @@ export function PublicationForm({ dispatch, publication }: Props) {
         </button>
       ) : null}
       <Input {...inputConsts} name="title" label="Otsikko (title)" />
-      <Input
-        {...inputConsts}
-        name="englishTitle"
-        label="Englanninkielinen otsikko"
-      />
+      <Input {...inputConsts} name="englishTitle" label="Englanninkielinen otsikko" />
       <Input {...inputConsts} name="publisher" label="Kustantaja" />
       <Input {...inputConsts} name="publishLocation" label="Julkaisupaikka" />
       <Input {...inputConsts} name="year" label="Julkaisuvuosi" type="number" />

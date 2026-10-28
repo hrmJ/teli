@@ -6,4 +6,7 @@ export const baseInpt: Styles = css.raw({
   padding: "s1",
   border: "1px solid",
   borderColor: "grey7",
+  _disabled: {
+    background: "grey7",
+  },
 });

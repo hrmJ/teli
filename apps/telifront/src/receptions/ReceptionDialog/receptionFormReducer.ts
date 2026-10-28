@@ -1,24 +1,15 @@
-import {
-  NewPublicationDtoSchema,
-  PublicationDto,
-} from "@teli/contracts/publications";
+import { NewPublicationDtoSchemaWithAuthor, PublicationDto } from "@teli/contracts/publications";
 import * as v from "valibot";
 
 function validatePublication(data: unknown) {
-  const parsed = v.safeParse(NewPublicationDtoSchema, data);
+  const parsed = v.safeParse(NewPublicationDtoSchemaWithAuthor, data);
   if (!parsed.success) {
-    console.log(parsed.issues);
     throw new Error("Invalid reception data");
   }
   return parsed.output;
 }
 
-export type ReceptionType =
-  | "translation"
-  | "review"
-  | "adaptation"
-  | "article"
-  | "other";
+export type ReceptionType = "translation" | "review" | "adaptation" | "article" | "other";
 
 export interface ReceptionForm {
   receptionType: ReceptionType;
@@ -39,10 +30,7 @@ export type ReceptionFormAction =
     }
   | { type: "useNewOrExistingPublication"; newOrExisting: "new" | "existing" };
 
-export function receptionFormReducer(
-  state: ReceptionForm,
-  action: ReceptionFormAction,
-): ReceptionForm {
+export function receptionFormReducer(state: ReceptionForm, action: ReceptionFormAction): ReceptionForm {
   switch (action.type) {
     case "editType":
       return { ...state, receptionType: action.receptionType };
@@ -58,6 +46,7 @@ export function receptionFormReducer(
     case "clearExistingPublication":
       return { ...state, existingPublication: undefined };
     case "updateNewPublicationField":
+      console.log(action.field, action.value, "moro");
       const newPublication = validatePublication({
         ...state.newPublication,
         [action.field]: action.value,

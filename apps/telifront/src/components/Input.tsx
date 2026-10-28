@@ -4,9 +4,10 @@ import { baseInpt } from "../styles/input";
 
 type DispatchFn = (fieldName: string, value: unknown) => void;
 
-function updateField(dispatch: DispatchFn) {
+function updateField(dispatch: DispatchFn, type?: React.InputHTMLAttributes<HTMLInputElement>["type"]) {
   return (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
-    dispatch(e.target.name, e.target.value);
+    const value = type === "number" ? e.target.valueAsNumber : e.target.value;
+    dispatch(e.target.name, value);
   };
 }
 
@@ -26,7 +27,7 @@ function compileInputValue(value: unknown) {
 }
 
 export function Input<T>({ data, label, dispatch, validate, ...attributes }: Props<T>) {
-  const onChange = updateField(dispatch);
+  const onChange = updateField(dispatch, attributes.type);
   const value = compileInputValue(data?.[attributes.name]);
   const [error, setError] = useState("");
   return (

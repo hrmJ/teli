@@ -10,7 +10,7 @@ import { ArrowUpTrayIcon } from "@heroicons/react/24/solid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveNewAuthor } from "../api";
 import { Spinner } from "../../components/Spinner";
-import { redirect, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 
 const Input = InputBase<NewAuthorDto>;
 

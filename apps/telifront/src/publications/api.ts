@@ -1,15 +1,11 @@
 import { config } from "../config";
 import * as v from "valibot";
-import {
-  NewReceptionData,
-  ReceptionDtoSchema,
-} from "@teli/contracts/receptions";
-import { PublicationListDtoSchema } from "@teli/contracts/publications";
+import { NewReceptionData, ReceptionDtoSchema } from "@teli/contracts/receptions";
+import { NewPublicationDtoSchema, PublicationListDtoSchema } from "@teli/contracts/publications";
+import { keycloak } from "../auth/keycloak";
 
 export async function getReceptions(originalId: string) {
-  const response = await fetch(
-    `${config.apiUrl}/publications/${originalId}/receptions`,
-  );
+  const response = await fetch(`${config.apiUrl}/publications/${originalId}/receptions`);
 
   if (!response.ok) {
     throw new Error(`Failed to load receptions: ${response.status}`);
@@ -38,21 +34,15 @@ export async function getPublications(title: string) {
   return parsed.output.publications;
 }
 
-export async function updateReceptions(
-  originalId: string,
-  receptionData: NewReceptionData,
-) {
-  const response = await fetch(
-    `${config.apiUrl}/publications/${originalId}/receptions`,
-    {
-      method: "PUT",
-      body: JSON.stringify(receptionData),
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ???`,
-      },
+export async function updateReceptions(originalId: string, receptionData: NewReceptionData) {
+  const response = await fetch(`${config.apiUrl}/publications/${originalId}/receptions`, {
+    method: "PUT",
+    body: JSON.stringify(receptionData),
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ???`,
     },
-  );
+  });
 
   if (!response.ok) {
     throw new Error(`Failed to load receptions: ${response.status}`);
@@ -64,4 +54,21 @@ export async function updateReceptions(
     throw new Error("Invalid reception data");
   }
   return parsed.output;
+}
+
+export async function saveNewPublication(data: { publication: NewPublicationDtoSchema; authorId: string }) {
+  if (!keycloak.token) throw new Error("Unauthenticated");
+  await keycloak.updateToken(30);
+  const response = await fetch(`${config.apiUrl}/publications`, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${keycloak.token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to create publication: ${response.status}`);
+  }
 }

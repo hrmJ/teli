@@ -1,4 +1,4 @@
-import { NewPublicationDtoSchema } from "@teli/contracts/publications";
+import { NewPublicationDtoSchemaWithAuthor } from "@teli/contracts/publications";
 import { type ReceptionType, type ReceptionForm } from "./receptionFormReducer";
 import * as v from "valibot";
 
@@ -7,12 +7,9 @@ function validateStep1(receptionType?: ReceptionType) {
   return ["Lisää reseption tyyppi."];
 }
 
-function validateStep2(
-  data: ReceptionForm,
-  authorMap: Map<string, { name: string; id: string }>,
-) {
+function validateStep2(data: ReceptionForm, authorMap: Map<string, { name: string; id: string }>) {
   if (data.newOrExistingPublication === "new") {
-    const parsed = v.safeParse(NewPublicationDtoSchema, data.newPublication);
+    const parsed = v.safeParse(NewPublicationDtoSchemaWithAuthor, data.newPublication);
     if (!parsed.success) {
       console.log(
         parsed.issues.map((iss) => iss.message),
@@ -20,10 +17,8 @@ function validateStep2(
       );
       return ["Tarkista uuden teoksen tiedot."];
     }
-    if (!parsed.output.author || !authorMap.has(parsed.output.author)) {
-      return [
-        "Uudelta teokselta puuttuu tekijä tai tekijää ei löydy. Huom! Voit lisätä uuden tekijän yläreunan linkistä.",
-      ];
+    if (!parsed.output.author || !authorMap.has(parsed.output.author.toLowerCase())) {
+      return ["Uudelta teokselta puuttuu tekijä tai tekijää ei löydy. Huom! Voit lisätä uuden tekijän yläreunan linkistä."];
     }
     return;
   }
