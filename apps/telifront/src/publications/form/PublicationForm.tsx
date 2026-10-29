@@ -4,8 +4,9 @@ import { iconBtn } from "../../styles/button";
 import { Input as InputBase } from "../../components/Input";
 import { validateAuthor } from "./validators";
 import type { NewPublicationDtoSchema } from "@teli/contracts/publications";
-import { use } from "react";
+import { use, useState } from "react";
 import { AuthorContext } from "../../authors/AuthorContext";
+import { AddAuthorDialog } from "../../authors/AuthorDialog/AddAuthorDialog";
 
 const Input = InputBase<NewPublicationDtoSchema & { author: string }>;
 
@@ -43,19 +44,12 @@ export function PublicationForm({ dispatch, publication, disableAuthor }: Props)
         ))}
       </datalist>
       {!disableAuthor && validateAuthor(authorMap, data?.author) ? (
-        <button
-          onClick={(e) => {
-            e.preventDefault();
+        <AddAuthorDialog
+          onSuccess={(name) => {
+            dispatch("author", name);
           }}
-          className={css(iconBtn, {
-            color: "yellow.600",
-            fontSize: "s2",
-            marginBottom: "s4",
-          })}
-        >
-          <UserPlusIcon className={css({ width: "s3", height: "s3" })} />
-          <div>Lisää uusi tekijä</div>
-        </button>
+          lastName={typeof data.author === "string" ? data.author : ""}
+        />
       ) : null}
       <Input {...inputConsts} name="title" label="Otsikko (title)" />
       <Input {...inputConsts} name="englishTitle" label="Englanninkielinen otsikko" />

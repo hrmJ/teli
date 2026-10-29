@@ -16,7 +16,9 @@ function RootComponent() {
     fetchStatus,
   } = useQuery({
     queryKey: ["authorNames"],
-    queryFn: async () => getAuthorList(),
+    queryFn: async () => {
+      return getAuthorList();
+    },
   });
 
   const authors = authorData?.authors ?? [];

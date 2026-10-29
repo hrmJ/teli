@@ -14,10 +14,20 @@ import { useNavigate } from "@tanstack/react-router";
 
 const Input = InputBase<NewAuthorDto>;
 
-export function AddAuthorForm({ onSuccess }: { onSuccess: () => void }) {
+export function AddAuthorForm({
+  onSuccess,
+  navigateOnSuccess,
+  firstName: initialFirstName = "",
+  lastName: initialLastName = "",
+}: {
+  onSuccess: (name: string) => void;
+  navigateOnSuccess?: boolean;
+  firstName?: string;
+  lastName?: string;
+}) {
   const [data, dispatch] = useReducer(authorFormReducer, {
-    firstName: "",
-    lastName: "",
+    firstName: initialFirstName,
+    lastName: initialLastName,
   });
 
   const navigate = useNavigate();
@@ -28,7 +38,9 @@ export function AddAuthorForm({ onSuccess }: { onSuccess: () => void }) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authorIndex"] });
-      onSuccess();
+      queryClient.invalidateQueries({ queryKey: ["authorNames"] });
+      onSuccess(`${data.lastName.trim()} ${data.firstName.trim()}`);
+      if (!navigateOnSuccess) return;
       navigate({
         to: `/author/$author`,
         params: { author: `${data.lastName.trim()} ${data.firstName.trim()}` },

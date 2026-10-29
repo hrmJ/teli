@@ -1,8 +1,5 @@
-export function validateAuthor(
-  authorMap: Map<string, { name: string; id: string }>,
-  author: unknown,
-) {
+export function validateAuthor(authorMap: Map<string, { name: string; id: string }>, author: unknown) {
   if (typeof author !== "string") return;
-  if (authorMap.has(author)) return;
+  if (authorMap.has(author.toLowerCase().trim())) return;
   return "Tekijää ei löydy";
 }

@@ -6,13 +6,24 @@ import { Dialog } from "../../components/Dialog";
 import { AddAuthorForm } from "../form/AddAuthorForm";
 import { keycloak } from "../../auth/keycloak";
 
-export function AddAuthorDialog() {
+export function AddAuthorDialog({
+  onSuccess,
+  firstName,
+  lastName,
+}: {
+  onSuccess?: (name: string) => void;
+  firstName?: string;
+  lastName?: string;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
       {keycloak.authenticated ? (
         <button
-          onClick={() => setIsOpen(true)}
+          onClick={(e) => {
+            e.preventDefault();
+            setIsOpen(true);
+          }}
           className={css(iconBtn, {
             color: "yellow.600",
             fontSize: "s2",
@@ -35,8 +46,11 @@ export function AddAuthorDialog() {
           })}
         >
           <AddAuthorForm
-            onSuccess={() => {
+            firstName={firstName}
+            lastName={lastName}
+            onSuccess={(name) => {
               setIsOpen(false);
+              onSuccess?.(name);
             }}
           />
         </Dialog>
