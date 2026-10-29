@@ -4,6 +4,7 @@ import { Navigation } from "../components/Navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getAuthorList } from "../authors/api";
 import { AuthorContext } from "../authors/AuthorContext";
+import { css } from "../../styled-system/css";
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -26,10 +27,22 @@ function RootComponent() {
 
   return (
     <React.Fragment>
-      <Navigation />
-      <AuthorContext value={{ authors, authorMap }}>
-        <Outlet />
-      </AuthorContext>
+      <div
+        className={css({
+          maxWidth: "70vw",
+          margin: "auto",
+          borderLeft: "1px solid",
+          borderRight: "1px solid",
+          borderLeftColor: "grey7",
+          borderRightColor: "grey7",
+          minHeight: "100vh",
+        })}
+      >
+        <Navigation />
+        <AuthorContext value={{ authors, authorMap }}>
+          <Outlet />
+        </AuthorContext>
+      </div>
     </React.Fragment>
   );
 }
