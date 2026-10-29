@@ -11,6 +11,7 @@ type AuthorModelLike = {
   findById: typeof AuthorModel.findById;
   aggregate: typeof AuthorModel.aggregate;
   create: typeof AuthorModel.create;
+  findByIdAndDelete: typeof AuthorModel.findByIdAndDelete;
 };
 
 type Deps = {
@@ -84,6 +85,11 @@ export function composeMongooseAuthorRepository(deps: Deps): AuthorRepository {
       const author = await deps.AuthorModel.findById(id);
       author?.publications.push(publicationToPersistence({ ...publication, author: author.name }));
       await author?.save();
+      return true;
+    },
+
+    async delete(id: string) {
+      await deps.AuthorModel.findByIdAndDelete({ _id: id });
       return true;
     },
   };

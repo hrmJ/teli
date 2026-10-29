@@ -1,5 +1,12 @@
 import type { RequestHandler } from "express";
-import type { CreateAuthor, GetAuthorDetails, GetAuthorIndex, ListAuthorNames, ListAuthors } from "@teli/application/authors";
+import type {
+  CreateAuthor,
+  DeleteAuthor,
+  GetAuthorDetails,
+  GetAuthorIndex,
+  ListAuthorNames,
+  ListAuthors,
+} from "@teli/application/authors";
 import { presentAuthorDetails, presentAuthorIndex, presentAuthorList } from "./authors.presenter.ts";
 import { validateNewAuthor } from "./authors.validator.ts";
 
@@ -9,6 +16,7 @@ type AuthorsControllerDeps = {
   listAuthors: ListAuthors;
   listAuthorNames: ListAuthorNames;
   createAuthor: CreateAuthor;
+  deleteAuthor: DeleteAuthor;
 };
 
 export function composeAuthorsController(deps: AuthorsControllerDeps) {
@@ -53,11 +61,22 @@ export function composeAuthorsController(deps: AuthorsControllerDeps) {
     res.status(201).json({ id: savedAuthor });
   };
 
+  const deleteAuthorHandler: RequestHandler = async function (req, res) {
+    const { id } = req.params;
+    if (typeof id !== "string") {
+      res.status(400).json({ error: "Invalid author id" });
+      return;
+    }
+    await deps.deleteAuthor(id);
+    res.sendStatus(204);
+  };
+
   return {
     authorIndexHandler,
     authorDetailsHandler,
     authorListHandler,
     authorNameListHandler,
     createAuthorHandler,
+    deleteAuthorHandler,
   };
 }

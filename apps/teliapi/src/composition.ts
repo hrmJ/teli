@@ -1,6 +1,7 @@
 import {
   composeAddPublication,
   composeCreateAuthor,
+  composeDeleteAuthor,
   composeGetAuthorById,
   composeGetAuthorDetails,
   composeGetAuthorIndex,
@@ -28,6 +29,7 @@ export const authorsController = composeAuthorsController({
   listAuthors: composeListAuthors({ authors: authorRepository }),
   listAuthorNames: composeListAuthorNames({ authors: authorRepository }),
   createAuthor: composeCreateAuthor({ authors: authorRepository }),
+  deleteAuthor: composeDeleteAuthor({ authors: authorRepository }),
 });
 
 export const publicationsController = composePublicationsController({

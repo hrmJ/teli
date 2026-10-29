@@ -1,8 +1,6 @@
 import type { PublicationDocument } from "@teli/infrastructure/mongoose";
 
-export function publicationFixture(
-  overrides: Partial<PublicationDocument> = {},
-) {
+export function publicationFixture(overrides: Partial<PublicationDocument> = {}) {
   return {
     title: "Pitkä yksinäisyys",
     "english title": "Solitude",
@@ -15,7 +13,7 @@ export function publicationFixture(
     source: "Kirjaston kanta",
     "publish location": "Helsinki",
     year: 1987,
-    date: new Date(1987, 1, 5),
+    date: new Date(1987, 1, 5).toISOString(),
     reference: "some",
     note: "btw",
     link: "https://some.url",

@@ -6,9 +6,10 @@ interface Props {
   close: () => void;
   children: ReactNode;
   styles?: Styles;
+  noFooter?: boolean;
 }
 
-export function Dialog({ close, children, styles }: Props) {
+export function Dialog({ close, children, styles, noFooter }: Props) {
   useLayoutEffect(() => {
     if (!dialogRef.current) return;
     dialogRef.current.showModal();
@@ -34,24 +35,23 @@ export function Dialog({ close, children, styles }: Props) {
       ref={dialogRef}
     >
       {children}
-      <footer
-        className={css({
-          borderTop: "1px solid",
-          borderTopColor: "grey7",
-          marginTop: "s5",
-          paddingTop: "s2",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-        })}
-      >
-        <button
-          className={css(iconBtn, { fontSize: "s3", color: "grey3" })}
-          onClick={() => close()}
+      {noFooter ? null : (
+        <footer
+          className={css({
+            borderTop: "1px solid",
+            borderTopColor: "grey7",
+            marginTop: "s5",
+            paddingTop: "s2",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          })}
         >
-          Sulje
-        </button>
-      </footer>
+          <button className={css(iconBtn, { fontSize: "s3", color: "grey3" })} onClick={() => close()}>
+            Sulje
+          </button>
+        </footer>
+      )}
     </dialog>
   );
 }

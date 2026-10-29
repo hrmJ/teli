@@ -17,6 +17,22 @@ export async function getAuthorIndex() {
   return v.parse(AuthorIndexDtoSchema, data);
 }
 
+export async function deleteAuthor(id: string) {
+  if (!keycloak.token) throw new Error("Unauthenticated");
+  await keycloak.updateToken(30);
+  const response = await fetch(`${config.apiUrl}/authors/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${keycloak.token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to delete author: ${response.status}`);
+  }
+}
+
 export async function saveNewAuthor(data: NewAuthorDto) {
   if (!keycloak.token) throw new Error("Unauthenticated");
   await keycloak.updateToken(30);

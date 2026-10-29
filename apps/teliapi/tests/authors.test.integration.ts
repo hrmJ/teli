@@ -193,3 +193,64 @@ test("Unauthenticated users cannot add new authors", async () => {
   // Assert
   assert.equal(resp.status, 401);
 });
+
+test("Authenticated users can delete authors", async () => {
+  // Arrange
+  const name = "Some Author";
+  const author = await AuthorModel.insertOne(
+    authorFixture({
+      name,
+      publications: [publicationFixture({ title: "Publication 1" }), publicationFixture({ title: "Publication 2" })],
+    } as any),
+  );
+
+  const tokens = await loginTestUser();
+
+  try {
+    const resp = await fetch(`${testConfig.baseUrl}/authors/${author.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${tokens.access_token}`,
+      },
+    });
+
+    // Assert
+    assert.equal(resp.status, 204);
+
+    const newAuthor = await AuthorModel.findOne({ name });
+    assert.equal(newAuthor, undefined);
+  } finally {
+    await logoutTestUser(tokens.refresh_token);
+  }
+});
+
+test("Unauthenticated users cannot  delete authors", async () => {
+  // Arrange
+  const name = "Some Author";
+  const author = await AuthorModel.insertOne(
+    authorFixture({
+      name,
+      publications: [publicationFixture({ title: "Publication 1" }), publicationFixture({ title: "Publication 2" })],
+    } as any),
+  );
+
+  const tokens = await loginTestUser();
+
+  try {
+    const resp = await fetch(`${testConfig.baseUrl}/authors/${author.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Assert
+    assert.equal(resp.status, 401);
+
+    const newAuthor = await AuthorModel.findOne({ name });
+    assert.notEqual(newAuthor, undefined);
+  } finally {
+    await logoutTestUser(tokens.refresh_token);
+  }
+});

@@ -54,7 +54,7 @@ export function AddPublicationDialog(props: { author: { id: string; name: string
           onClick={() => setIsOpen(true)}
           className={css(iconBtn, {
             color: "yellow.600",
-            fontSize: "s2",
+            fontSize: "s4",
             marginTop: "s4",
             padding: "s2",
             paddingLeft: "0",

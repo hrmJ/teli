@@ -2,7 +2,7 @@ import type { RequestHandler } from "express";
 import { presentPublication } from "./publications.presenter.ts";
 import type { AddPublicationReceptions, GetPublicationById, GetPublications, GetReceptions } from "@teli/application/publications";
 import type { AddPublication, GetAuthorById } from "@teli/application/authors";
-import { formatDate, validateNewPublication, validateNewReception, validatePublicationId } from "./publications.validator.ts";
+import { validateNewPublication, validateNewReception, validatePublicationId } from "./publications.validator.ts";
 
 type PublicationsControllerDeps = {
   getReceptions: GetReceptions;
@@ -70,8 +70,7 @@ export function composePublicationsController(deps: PublicationsControllerDeps) 
       res.status(422).json({ error: "Invalid author" });
       return;
     }
-    const date = formatDate(publication.date);
-    const newPublication = validateNewPublication({ ...publication, date });
+    const newPublication = validateNewPublication(publication);
     await deps.addPublication(authorId, newPublication);
     res.status(201).json({ status: "success" });
   };

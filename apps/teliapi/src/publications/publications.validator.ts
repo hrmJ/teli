@@ -28,9 +28,3 @@ export function validateNewPublication(data: unknown) {
   }
   return parsed.output;
 }
-
-export function formatDate(date: unknown) {
-  if (date instanceof Date) return date;
-  if (!date) return date;
-  if (typeof date === "string") return new Date(date);
-}

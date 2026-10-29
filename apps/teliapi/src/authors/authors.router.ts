@@ -8,5 +8,6 @@ export function composeAuthorRouter() {
     .get("/names", authorsController.authorNameListHandler)
     .get("/", authorsController.authorListHandler)
     .post("/", authMiddleware, authorsController.createAuthorHandler)
+    .delete("/:id", authMiddleware, authorsController.deleteAuthorHandler)
     .get("/:name", authorsController.authorDetailsHandler);
 }

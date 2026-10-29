@@ -12,7 +12,7 @@ export type Publication = {
   publicationName?: string;
   source?: string;
   publishLocation?: string;
-  date?: Date;
+  date?: Date | string;
   reference?: string;
   note?: string;
   link?: string;
