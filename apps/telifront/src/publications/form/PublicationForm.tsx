@@ -49,6 +49,7 @@ export function PublicationForm({ dispatch, publication, disableAuthor }: Props)
             dispatch("author", name);
           }}
           lastName={typeof data.author === "string" ? data.author : ""}
+          navigateOnSuccess={false}
         />
       ) : null}
       <Input {...inputConsts} name="title" label="Otsikko (title)" />

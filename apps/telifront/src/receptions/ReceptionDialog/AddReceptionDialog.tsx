@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReceptionForm } from "./receptionFormReducer";
 import { saveReception } from "../api";
 import { AuthorContext } from "../../authors/AuthorContext";
+import { keycloak } from "../../auth/keycloak";
 
 interface Props {
   to: string;
@@ -41,18 +42,20 @@ export function AddReceptionDialog({ to, originalId }: Props) {
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className={css(iconBtn, {
-          color: "yellow.600",
-          fontSize: "s2",
-          marginTop: "s4",
-          padding: "s2",
-        })}
-      >
-        <LinkIcon className={css({ width: "s3", height: "s3" })} />
-        <div>Lisää reseptio</div>
-      </button>
+      {keycloak.authenticated ? (
+        <button
+          onClick={() => setIsOpen(true)}
+          className={css(iconBtn, {
+            color: "yellow.600",
+            fontSize: "s2",
+            marginTop: "s4",
+            padding: "s2",
+          })}
+        >
+          <LinkIcon className={css({ width: "s3", height: "s3" })} />
+          <div>Lisää reseptio</div>
+        </button>
+      ) : null}
       {isOpen ? (
         <Dialog
           close={() => setIsOpen(false)}

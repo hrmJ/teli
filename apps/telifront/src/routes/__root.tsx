@@ -26,9 +26,10 @@ function RootComponent() {
   const authorMap = authorData?.authorMap ?? new Map();
 
   return (
-    <React.Fragment>
-      <div
+    <div className={css({ background: "grey9", position: "relative" })}>
+      <main
         className={css({
+          background: "white",
           maxWidth: "70vw",
           margin: "auto",
           borderLeft: "1px solid",
@@ -38,11 +39,21 @@ function RootComponent() {
           minHeight: "100vh",
         })}
       >
+        <h1
+          className={css({
+            paddingLeft: "s10",
+            fontSize: "s6",
+            color: "grey5",
+            marginBottom: "s4",
+          })}
+        >
+          Tekstit <span className={css({ fontFamily: "Faster One" })}>liikkeessä</span>
+        </h1>
         <Navigation />
         <AuthorContext value={{ authors, authorMap }}>
           <Outlet />
         </AuthorContext>
-      </div>
-    </React.Fragment>
+      </main>
+    </div>
   );
 }

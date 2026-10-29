@@ -10,10 +10,12 @@ export function AddAuthorDialog({
   onSuccess,
   firstName,
   lastName,
+  navigateOnSuccess,
 }: {
   onSuccess?: (name: string) => void;
   firstName?: string;
   lastName?: string;
+  navigateOnSuccess?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -52,6 +54,7 @@ export function AddAuthorDialog({
               setIsOpen(false);
               onSuccess?.(name);
             }}
+            navigateOnSuccess={navigateOnSuccess}
           />
         </Dialog>
       ) : null}

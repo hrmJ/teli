@@ -16,7 +16,7 @@ const Input = InputBase<NewAuthorDto>;
 
 export function AddAuthorForm({
   onSuccess,
-  navigateOnSuccess,
+  navigateOnSuccess = true,
   firstName: initialFirstName = "",
   lastName: initialLastName = "",
 }: {
