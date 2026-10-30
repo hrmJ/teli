@@ -87,7 +87,7 @@ export function composeMongoosePublicationRepository(deps: Deps): PublicationRep
         throw new Error("Author not found");
       }
 
-      author.publications.push(publicationToPersistence({ ...publication, author: author.name }));
+      author.publications.push(publicationToPersistence({ ...publication }));
 
       await author.save();
       const created = author.publications.at(-1)!;
