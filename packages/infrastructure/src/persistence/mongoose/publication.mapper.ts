@@ -16,7 +16,7 @@ export function publicationToDomain(doc: PublicationDocument, authorName?: strin
     receptions: nullToUndefined(doc.receptions),
     publisher: nullToUndefined(doc.publisher),
     receptionOf: doc.receptionOf,
-    date: nullToUndefined(doc.date),
+    date: nullToUndefined(doc.date?.toISOString()),
     genre: nullToUndefined(doc.genre),
     language: nullToUndefined(doc.language),
     link: nullToUndefined(doc.link),
@@ -26,7 +26,7 @@ export function publicationToDomain(doc: PublicationDocument, authorName?: strin
   };
 }
 
-export function publicationToPersistence(pub: Omit<Publication, "id">) {
+export function publicationToPersistence(pub: Omit<Publication, "id" | "author">) {
   return {
     title: pub.title,
     "english title": pub.englishTitle,

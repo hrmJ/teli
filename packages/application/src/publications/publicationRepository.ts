@@ -2,7 +2,7 @@ import type { Publication } from "@teli/domain/publications";
 
 export type PublicationRepository = {
   getById(id: string): Promise<Publication | null>;
-  updateById(id: string, publication: Publication): Promise<boolean>;
+  updateById(id: string, publication: Omit<Publication, "id" | "author">): Promise<boolean>;
   getByIds(ids: string[]): Promise<Publication[]>;
   searchByTitle(title: string): Promise<Publication[]>;
   create(publication: Omit<Publication, "id" | "author">, authorId: string): Promise<Publication>;

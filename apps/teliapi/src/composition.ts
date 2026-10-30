@@ -17,6 +17,7 @@ import {
   composeGetPublicationById,
   composeGetPublications,
   composeGetReceptions,
+  composeUpdatePublication,
 } from "@teli/application/publications";
 
 const authorRepository = composeMongooseAuthorRepository({ AuthorModel });
@@ -41,4 +42,5 @@ export const publicationsController = composePublicationsController({
   addPublicationReception: composeAddPublicationReceptions({ publications: publicationRepository }),
   getAuthorById: composeGetAuthorById({ authors: authorRepository }),
   addPublication: composeAddPublication({ authors: authorRepository }),
+  updatePublication: composeUpdatePublication({ publications: publicationRepository }),
 });

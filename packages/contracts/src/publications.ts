@@ -27,7 +27,7 @@ export const PublicationDtoSchema = v.object({
   link: v.optional(v.string()),
 });
 
-export type PublicationDto = v.InferOutput<typeof PublicationDtoSchema>;
+export type PublicationDto = v.InferOutput<typeof PublicationDtoSchema> & { date?: Date | string };
 
 export const PublicationListDtoSchema = v.object({
   publications: v.array(PublicationDtoSchema),

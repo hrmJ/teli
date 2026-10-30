@@ -1,6 +1,12 @@
 import type { RequestHandler } from "express";
 import { presentPublication } from "./publications.presenter.ts";
-import type { AddPublicationReceptions, GetPublicationById, GetPublications, GetReceptions } from "@teli/application/publications";
+import type {
+  AddPublicationReceptions,
+  GetPublicationById,
+  GetPublications,
+  GetReceptions,
+  UpdatePublication,
+} from "@teli/application/publications";
 import type { AddPublication, GetAuthorById } from "@teli/application/authors";
 import { validateNewPublication, validateNewReception, validatePublicationId } from "./publications.validator.ts";
 
@@ -11,6 +17,7 @@ type PublicationsControllerDeps = {
   addPublicationReception: AddPublicationReceptions;
   getAuthorById: GetAuthorById;
   addPublication: AddPublication;
+  updatePublication: UpdatePublication;
 };
 
 export function composePublicationsController(deps: PublicationsControllerDeps) {
@@ -75,10 +82,23 @@ export function composePublicationsController(deps: PublicationsControllerDeps) 
     res.status(201).json({ status: "success" });
   };
 
+  const updatePublicationHandler: RequestHandler = async function (req, res) {
+    const { id } = req.params;
+    if (typeof id !== "string") {
+      res.status(400).json({ error: "Invalid author id" });
+      return;
+    }
+    const { publication } = req.body;
+    const newPublication = validateNewPublication(publication);
+    const updatedPublication = await deps.updatePublication(id, newPublication);
+    res.status(200).json({ publication: updatedPublication });
+  };
+
   return {
     viewReceptionsHandler,
     updateReceptionsHandler,
     viewPublicationsHandler,
     createPublicationHandler,
+    updatePublicationHandler,
   };
 }

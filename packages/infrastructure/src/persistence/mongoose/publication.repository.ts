@@ -44,7 +44,7 @@ export function composeMongoosePublicationRepository(deps: Deps): PublicationRep
       );
     },
 
-    async updateById(publicationId: string, updatedPublication: Publication) {
+    async updateById(publicationId: string, updatedPublication: Omit<Publication, "id" | "author">) {
       const author = await deps.AuthorModel.findOne({
         "publications._id": publicationId,
       });

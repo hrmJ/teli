@@ -111,3 +111,67 @@ test("Unauthenticated users cannot add publications", async () => {
 
   assert.equal(401, resp.status);
 });
+
+test("Authenticated users can update publication details", async () => {
+  // Arrange
+  const tokens = await loginTestUser();
+  const publicationDetails = publicationFixture({ title: "Already existing", "document type": "book" });
+  const author = await AuthorModel.insertOne(
+    authorFixture({
+      publications: [publicationDetails, publicationFixture({ title: "Another" })],
+    } as any),
+  );
+  const publication1 = author.publications.at(0);
+  const newTitle = "New title!";
+  const newType = "article";
+
+  try {
+    // Act
+    const resp = await fetch(`${testConfig.baseUrl}/publications/${publication1?._id.toString()}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        publication: { title: newTitle, documentType: newType },
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${tokens.access_token}`,
+      },
+    });
+    // Assert
+    assert.equal(resp.status, 200);
+    const updatedAuthor = await AuthorModel.findById(author._id.toString());
+    const [firstPub, secondPub] = updatedAuthor!.publications;
+    assert.equal(firstPub.title, newTitle);
+    assert.equal(firstPub["document type"], newType);
+    assert.equal(secondPub.title, "Another");
+  } finally {
+    await logoutTestUser(tokens.refresh_token);
+  }
+});
+
+test("Unauthenticated users cannot update publication details", async () => {
+  // Arrange
+  const publicationDetails = publicationFixture({ title: "Already existing", "document type": "book" });
+  const author = await AuthorModel.insertOne(
+    authorFixture({
+      publications: [publicationDetails],
+    } as any),
+  );
+  const publication1 = author.publications.at(0);
+  const newTitle = "New title!";
+  const newType = "article";
+
+  // Act
+  const resp = await fetch(`${testConfig.baseUrl}/publications/${publication1?._id.toString()}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      publication: { title: newTitle, documentType: newType },
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  // Assert
+  assert.equal(resp.status, 401);
+});
