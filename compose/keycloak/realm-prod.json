@@ -1,0 +1,19 @@
+{
+  "realm": "teli",
+  "enabled": true,
+  "displayName": "Tekstit liikkeesä",
+  "clients": [
+    {
+      "clientId": "telifront",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": ["https://your-university-host.example/teli/*"],
+      "webOrigins": ["https://your-university-host.example"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      }
+    }
+  ]
+}
