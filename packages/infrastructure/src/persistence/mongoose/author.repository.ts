@@ -12,6 +12,7 @@ type AuthorModelLike = {
   aggregate: typeof AuthorModel.aggregate;
   create: typeof AuthorModel.create;
   findByIdAndDelete: typeof AuthorModel.findByIdAndDelete;
+  findByIdAndUpdate: typeof AuthorModel.findByIdAndUpdate;
 };
 
 type Deps = {
@@ -91,6 +92,19 @@ export function composeMongooseAuthorRepository(deps: Deps): AuthorRepository {
     async delete(id: string) {
       await deps.AuthorModel.findByIdAndDelete({ _id: id });
       return true;
+    },
+
+    async update(id: string, author: Omit<Author, "id" | "publications">) {
+      const { publications, ...updateData } = authorToPersistence(author);
+      const updatedAuthor = await deps.AuthorModel.findByIdAndUpdate(
+        id,
+        { $set: updateData },
+        { returnDocument: "after", runValidators: true },
+      );
+      if (!updatedAuthor) {
+        throw new Error("Unable to update author");
+      }
+      return authorToDomain(updatedAuthor);
     },
   };
 }

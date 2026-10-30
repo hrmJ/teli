@@ -7,6 +7,7 @@ import {
   composeGetAuthorIndex,
   composeListAuthorNames,
   composeListAuthors,
+  composeUpdateAuthor,
 } from "@teli/application/authors";
 import { AuthorModel, composeMongooseAuthorRepository, composeMongoosePublicationRepository } from "@teli/infrastructure/mongoose";
 import { composeAuthorsController } from "./authors/authors.controller.ts";
@@ -30,6 +31,7 @@ export const authorsController = composeAuthorsController({
   listAuthorNames: composeListAuthorNames({ authors: authorRepository }),
   createAuthor: composeCreateAuthor({ authors: authorRepository }),
   deleteAuthor: composeDeleteAuthor({ authors: authorRepository }),
+  updateAuthor: composeUpdateAuthor({ authors: authorRepository }),
 });
 
 export const publicationsController = composePublicationsController({

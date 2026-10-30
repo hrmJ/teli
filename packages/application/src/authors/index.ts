@@ -15,3 +15,5 @@ export { type ListAuthorNames, composeListAuthorNames } from "./authorListAllNam
 export { type CreateAuthor, composeCreateAuthor } from "./createAuthor.query.ts";
 
 export { type DeleteAuthor, composeDeleteAuthor } from "./deleteAuthor.query.ts";
+
+export { type UpdateAuthor, composeUpdateAuthor } from "./updateAuthor.query.ts";

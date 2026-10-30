@@ -254,3 +254,112 @@ test("Unauthenticated users cannot  delete authors", async () => {
     await logoutTestUser(tokens.refresh_token);
   }
 });
+
+test("Authenticated users can update authors", async () => {
+  // Arrange
+  const name = "Author Some";
+  const authorDetails = {
+    name,
+    "year of birth": 1987,
+    "professional details": "some details",
+    "other names": "Mr X",
+  };
+
+  const author = await AuthorModel.insertOne(
+    authorFixture({
+      ...authorDetails,
+      publications: [publicationFixture({ title: "Publication 1" }), publicationFixture({ title: "Publication 2" })] as any,
+    }),
+  );
+
+  const tokens = await loginTestUser();
+
+  const changedOtherNames = "Changed my name";
+
+  try {
+    const resp = await fetch(`${testConfig.baseUrl}/authors/${author.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${tokens.access_token}`,
+      },
+      body: JSON.stringify({
+        firstName: "Some",
+        lastName: "Author",
+        yearOfBirth: authorDetails["year of birth"],
+        professionalDetails: authorDetails["professional details"],
+        otherNames: changedOtherNames,
+      }),
+    });
+
+    // Assert
+    assert.equal(resp.status, 200);
+
+    const newAuthor = await AuthorModel.findById(author._id);
+    if (newAuthor === null) {
+      throw new Error("Author no longer found!");
+    }
+    assert.equal(newAuthor.name, authorDetails.name);
+    assert.equal(newAuthor["year of birth"], authorDetails["year of birth"]);
+    assert.equal(newAuthor["professional details"], authorDetails["professional details"]);
+    assert.equal(newAuthor["other names"], changedOtherNames);
+    assert.equal(newAuthor["publications"].length, 2);
+  } finally {
+    await logoutTestUser(tokens.refresh_token);
+  }
+});
+
+test("Unauthenticated users cannot update authors", async () => {
+  // Arrange
+  const name = "Some Author";
+  const authorDetails = {
+    name,
+    "year of birth": 1987,
+    "professional details": "some details",
+    "other names": "Mr X",
+  };
+
+  const author = await AuthorModel.insertOne(
+    authorFixture({
+      ...authorDetails,
+      publications: [publicationFixture({ title: "Publication 1" }), publicationFixture({ title: "Publication 2" })] as any,
+    }),
+  );
+
+  const tokens = await loginTestUser();
+
+  const changedOtherNames = "Changed my name";
+
+  try {
+    const resp = await fetch(`${testConfig.baseUrl}/authors/${author.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        firstName: "Some",
+        lastName: "Author",
+        yearOfBirth: authorDetails["year of birth"],
+        professionalDetails: authorDetails["professional details"],
+        otherNames: changedOtherNames,
+      }),
+    });
+
+    // Assert
+    assert.equal(resp.status, 401);
+
+    const newAuthor = await AuthorModel.findById(author._id);
+    if (newAuthor === null) {
+      throw new Error("Author no longer found!");
+    }
+    assert.equal(newAuthor.name, authorDetails.name);
+    assert.equal(newAuthor["year of birth"], authorDetails["year of birth"]);
+    assert.equal(newAuthor["professional details"], authorDetails["professional details"]);
+    assert.equal(newAuthor["other names"], authorDetails["other names"]);
+    assert.equal(newAuthor["publications"].length, 2);
+    assert.equal(newAuthor["publications"].at(0)?.title, "Publication 1");
+    assert.equal(newAuthor["publications"].at(1)?.title, "Publication 2");
+  } finally {
+    await logoutTestUser(tokens.refresh_token);
+  }
+});

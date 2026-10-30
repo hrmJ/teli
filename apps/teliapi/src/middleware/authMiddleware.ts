@@ -1,9 +1,9 @@
 import { createRemoteJWKSet, jwtVerify } from "jose";
 import { type Request, type Response, type NextFunction } from "express";
+import { config } from "../config.ts";
 
-const issuer = "http://localhost:8080/realms/teli";
-
-const jwks = createRemoteJWKSet(new URL(`${issuer}/protocol/openid-connect/certs`));
+if (!config.issuer) throw new Error("Initialization error: missing issuer env");
+const jwks = createRemoteJWKSet(new URL(`${config.issuer}/protocol/openid-connect/certs`));
 
 /**
  * Simple authn check without authz check:
@@ -20,7 +20,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
   }
 
   try {
-    await jwtVerify(authorization.slice("Bearer ".length), jwks, { issuer });
+    await jwtVerify(authorization.slice("Bearer ".length), jwks, { issuer: config.issuer });
   } catch {
     res.status(401).json({ error: "unauthenticated" });
     return;

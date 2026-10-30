@@ -6,6 +6,7 @@ import type {
   GetAuthorIndex,
   ListAuthorNames,
   ListAuthors,
+  UpdateAuthor,
 } from "@teli/application/authors";
 import { presentAuthorDetails, presentAuthorIndex, presentAuthorList } from "./authors.presenter.ts";
 import { validateNewAuthor } from "./authors.validator.ts";
@@ -17,6 +18,7 @@ type AuthorsControllerDeps = {
   listAuthorNames: ListAuthorNames;
   createAuthor: CreateAuthor;
   deleteAuthor: DeleteAuthor;
+  updateAuthor: UpdateAuthor;
 };
 
 export function composeAuthorsController(deps: AuthorsControllerDeps) {
@@ -71,6 +73,17 @@ export function composeAuthorsController(deps: AuthorsControllerDeps) {
     res.sendStatus(204);
   };
 
+  const updateAuthorHandler: RequestHandler = async function (req, res) {
+    const { id } = req.params;
+    if (typeof id !== "string") {
+      res.status(400).json({ error: "Invalid author id" });
+      return;
+    }
+    const newAuthor = validateNewAuthor(req.body);
+    const updatedAuthor = await deps.updateAuthor(id, newAuthor);
+    res.status(200).json({ author: updatedAuthor });
+  };
+
   return {
     authorIndexHandler,
     authorDetailsHandler,
@@ -78,5 +91,6 @@ export function composeAuthorsController(deps: AuthorsControllerDeps) {
     authorNameListHandler,
     createAuthorHandler,
     deleteAuthorHandler,
+    updateAuthorHandler,
   };
 }

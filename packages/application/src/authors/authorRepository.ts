@@ -10,4 +10,5 @@ export type AuthorRepository = {
   create: (author: Omit<Author, "id" | "publications">) => Promise<Author>;
   addPublication: (authorId: string, publication: Omit<Publication, "id" | "author">) => Promise<boolean>;
   delete: (id: string) => Promise<boolean>;
+  update: (id: string, author: Omit<Author, "id" | "publications">) => Promise<Author>;
 };
