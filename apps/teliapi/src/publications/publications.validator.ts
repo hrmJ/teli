@@ -1,5 +1,5 @@
 import { NewPublicationDtoSchema } from "@teli/contracts/publications";
-import { NewReceptionDataSchema } from "@teli/contracts/receptions";
+import { NewReceptionDataSchema, receptionTypeSchema } from "@teli/contracts/receptions";
 import type { Request, Response } from "express";
 import * as v from "valibot";
 
@@ -25,6 +25,15 @@ export function validateNewPublication(data: unknown) {
   if (!parsed.success) {
     console.log(parsed.issues);
     throw new Error("Invalid publication data");
+  }
+  return parsed.output;
+}
+
+export function validateReceptionType(data: unknown) {
+  const parsed = v.safeParse(receptionTypeSchema, data);
+  if (!parsed.success) {
+    console.log(parsed.issues);
+    throw new Error("Invalid reception type");
   }
   return parsed.output;
 }

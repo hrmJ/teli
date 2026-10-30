@@ -21,7 +21,6 @@ export const PublicationDtoSchema = v.object({
       v.transform((date) => date.slice(0, 10)),
     ),
   ),
-
   reference: v.optional(v.string()),
   note: v.optional(v.string()),
   link: v.optional(v.string()),

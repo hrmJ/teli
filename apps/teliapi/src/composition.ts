@@ -17,6 +17,7 @@ import {
   composeGetPublicationById,
   composeGetPublications,
   composeGetReceptions,
+  composeUnlinkPublicationReceptions,
   composeUpdatePublication,
 } from "@teli/application/publications";
 
@@ -43,4 +44,5 @@ export const publicationsController = composePublicationsController({
   getAuthorById: composeGetAuthorById({ authors: authorRepository }),
   addPublication: composeAddPublication({ authors: authorRepository }),
   updatePublication: composeUpdatePublication({ publications: publicationRepository }),
+  unlinkReception: composeUnlinkPublicationReceptions({ publications: publicationRepository }),
 });

@@ -135,3 +135,135 @@ test("Authenticated users can link new works as receptions", async () => {
     await logoutTestUser(tokens.refresh_token);
   }
 });
+
+test("Authenticated users can unlink works from a publication's receptions", async () => {
+  const receptionAuthor = await AuthorModel.insertOne(
+    authorFixture({
+      name: "Ralph Receptoff",
+      publications: [],
+    } as any),
+  );
+  const receptionAuthorId = receptionAuthor._id.toString();
+
+  const tokens = await loginTestUser();
+  try {
+    const resp = await fetch(`${testConfig.baseUrl}/publications/${originalId}/receptions`, {
+      method: "PUT",
+      body: JSON.stringify({
+        receptionType: "translation",
+        newOrExistingPublication: "new",
+        newPublication: {
+          authorId: receptionAuthor.id,
+          title: "some new reception",
+        },
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${tokens.access_token}`,
+      },
+    });
+
+    // Assert
+    assert.equal(resp.status, 204);
+    const updatedOriginalAuthor = await AuthorModel.findById(originalAuthorId);
+    const updatedReceptionAuthor = await AuthorModel.findById(receptionAuthorId);
+    const updatedReceptions = updatedOriginalAuthor?.publications.at(0)?.receptions;
+    const newPubId = updatedReceptionAuthor?.publications?.at(0)?._id.toString();
+    assert.deepStrictEqual(updatedReceptions, {
+      translations: [newPubId],
+      adaptations: [],
+      articles: [],
+      reviews: [],
+      other: [],
+    });
+
+    const resp2 = await fetch(`${testConfig.baseUrl}/publications/${originalId}/receptions/${newPubId}?receptionType=translation`, {
+      method: "DELETE",
+      body: JSON.stringify({
+        receptionType: "translation",
+        newOrExistingPublication: "new",
+        newPublication: {
+          authorId: receptionAuthor.id,
+          title: "some new reception",
+        },
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${tokens.access_token}`,
+      },
+    });
+
+    assert.equal(resp2.status, 204);
+
+    const updatedOriginalAuthor2 = await AuthorModel.findById(originalAuthorId);
+
+    const updatedReceptions2 = updatedOriginalAuthor2?.publications.at(0)?.receptions;
+    assert.deepStrictEqual(updatedReceptions2, {
+      translations: [],
+      adaptations: [],
+      articles: [],
+      reviews: [],
+      other: [],
+    });
+  } finally {
+    await logoutTestUser(tokens.refresh_token);
+  }
+});
+
+test("Unauthenticated users cannot unlink works from a publication's receptions", async () => {
+  const receptionAuthor = await AuthorModel.insertOne(
+    authorFixture({
+      name: "Ralph Receptoff",
+      publications: [],
+    } as any),
+  );
+  const receptionAuthorId = receptionAuthor._id.toString();
+
+  const tokens = await loginTestUser();
+  const resp = await fetch(`${testConfig.baseUrl}/publications/${originalId}/receptions`, {
+    method: "PUT",
+    body: JSON.stringify({
+      receptionType: "translation",
+      newOrExistingPublication: "new",
+      newPublication: {
+        authorId: receptionAuthor.id,
+        title: "some new reception",
+      },
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${tokens.access_token}`,
+    },
+  });
+
+  // Assert
+  assert.equal(resp.status, 204);
+  const updatedOriginalAuthor = await AuthorModel.findById(originalAuthorId);
+  const updatedReceptionAuthor = await AuthorModel.findById(receptionAuthorId);
+  const updatedReceptions = updatedOriginalAuthor?.publications.at(0)?.receptions;
+  const newPubId = updatedReceptionAuthor?.publications?.at(0)?._id.toString();
+  assert.deepStrictEqual(updatedReceptions, {
+    translations: [newPubId],
+    adaptations: [],
+    articles: [],
+    reviews: [],
+    other: [],
+  });
+
+  const resp2 = await fetch(`${testConfig.baseUrl}/publications/${originalId}/receptions/${newPubId}?receptionType=translation`, {
+    method: "DELETE",
+    body: JSON.stringify({
+      receptionType: "translation",
+      newOrExistingPublication: "new",
+      newPublication: {
+        authorId: receptionAuthor.id,
+        title: "some new reception",
+      },
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  assert.equal(resp2.status, 401);
+});

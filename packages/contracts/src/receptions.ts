@@ -21,3 +21,5 @@ export const NewReceptionDataSchema = v.object({
 });
 
 export type NewReceptionData = v.InferOutput<typeof NewReceptionDataSchema>;
+
+export const receptionTypeSchema = v.picklist(receptionTypeList);

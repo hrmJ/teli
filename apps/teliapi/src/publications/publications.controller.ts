@@ -5,10 +5,16 @@ import type {
   GetPublicationById,
   GetPublications,
   GetReceptions,
+  UnlinkPublicationReceptions,
   UpdatePublication,
 } from "@teli/application/publications";
 import type { AddPublication, GetAuthorById } from "@teli/application/authors";
-import { validateNewPublication, validateNewReception, validatePublicationId } from "./publications.validator.ts";
+import {
+  validateNewPublication,
+  validateNewReception,
+  validatePublicationId,
+  validateReceptionType,
+} from "./publications.validator.ts";
 
 type PublicationsControllerDeps = {
   getReceptions: GetReceptions;
@@ -18,6 +24,7 @@ type PublicationsControllerDeps = {
   getAuthorById: GetAuthorById;
   addPublication: AddPublication;
   updatePublication: UpdatePublication;
+  unlinkReception: UnlinkPublicationReceptions;
 };
 
 export function composePublicationsController(deps: PublicationsControllerDeps) {
@@ -94,11 +101,24 @@ export function composePublicationsController(deps: PublicationsControllerDeps) 
     res.status(200).json({ publication: updatedPublication });
   };
 
+  const unlinkReceptionsHandler: RequestHandler = async function (req, res) {
+    const { id, receptionId } = req.params;
+    if (typeof id !== "string" || typeof receptionId !== "string") {
+      res.status(400).json({ error: "Invalid publication or reception id" });
+      return;
+    }
+    const receptionType = validateReceptionType(req.query.receptionType);
+    const updatedPublication = await deps.unlinkReception(id, receptionId, receptionType);
+
+    res.status(204).json({ publication: updatedPublication });
+  };
+
   return {
     viewReceptionsHandler,
     updateReceptionsHandler,
     viewPublicationsHandler,
     createPublicationHandler,
     updatePublicationHandler,
+    unlinkReceptionsHandler,
   };
 }
