@@ -4,6 +4,7 @@ import { publicationToDomain, publicationToPersistence } from "./publication.map
 import type { PublicationRepository } from "@teli/application/publications";
 import type { Publication } from "@teli/domain/publications";
 import { receptionTypeAsCategory, type ReceptionType } from "@teli/domain/receptions";
+import type { PublicationDocument } from "./publication.schema.ts";
 
 type AuthorModelLike = {
   find: typeof AuthorModel.find;
@@ -124,6 +125,59 @@ export function composeMongoosePublicationRepository(deps: Deps): PublicationRep
             return publicationToDomain(pub, author.name);
           }),
       );
+    },
+
+    async searchByQuery(query: string): Promise<string[]> {
+      const fields: (keyof PublicationDocument)[] = ["title", "english title", "other authors", "publication name"];
+
+      const regex = { $regex: escapeRegex(query), $options: "i" };
+      const matches = fields.map((field) => ({ [`publications.${field}`]: regex }));
+      const authors = await deps.AuthorModel.find({ $or: matches });
+      const pattern = new RegExp(escapeRegex(query), "i");
+
+      return authors.flatMap((author) =>
+        author.publications
+          .filter((publication) => fields.some((field) => pattern.test(publication.get(field) ?? "")))
+          .map((pub) => pub._id.toString()),
+      );
+    },
+
+    async filterByReceptionType(publicationIds: string[], types: ReceptionType[], originals: boolean): Promise<string[]> {
+      if (!publicationIds.length) return [];
+      if (originals) {
+        const publications = await this.getByIds(publicationIds);
+        return publications.filter((pub) => !pub.receptionOf?.length).map((pub) => pub.id);
+      }
+
+      if (!types.length) return [];
+
+      const idSet = new Set(publicationIds);
+      const categories = types.map(receptionTypeAsCategory);
+      const authors = await deps.AuthorModel.find({
+        $or: categories.map((category) => ({
+          [`publications.receptions.${category}`]: {
+            $in: publicationIds,
+          },
+        })),
+      });
+
+      const matchingIds = new Set<string>();
+
+      // A clear potential perf bottleneck with O^n
+
+      for (const author of authors) {
+        for (const publication of author.publications) {
+          for (const category of categories) {
+            for (const id of publication.receptions?.[category] ?? []) {
+              if (idSet.has(id)) {
+                matchingIds.add(id);
+              }
+            }
+          }
+        }
+      }
+
+      return publicationIds.filter((id) => matchingIds.has(id));
     },
 
     async create(publication, authorId) {

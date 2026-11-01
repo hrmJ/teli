@@ -7,3 +7,5 @@ export { type GetPublicationById, composeGetPublicationById } from "./getPublica
 export { type UpdatePublication, composeUpdatePublication } from "./updatePublication.query.ts";
 
 export { type UnlinkPublicationReceptions, composeUnlinkPublicationReceptions } from "./unlinkPublicationReceptions.query.ts";
+
+export { type FilterPublications, composeFilterPublications } from "./filterPublications.query.ts";

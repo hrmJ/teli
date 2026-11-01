@@ -2,6 +2,7 @@ import type { RequestHandler } from "express";
 import { presentPublication } from "./publications.presenter.ts";
 import type {
   AddPublicationReceptions,
+  FilterPublications,
   GetPublicationById,
   GetPublications,
   GetReceptions,
@@ -10,6 +11,7 @@ import type {
 } from "@teli/application/publications";
 import type { AddPublication, GetAuthorById } from "@teli/application/authors";
 import {
+  validateFilterQuery,
   validateNewPublication,
   validateNewReception,
   validatePublicationId,
@@ -25,6 +27,7 @@ type PublicationsControllerDeps = {
   addPublication: AddPublication;
   updatePublication: UpdatePublication;
   unlinkReception: UnlinkPublicationReceptions;
+  filterPublications: FilterPublications;
 };
 
 export function composePublicationsController(deps: PublicationsControllerDeps) {
@@ -66,15 +69,28 @@ export function composePublicationsController(deps: PublicationsControllerDeps) 
   };
 
   const viewPublicationsHandler: RequestHandler = async function (req, res) {
-    const title = req.query.title;
-    if (!title || typeof title !== "string") {
-      res.status(400).json({ error: "No search params in query" });
+    const { title, ...queryParams } = req.query;
+
+    // Mere title as a search param is handled separately
+    if (typeof title === "string") {
+      const publicationsRaw = await deps.getPublications(title);
+      const publications = publicationsRaw.publications.map(presentPublication);
+      res.status(200).json({ publications });
       return;
     }
-    const publicationsRaw = await deps.getPublications(title);
-    const publications = publicationsRaw.publications.map(presentPublication);
 
+    const { query, receptionType, originals } = validateFilterQuery(queryParams);
+    const receptionTypes = Array.isArray(receptionType) ? receptionType : [receptionType];
+
+    const publicationsRaw = await deps.filterPublications({
+      query,
+      receptionTypes: receptionTypes.filter((receptionType) => receptionType !== undefined),
+      originals,
+    });
+
+    const publications = publicationsRaw.publications.map(presentPublication);
     res.status(200).json({ publications });
+    return;
   };
 
   const createPublicationHandler: RequestHandler = async function (req, res) {

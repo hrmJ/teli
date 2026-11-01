@@ -37,3 +37,22 @@ export function validateReceptionType(data: unknown) {
   }
   return parsed.output;
 }
+
+export function validateFilterQuery(data: unknown) {
+  const filterQuerySchema = v.object({
+    query: v.pipe(v.string(), v.minLength(3, "The query string must be 3 or more UTF-16 code units long.")),
+    receptionType: v.optional(v.union([v.array(receptionTypeSchema), receptionTypeSchema])),
+    originals: v.optional(
+      v.pipe(
+        v.string(),
+        v.transform((originals) => (originals === "true" ? true : false)),
+      ),
+    ),
+  });
+  const parsed = v.safeParse(filterQuerySchema, data);
+  if (!parsed.success) {
+    console.log(parsed.issues);
+    throw new Error("Invalid reception type");
+  }
+  return parsed.output;
+}

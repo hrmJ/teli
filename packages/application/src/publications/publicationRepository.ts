@@ -6,6 +6,8 @@ export type PublicationRepository = {
   updateById(id: string, publication: Omit<Publication, "id" | "author">): Promise<boolean>;
   getByIds(ids: string[]): Promise<Publication[]>;
   searchByTitle(title: string): Promise<Publication[]>;
+  searchByQuery(query: string): Promise<string[]>;
+  filterByReceptionType(ids: string[], receptionTypes: ReceptionType[], originals: boolean): Promise<string[]>;
   create(publication: Omit<Publication, "id" | "author">, authorId: string): Promise<Publication>;
   updateReceptionsById: (originalId: string, receptionIdsByType: string[], receptionType: ReceptionType) => Promise<boolean>;
   updateReceptionsOfById: (originalId: string, receptionOf: string[]) => Promise<boolean>;
