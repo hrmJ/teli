@@ -63,7 +63,7 @@ export function Publication(props: Props) {
           marginTop: props.displayAs === "original" ? "0" : "s4",
         },
 
-        boxShadow: props.displayAs === "original" ? "none" : "0 1px 2px hsla(0, 0%, 0%, .2)",
+        boxShadow: props.displayAs === "original" || props.displayAs === "searchResult" ? "none" : "0 1px 2px hsla(0, 0%, 0%, .2)",
       })}
     >
       <PublicationTitle

@@ -13,13 +13,17 @@ export type ReceptionDto = v.InferOutput<typeof ReceptionDtoSchema>;
 
 export const receptionTypeList = ["translation", "review", "adaptation", "article", "other"] as const;
 
+const receptionType = v.picklist(receptionTypeList);
+
 export const NewReceptionDataSchema = v.object({
-  receptionType: v.picklist(receptionTypeList),
+  receptionType,
   existingPublication: v.optional(v.object({ title: v.string(), id: v.string() })),
   newOrExistingPublication: v.picklist(["new", "existing"]),
   newPublication: v.optional(v.intersect([NewPublicationDtoSchema, v.object({ authorId: v.string() })])),
 });
 
 export type NewReceptionData = v.InferOutput<typeof NewReceptionDataSchema>;
+
+export type ReceptionType = v.InferOutput<typeof receptionType>;
 
 export const receptionTypeSchema = v.picklist(receptionTypeList);

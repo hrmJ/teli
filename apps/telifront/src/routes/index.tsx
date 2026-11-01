@@ -12,33 +12,28 @@ function RouteComponent() {
         padding: "s9",
         paddingLeft: "s10",
         color: "grey2b",
-        maxWidth: "s21",
+        width: "100%",
         "& p + p": {
           marginTop: "s4",
         },
+        "& p": {
+          textAlign: "justify",
+        },
       })}
     >
-      <section className={css({ marginBottom: "s8" })}>
-        <h1
-          className={css({
-            fontSize: "s9",
-            fontWeight: "s3",
-            paddingLeft: "0",
-            marginBottom: "s5",
-          })}
-        >
-          Tekstit liikkeessä
-        </h1>
-
+      <section
+        className={css({
+          marginBottom: "s8",
+          background: "grey9",
+          borderRadius: "sm",
+          padding: "s5",
+        })}
+      >
         <p>
           Tekstit liikkeessä (TeLi) -tietokanta on suunniteltu TeLi-projektille. Tähän tietokantaan on koottu bibliografisia tietoja
           suomalaisten ja venäläisten naiskirjailijoiden kirjoittamista teoksista ja niiden käännöksistä ja muusta vastaanotosta
-          Venäjällä ja Suomessa.
-        </p>
-
-        <p>
-          TeLi -tietokanta sisältää tällä hetkellä yli 1000 nimeä suomalaisia ja venäläisiä naiskirjailijoita, kääntäjiä, tutkijoita,
-          toimittajia ja muita kulttuurialan tekijöitä. Tietokannassa on yli 6000 tietuetta.
+          Venäjällä ja Suomessa. TeLi -tietokanta sisältää tällä hetkellä yli 1000 nimeä suomalaisia ja venäläisiä naiskirjailijoita,
+          kääntäjiä, tutkijoita, toimittajia ja muita kulttuurialan tekijöitä. Tietokannassa on yli 6000 tietuetta.
         </p>
 
         <p>
@@ -46,18 +41,21 @@ function RouteComponent() {
           ei tarvita.
         </p>
       </section>
-      <hr />
-      <section className={css({ marginTop: "s8" })}>
+      <section
+        className={css({
+          marginTop: "s8",
+
+          background: "yellow.50",
+          borderRadius: "sm",
+          padding: "s5",
+        })}
+      >
         <p>
           База данных TeLi создана специально для проекта TeLi — «Тексты в движении». В базе данных собраны библиографические сведения о
           произведениях, написанных финляндскими и русскими писательницами и переведённых на (соответственно) русский и финский языки, а
           также информация о самых разных вариантах их рецепции в России и Финляндии, как то статьи в научных изданиях, рецензии в
           журналах, газетах и социальных сетях (в блогах и на интернет-форумах), театральные постановки и экранизации, радио- и
-          телепрограммы.
-        </p>
-
-        <p>
-          База данных TeLi постоянно пополняется: на конец 2022 года в ней представлены более 1000 имён финляндских и
+          телепрограммы. База данных TeLi постоянно пополняется: на конец 2022 года в ней представлены более 1000 имён финляндских и
           русских/русскоязычных писательниц, переводчиц, исследователей, журналистов и других деятелей литературы и культуры. Общее
           количество рецепций составляет более 6000 записей.
         </p>

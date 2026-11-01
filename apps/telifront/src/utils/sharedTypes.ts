@@ -1,1 +1,1 @@
-export type DisplayAs = "original" | "reception";
+export type DisplayAs = "original" | "reception" | "searchResult";

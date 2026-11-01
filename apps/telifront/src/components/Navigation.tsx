@@ -36,21 +36,23 @@ export function Navigation() {
           "& a": {
             border: "1px solid",
             borderRadius: "4px",
-            padding: "s1",
+            paddingLeft: "s5",
+            paddingRight: "s5",
+            paddingTop: "s2",
+            paddingBottom: "s2",
             borderColor: "grey5",
           },
         })}
       >
-        <div>
-          <Link activeProps={activeProps} to="/">
-            Etusivu
-          </Link>
-        </div>
-        <div>
-          <Link activeProps={activeProps} to="/authors">
-            Tekijät
-          </Link>
-        </div>
+        <Link activeProps={activeProps} to="/">
+          Etusivu
+        </Link>
+        <Link activeProps={activeProps} to="/authors">
+          Tekijät
+        </Link>
+        <Link activeProps={activeProps} to="/publications">
+          Tekstit
+        </Link>
       </div>
       <div
         className={css({

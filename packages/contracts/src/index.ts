@@ -3,4 +3,4 @@ export type { AuthorDto, AuthorListItemDto, GetAuthorsResponse } from "./authors
 export { type PublicationDto } from "./publications.ts";
 export { AuthorDtoSchema } from "./authors.ts";
 
-export { NewReceptionDataSchema, type NewReceptionData, receptionTypeSchema } from "./receptions.ts";
+export { NewReceptionDataSchema, type NewReceptionData, receptionTypeSchema, type ReceptionType } from "./receptions.ts";

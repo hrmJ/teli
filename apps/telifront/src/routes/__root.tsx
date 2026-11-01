@@ -26,16 +26,12 @@ function RootComponent() {
   const authorMap = authorData?.authorMap ?? new Map();
 
   return (
-    <div className={css({ background: "grey9", position: "relative" })}>
+    <div className={css({ background: "white", position: "relative" })}>
       <main
         className={css({
           background: "white",
           maxWidth: "70vw",
           margin: "auto",
-          borderLeft: "1px solid",
-          borderRight: "1px solid",
-          borderLeftColor: "grey7",
-          borderRightColor: "grey7",
           minHeight: "100vh",
         })}
       >

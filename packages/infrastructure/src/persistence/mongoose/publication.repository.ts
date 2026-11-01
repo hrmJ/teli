@@ -128,7 +128,7 @@ export function composeMongoosePublicationRepository(deps: Deps): PublicationRep
     },
 
     async searchByQuery(query: string): Promise<string[]> {
-      const fields: (keyof PublicationDocument)[] = ["title", "english title", "other authors", "publication name"];
+      const fields: (keyof PublicationDocument)[] = ["title", "english title", "other authors", "publication name", "publisher"];
 
       const regex = { $regex: escapeRegex(query), $options: "i" };
       const matches = fields.map((field) => ({ [`publications.${field}`]: regex }));

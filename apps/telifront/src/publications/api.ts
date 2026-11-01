@@ -2,7 +2,9 @@ import { config } from "../config";
 import * as v from "valibot";
 import { NewReceptionData, ReceptionDtoSchema } from "@teli/contracts/receptions";
 import { NewPublicationDtoSchema, PublicationListDtoSchema } from "@teli/contracts/publications";
+import { type ReceptionType } from "@teli/contracts/receptions";
 import { keycloak } from "../auth/keycloak";
+import { compileReceptionTypeQuery } from "./receptionHelpers";
 
 export async function getReceptions(originalId: string) {
   const response = await fetch(`${config.apiUrl}/publications/${originalId}/receptions`);
@@ -17,6 +19,22 @@ export async function getReceptions(originalId: string) {
     throw new Error("Invalid reception data");
   }
   return parsed.output;
+}
+
+export async function filterPublications(props: { query: string; receptionType: Record<ReceptionType, boolean>; originals?: Boolean }) {
+  const receptionTypeQuery = compileReceptionTypeQuery(props.receptionType);
+  const response = await fetch(`${config.apiUrl}/publications?query=${props.query}${receptionTypeQuery}`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to search publications: ${response.status}`);
+  }
+
+  const data: unknown = await response.json();
+  const parsed = v.safeParse(PublicationListDtoSchema, data);
+  if (!parsed.success) {
+    throw new Error("Invalid publications data");
+  }
+  return parsed.output.publications;
 }
 
 export async function getPublications(title: string) {

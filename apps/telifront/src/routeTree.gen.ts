@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PublicationsRouteImport } from './routes/publications'
 import { Route as AuthorsRouteImport } from './routes/authors'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthorsLetterRouteImport } from './routes/authors.$letter'
 import { Route as AuthorAuthorRouteImport } from './routes/author.$author'
 
+const PublicationsRoute = PublicationsRouteImport.update({
+  id: '/publications',
+  path: '/publications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthorsRoute = AuthorsRouteImport.update({
   id: '/authors',
   path: '/authors',
@@ -38,12 +44,14 @@ const AuthorAuthorRoute = AuthorAuthorRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/authors': typeof AuthorsRouteWithChildren
+  '/publications': typeof PublicationsRoute
   '/author/$author': typeof AuthorAuthorRoute
   '/authors/$letter': typeof AuthorsLetterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/authors': typeof AuthorsRouteWithChildren
+  '/publications': typeof PublicationsRoute
   '/author/$author': typeof AuthorAuthorRoute
   '/authors/$letter': typeof AuthorsLetterRoute
 }
@@ -51,25 +59,42 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/authors': typeof AuthorsRouteWithChildren
+  '/publications': typeof PublicationsRoute
   '/author/$author': typeof AuthorAuthorRoute
   '/authors/$letter': typeof AuthorsLetterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/authors' | '/author/$author' | '/authors/$letter'
+  fullPaths:
+    '/' | '/authors' | '/publications' | '/author/$author' | '/authors/$letter'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/authors' | '/author/$author' | '/authors/$letter'
-  id: '__root__' | '/' | '/authors' | '/author/$author' | '/authors/$letter'
+  to:
+    '/' | '/authors' | '/publications' | '/author/$author' | '/authors/$letter'
+  id:
+    | '__root__'
+    | '/'
+    | '/authors'
+    | '/publications'
+    | '/author/$author'
+    | '/authors/$letter'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthorsRoute: typeof AuthorsRouteWithChildren
+  PublicationsRoute: typeof PublicationsRoute
   AuthorAuthorRoute: typeof AuthorAuthorRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/publications': {
+      id: '/publications'
+      path: '/publications'
+      fullPath: '/publications'
+      preLoaderRoute: typeof PublicationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/authors': {
       id: '/authors'
       path: '/authors'
@@ -115,6 +140,7 @@ const AuthorsRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthorsRoute: AuthorsRouteWithChildren,
+  PublicationsRoute: PublicationsRoute,
   AuthorAuthorRoute: AuthorAuthorRoute,
 }
 export const routeTree = rootRouteImport
