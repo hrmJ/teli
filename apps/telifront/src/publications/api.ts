@@ -95,7 +95,7 @@ export async function saveNewPublication(data: { publication: NewPublicationDtoS
   }
 }
 
-export async function updatePublication(data: { publication: NewPublicationDtoSchema; authorId: string; publicationId: string }) {
+export async function updatePublication(data: { publication: NewPublicationDtoSchema; publicationId: string; newAuthorId?: string }) {
   if (!keycloak.token) throw new Error("Unauthenticated");
   await keycloak.updateToken(30);
   const response = await fetch(`${config.apiUrl}/publications/${data.publicationId}`, {

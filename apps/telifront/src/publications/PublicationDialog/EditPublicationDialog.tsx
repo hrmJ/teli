@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { use, useReducer, useState } from "react";
 import { css } from "../../../styled-system/css";
 import { iconBtn, iconBtnPill } from "../../styles/button";
 import { Dialog } from "../../components/Dialog";
@@ -9,12 +9,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PublicationDto, type NewPublicationDtoSchema } from "@teli/contracts/publications";
 import { updatePublication } from "../api";
 import { Spinner } from "../../components/Spinner";
+import { AuthorContext } from "../../authors/AuthorContext";
 
 /**
  * Used when adding a publication directly for an author
  */
 export function EditPublicationDialog(props: { author: { id: string; name: string }; publication: PublicationDto; parentId?: string }) {
+  const { authorMap } = use(AuthorContext);
   const [isOpen, setIsOpen] = useState(false);
+  const [newAuthorId, setNewAuthorId] = useState<string | undefined>(undefined);
 
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
@@ -25,8 +28,8 @@ export function EditPublicationDialog(props: { author: { id: string; name: strin
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (data: { publication: NewPublicationDtoSchema; authorId: string; publicationId: string }) => {
-      return updatePublication(data);
+    mutationFn: (data: { publication: NewPublicationDtoSchema; publicationId: string }) => {
+      return updatePublication({ ...data, newAuthorId });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authorDetails", props.author.name] });
@@ -63,9 +66,13 @@ export function EditPublicationDialog(props: { author: { id: string; name: strin
           ) : null}
 
           <PublicationForm
-            disableAuthor={true}
+            disableAuthor={false}
             publication={data}
             dispatch={(field, value) => {
+              if (field === "author" && typeof value === "string") {
+                const authorEntry = authorMap.get(value.toLowerCase().trim());
+                setNewAuthorId(authorEntry?.id);
+              }
               dispatch({ type: "updatePublicationField", field, value });
             }}
           />
@@ -81,7 +88,7 @@ export function EditPublicationDialog(props: { author: { id: string; name: strin
               e.preventDefault();
               setValidationErrors([]);
               const { author, ...publication } = data;
-              mutation.mutate({ publication, authorId: props.author.id, publicationId: props.publication.id });
+              mutation.mutate({ publication, publicationId: props.publication.id });
               return;
             }}
           >

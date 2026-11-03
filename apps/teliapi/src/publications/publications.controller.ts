@@ -111,10 +111,10 @@ export function composePublicationsController(deps: PublicationsControllerDeps) 
       res.status(400).json({ error: "Invalid author id" });
       return;
     }
-    const { publication, authorId } = req.body;
-    const newAuthorId = typeof authorId === "string" ? authorId : undefined;
+    const { publication, newAuthorId } = req.body;
+    const validatedNewAuthorId = typeof newAuthorId === "string" ? newAuthorId : undefined;
     const newPublication = validateNewPublication(publication);
-    const updatedPublication = await deps.updatePublication(id, newPublication, newAuthorId);
+    const updatedPublication = await deps.updatePublication(id, newPublication, validatedNewAuthorId);
     res.status(200).json({ publication: updatedPublication });
   };
 

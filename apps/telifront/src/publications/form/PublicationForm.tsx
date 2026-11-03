@@ -1,10 +1,8 @@
-import { UserPlusIcon } from "@heroicons/react/24/solid";
 import { css } from "../../../styled-system/css";
-import { iconBtn } from "../../styles/button";
 import { Input as InputBase } from "../../components/Input";
 import { validateAuthor } from "./validators";
 import type { NewPublicationDtoSchema } from "@teli/contracts/publications";
-import { use, useState } from "react";
+import { use } from "react";
 import { AuthorContext } from "../../authors/AuthorContext";
 import { AddAuthorDialog } from "../../authors/AuthorDialog/AddAuthorDialog";
 

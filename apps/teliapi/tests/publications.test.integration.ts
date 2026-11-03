@@ -133,7 +133,7 @@ test("Authenticated users can update publication author", async () => {
       method: "PUT",
       body: JSON.stringify({
         publication: { documentType: newType },
-        authorId: author2.id.toString(),
+        newAuthorId: author2.id.toString(),
       }),
       headers: {
         "Content-Type": "application/json",
