@@ -3,7 +3,7 @@ import type { ReceptionType } from "@teli/domain/receptions";
 
 export type PublicationRepository = {
   getById(id: string): Promise<Publication | null>;
-  updateById(id: string, publication: Omit<Publication, "id" | "author">): Promise<boolean>;
+  updateById(id: string, publication: Partial<Omit<Publication, "id" | "author">>, newAuthorId?: string): Promise<boolean>;
   getByIds(ids: string[]): Promise<Publication[]>;
   searchByTitle(title: string): Promise<Publication[]>;
   searchByQuery(query: string): Promise<string[]>;

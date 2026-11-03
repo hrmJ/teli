@@ -26,24 +26,26 @@ export function publicationToDomain(doc: PublicationDocument, authorName?: strin
   };
 }
 
-export function publicationToPersistence(pub: Omit<Publication, "id" | "author">) {
-  return {
-    title: pub.title,
-    "english title": pub.englishTitle,
-    "other authors": pub.otherAuthors,
-    "document type": pub.documentType,
-    genre: pub.genre,
-    language: pub.language,
-    publisher: pub.publisher,
-    "publication name": pub.publicationName,
-    source: pub.source,
-    "publish location": pub.publishLocation,
-    year: pub.year,
-    date: pub.date,
-    reference: pub.reference,
-    note: pub.note,
-    link: pub.link,
-    receptions: pub.receptions,
-    receptionOf: pub.receptionOf,
-  };
+export function publicationToPersistence(publication: Partial<Publication>) {
+  return Object.fromEntries(
+    Object.entries({
+      title: publication.title,
+      "english title": publication.englishTitle,
+      "other authors": publication.otherAuthors,
+      "document type": publication.documentType,
+      genre: publication.genre,
+      language: publication.language,
+      publisher: publication.publisher,
+      "publication name": publication.publicationName,
+      source: publication.source,
+      "publish location": publication.publishLocation,
+      year: publication.year,
+      date: publication.date,
+      reference: publication.reference,
+      note: publication.note,
+      link: publication.link,
+      receptions: publication.receptions,
+      receptionOf: publication.receptionOf,
+    }).filter(([, value]) => value !== undefined),
+  );
 }

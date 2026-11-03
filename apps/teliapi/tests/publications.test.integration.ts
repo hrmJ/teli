@@ -39,6 +39,10 @@ test("titles can be searched", async () => {
   // Act
   const resp = await fetch(`${testConfig.baseUrl}/publications?title=match`);
   const json: any = await resp.json();
+
+  // Assert
+
+  assert.equal(resp.status, 200);
   assert.equal(json.publications.length, 5);
 
   assert.partialDeepStrictEqual(json, {
@@ -50,9 +54,6 @@ test("titles can be searched", async () => {
       { title: "match this is!" },
     ],
   });
-
-  // Assert
-  assert.equal(resp.status, 200);
 });
 
 test("Authenticated users can add publications in addition to existing ones", async () => {
@@ -110,6 +111,46 @@ test("Unauthenticated users cannot add publications", async () => {
   });
 
   assert.equal(401, resp.status);
+});
+
+test("Authenticated users can update publication author", async () => {
+  // Arrange
+  const tokens = await loginTestUser();
+  const publicationDetails = publicationFixture({ title: "Already existing", "document type": "book" });
+  const author = await AuthorModel.insertOne(
+    authorFixture({
+      name: "Original",
+      publications: [publicationDetails, publicationFixture({ title: "Another" })],
+    } as any),
+  );
+
+  const author2 = await AuthorModel.insertOne(authorFixture({ name: "Someone else" }));
+  const publication1 = author.publications.at(0);
+  const newType = "article";
+  try {
+    // Act
+    const resp = await fetch(`${testConfig.baseUrl}/publications/${publication1?._id.toString()}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        publication: { documentType: newType },
+        authorId: author2.id.toString(),
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${tokens.access_token}`,
+      },
+    });
+    // Assert
+    assert.equal(resp.status, 200);
+    const updatedAuthor1 = await AuthorModel.findById(author._id.toString());
+    const updatedAuthor2 = await AuthorModel.findById(author2._id.toString());
+    assert.equal(updatedAuthor1?.publications.length, 1);
+    assert.equal(updatedAuthor1?.publications.at(0)?.title, "Another");
+    assert.equal(updatedAuthor2?.publications.length, 1);
+    assert.equal(updatedAuthor2?.publications.at(0)?.title, "Already existing");
+  } finally {
+    await logoutTestUser(tokens.refresh_token);
+  }
 });
 
 test("Authenticated users can update publication details", async () => {

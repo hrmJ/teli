@@ -91,7 +91,7 @@ export function composeMongoosePublicationRepository(deps: Deps): PublicationRep
       return true;
     },
 
-    async updateById(publicationId: string, updatedPublication: Omit<Publication, "id" | "author">) {
+    async updateById(publicationId: string, updatedPublication: Omit<Publication, "id" | "author">, newAuthorId?: string) {
       const author = await deps.AuthorModel.findOne({
         "publications._id": publicationId,
       });
@@ -104,6 +104,24 @@ export function composeMongoosePublicationRepository(deps: Deps): PublicationRep
       }
 
       publication.set(publicationToPersistence(updatedPublication));
+
+      if (newAuthorId && newAuthorId !== author.id) {
+        // Moving into another author
+        const newAuthor = await deps.AuthorModel.findById(newAuthorId);
+        if (!newAuthor) {
+          throw new Error("Invalid new author given");
+        }
+
+        newAuthor.publications.push({
+          ...publication.toObject(),
+          // Note: preserve old pub's id to make sure references stay
+          _id: publication._id,
+        });
+
+        publication.deleteOne();
+
+        await newAuthor.save();
+      }
 
       await author.save();
 

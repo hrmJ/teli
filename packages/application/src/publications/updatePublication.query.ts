@@ -8,7 +8,7 @@ type Deps = {
 export type UpdatePublication = ReturnType<typeof composeUpdatePublication>;
 
 export function composeUpdatePublication({ publications }: Deps) {
-  return async function updatePublication(id: string, publication: Omit<Publication, "id" | "author">) {
-    await publications.updateById(id, publication);
+  return async function updatePublication(id: string, publication: Omit<Publication, "id" | "author">, newAuthorId?: string) {
+    await publications.updateById(id, publication, newAuthorId);
   };
 }
