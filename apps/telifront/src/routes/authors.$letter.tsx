@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { getAuthorDetails, getAuthorsByLetter } from "../authors/api";
-import { css } from "../../styled-system/css";
+import { createFileRoute } from "@tanstack/react-router";
+import { getAuthorsByLetter } from "../authors/api";
+import { AuthorList } from "../authors/AuthorList";
+import { Spinner } from "../components/Spinner";
 
 export const Route = createFileRoute("/authors/$letter")({
   component: RouteComponent,
@@ -13,44 +14,5 @@ function RouteComponent() {
     queryKey: ["authorsByLetter", letter],
     queryFn: async () => getAuthorsByLetter(letter),
   });
-  return (
-    <div
-      className={css({
-        display: "flex",
-        gap: "s4",
-        height: "80vh",
-        paddingTop: "s5",
-        paddingBottom: "s5",
-      })}
-    >
-      <ul
-        className={css({
-          display: "flex",
-          flexFlow: "column wrap",
-          gap: "s2",
-          color: "grey3",
-        })}
-      >
-        {data?.map((author) => (
-          <li
-            key={author.name}
-            className={css({
-              // flex: "1 1 100px",
-              display: "inline-block",
-              maxWidth: "s12",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis",
-              // border: "1px solid black",
-            })}
-          >
-            <Link to="/author/$author" params={{ author: author.name }}>
-              {author.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <Outlet />
-    </div>
-  );
+  return isPending ? <Spinner /> : <AuthorList data={data} />;
 }

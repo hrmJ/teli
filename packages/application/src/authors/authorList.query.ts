@@ -7,7 +7,7 @@ type Deps = {
 export type ListAuthors = ReturnType<typeof composeListAuthors>;
 
 export function composeListAuthors({ authors }: Deps) {
-  return async function listAuthors(by: { letter: string }) {
+  return async function listAuthors(by: { letter?: string; query?: string }) {
     const details = await authors.list(by);
     return details;
   };

@@ -22,7 +22,8 @@ function RouteComponent() {
   return (
     <div
       className={css({
-        padding: "s10",
+        paddingLeft: "s10",
+        marginTop: "s4",
         display: "flex",
         flexDirection: "column",
         gap: "s5",

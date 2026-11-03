@@ -4,6 +4,7 @@ import { Publication } from "../publications/Publication";
 import { css } from "../../styled-system/css";
 import { AddPublicationDialog } from "../publications/PublicationDialog/AddPublicationDialog";
 import { RemoveAuthorDialog } from "./AuthorDialog/RemoveAuthorDialog";
+import { UpdateAuthorDialog } from "./AuthorDialog/UpdateAuthorDialog";
 
 export function Author(props: { author?: AuthorDto }) {
   if (!props.author) return;
@@ -26,11 +27,14 @@ export function Author(props: { author?: AuthorDto }) {
           letterSpacing: "-0.02em",
           fontSize: "s11",
           color: "grey2",
-          marginBottom: "s5",
+          marginBottom: "s4",
         })}
       >
         {name}
-        <RemoveAuthorDialog id={props.author.id} name={name} />
+        <div className={css({ display: "flex", gap: "s2" })}>
+          <UpdateAuthorDialog author={props.author} />
+          <RemoveAuthorDialog id={props.author.id} name={name} />
+        </div>
       </h3>
       <ul className={css({ padding: "s4" })}>
         <AuthorEntry value={otherNames} label="Muut nimet" />

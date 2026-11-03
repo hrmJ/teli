@@ -4,8 +4,19 @@ import { AuthorDtoSchema, AuthorIndexDtoSchema, AuthorListDtoSchema, NewAuthorDt
 
 import { keycloak } from "../auth/keycloak";
 
+export async function searchAuthors(query: string) {
+  const response = await fetch(`${config.apiUrl}/authors?query=${query}`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to load author: ${response.status}`);
+  }
+
+  const data: unknown = await response.json();
+
+  return v.parse(AuthorListDtoSchema, data);
+}
+
 export async function getAuthorIndex() {
-  // await keycloak.updateToken(30);
   const response = await fetch(`${config.apiUrl}/authors/letters`);
 
   if (!response.ok) {
@@ -30,6 +41,23 @@ export async function deleteAuthor(id: string) {
 
   if (!response.ok) {
     throw new Error(`Failed to delete author: ${response.status}`);
+  }
+}
+
+export async function updateAuthor(data: NewAuthorDto, id: string) {
+  if (!keycloak.token) throw new Error("Unauthenticated");
+  await keycloak.updateToken(30);
+  const response = await fetch(`${config.apiUrl}/authors/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${keycloak.token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to update author: ${response.status}`);
   }
 }
 

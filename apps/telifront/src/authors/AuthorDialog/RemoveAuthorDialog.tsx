@@ -34,7 +34,7 @@ export function RemoveAuthorDialog({ name, id }: { name: string; id: string }) {
         <button
           onClick={() => setIsOpen(true)}
           className={css(iconBtn, {
-            color: "grey5",
+            color: "yellow.600",
             fontSize: "s2",
             padding: "s2",
             paddingLeft: "0",

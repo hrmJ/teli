@@ -1,3 +1,4 @@
+import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { css } from "../../styled-system/css";
 import type { DisplayAs } from "../utils/sharedTypes";
 import { Publisher } from "./Publisher";
@@ -10,13 +11,7 @@ interface Props {
   displayAs: DisplayAs;
 }
 
-export function PublicationTitle({
-  title,
-  year,
-  onClick,
-  publisherDetails,
-  displayAs,
-}: Props) {
+export function PublicationTitle({ title, year, onClick, publisherDetails, displayAs }: Props) {
   const yearFormatted = year !== undefined ? ` ${year}.` : "";
   return (
     <div
@@ -43,12 +38,8 @@ export function PublicationTitle({
       >
         {title}
       </button>
-      <div
-        className={css({ color: displayAs === "original" ? "grey4" : "grey5" })}
-      >
-        {publisherDetails.publisher || publisherDetails.publishLocation
-          ? " "
-          : ""}
+      <div className={css({ color: displayAs === "original" ? "grey4" : "grey5" })}>
+        {publisherDetails.publisher || publisherDetails.publishLocation ? " " : ""}
         <Publisher {...publisherDetails} />
         {yearFormatted}
       </div>

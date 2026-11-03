@@ -41,14 +41,20 @@ export function composeAuthorsController(deps: AuthorsControllerDeps) {
   };
 
   const authorListHandler: RequestHandler = async function (req, res) {
-    const letter = req.query.letter;
-    if (!letter || typeof letter !== "string") {
-      res.status(400).json({ error: "Missing letter to browse with" });
+    const { letter, query } = req.query;
+    if (typeof letter === "string" && letter) {
+      const authors = await deps.listAuthors({ letter });
+      const dto = presentAuthorList(authors);
+      res.json(dto);
       return;
     }
-    const authors = await deps.listAuthors({ letter });
-    const dto = presentAuthorList(authors);
-    res.json(dto);
+    if (typeof query === "string" && query) {
+      const authors = await deps.listAuthors({ query });
+      const dto = presentAuthorList(authors);
+      res.json(dto);
+      return;
+    }
+    throw new Error("Invalid author query");
   };
 
   const authorNameListHandler: RequestHandler = async function (_, res) {

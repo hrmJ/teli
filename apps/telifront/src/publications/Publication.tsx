@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { PublicationDto } from "../../../../packages/contracts/src/publications";
 import { PublicationEntry } from "./PublicationEntry";
-import { useState } from "react";
+import { use, useState } from "react";
 import { getReceptions } from "./api";
 import { Receptions } from "./Receptions";
 import { PublicationTitle } from "./PublicationTitle";
@@ -10,15 +10,19 @@ import { css } from "../../styled-system/css";
 import { PublicationType } from "./PublicationType";
 import { PublicationLink } from "./PublicationLink";
 import { PublicationAuthor } from "./PublicationAuthor";
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { LinkSlashIcon, MinusIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/solid";
 import type { DisplayAs } from "../utils/sharedTypes";
 import { hasReceptions, numberOfReceptions } from "./receptionHelpers";
 import { iconBtn } from "../styles/button";
 import { AddReceptionDialog } from "../receptions/ReceptionDialog/AddReceptionDialog";
+import { keycloak } from "../auth/keycloak";
+import { EditPublicationDialog } from "./PublicationDialog/EditPublicationDialog";
+import { AuthorContext } from "../authors/AuthorContext";
 
 interface Props {
   publication: PublicationDto;
   displayAs: DisplayAs;
+  parentId?: string;
 }
 
 export function Publication(props: Props) {
@@ -52,7 +56,8 @@ export function Publication(props: Props) {
     queryKey: ["receptions", id],
     queryFn: async () => getReceptions(id),
   });
-
+  const { authorMap, authors } = use(AuthorContext);
+  const authorEntry = authorMap.get(author.toLowerCase().trim());
   return (
     <article
       className={css({
@@ -75,6 +80,33 @@ export function Publication(props: Props) {
       />
       {isOpen ? (
         <div>
+          {keycloak.authenticated ? (
+            <div
+              className={css({
+                display: "flex",
+                gap: "s2",
+                alignItems: "center",
+                color: "yellow.600",
+                fontSize: "s2",
+                marginTop: "s3",
+                marginBottom: "s4",
+              })}
+            >
+              {authorEntry ? (
+                <EditPublicationDialog author={authorEntry} publication={props.publication} parentId={props.parentId} />
+              ) : null}
+              <button onClick={() => null} data-testid={`receptions__${title}`} className={css(iconBtn)}>
+                <TrashIcon className={css({ width: "s2", height: "s2" })} />
+                Poista teos
+              </button>
+              {props.displayAs === "reception" ? (
+                <button onClick={() => null} data-testid={`receptions__${title}`} className={css(iconBtn)}>
+                  <LinkSlashIcon className={css({ width: "s2", height: "s2" })} />
+                  Poista reseptioista
+                </button>
+              ) : null}
+            </div>
+          ) : null}
           <section
             className={css({
               padding: "s3",
@@ -115,7 +147,7 @@ export function Publication(props: Props) {
                 )}
                 Reseptiot ({numberOfReceptions(receptions)})
               </button>
-              <Receptions {...receptions} hidden={!receptionsOpen} />
+              <Receptions {...receptions} hidden={!receptionsOpen} parentId={props.publication.id} />
             </section>
           ) : null}
 

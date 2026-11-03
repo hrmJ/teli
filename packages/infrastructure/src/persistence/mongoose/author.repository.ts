@@ -53,15 +53,22 @@ export function composeMongooseAuthorRepository(deps: Deps): AuthorRepository {
     },
 
     async list(by) {
-      if (!by.letter) {
-        throw new Error("Authors can only be listed by letter");
+      if (by.letter) {
+        const authors = await deps.AuthorModel.find({
+          name: { $regex: `^${by.letter}`, $options: "i" },
+        }).sort({ name: 1 });
+
+        return authors.map(authorToDomain);
       }
 
-      const authors = await deps.AuthorModel.find({
-        name: { $regex: `^${by.letter}`, $options: "i" },
-      }).sort({ name: 1 });
+      if (by.query) {
+        const authors = await deps.AuthorModel.find({
+          name: { $regex: `${by.query}`, $options: "i" },
+        }).sort({ name: 1 });
+        return authors.map(authorToDomain);
+      }
 
-      return authors.map(authorToDomain);
+      throw new Error("No valid author filter given");
     },
 
     async listAllNames() {

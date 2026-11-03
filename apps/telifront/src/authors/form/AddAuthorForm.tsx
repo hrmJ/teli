@@ -7,7 +7,7 @@ import { validateNewAuthor, validateNewAuthorName } from "./validators";
 import { authorFormReducer } from "./authorFormReducer";
 import { iconBtnPill } from "../../styles/button";
 import { ArrowUpTrayIcon } from "@heroicons/react/24/solid";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
 import { saveNewAuthor } from "../api";
 import { Spinner } from "../../components/Spinner";
 import { useNavigate } from "@tanstack/react-router";
@@ -19,34 +19,45 @@ export function AddAuthorForm({
   navigateOnSuccess = true,
   firstName: initialFirstName = "",
   lastName: initialLastName = "",
+  otherProps = {},
+  isEdit,
+  originalName,
+  mutationFn,
 }: {
   onSuccess: (name: string) => void;
   navigateOnSuccess?: boolean;
   firstName?: string;
   lastName?: string;
+  originalName?: string;
+  otherProps?: Record<string, unknown>;
+  isEdit?: boolean;
+  mutationFn?: UseMutationResult<void, Error, NewAuthorDto, unknown>;
 }) {
   const [data, dispatch] = useReducer(authorFormReducer, {
     firstName: initialFirstName,
     lastName: initialLastName,
+    ...otherProps,
   });
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (newAuthor: NewAuthorDto) => {
-      return saveNewAuthor(newAuthor);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authorIndex"] });
-      queryClient.invalidateQueries({ queryKey: ["authorNames"] });
-      onSuccess(`${data.lastName.trim()} ${data.firstName.trim()}`);
-      if (!navigateOnSuccess) return;
-      navigate({
-        to: `/author/$author`,
-        params: { author: `${data.lastName.trim()} ${data.firstName.trim()}` },
-      });
-    },
-  });
+  const mutation =
+    mutationFn ??
+    useMutation({
+      mutationFn: (newAuthor: NewAuthorDto) => {
+        return saveNewAuthor(newAuthor);
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["authorIndex"] });
+        queryClient.invalidateQueries({ queryKey: ["authorNames"] });
+        onSuccess(`${data.lastName.trim()} ${data.firstName.trim()}`);
+        if (!navigateOnSuccess) return;
+        navigate({
+          to: `/author/$author`,
+          params: { author: `${data.lastName.trim()} ${data.firstName.trim()}` },
+        });
+      },
+    });
 
   const { firstName, lastName } = data;
 
@@ -75,7 +86,9 @@ export function AddAuthorForm({
           </div>
         ) : null}
 
-        <h2 className={css({ fontSize: "s8", color: "grey3", textAlign: "left" })}>Uusi tekijä</h2>
+        <h2 className={css({ fontSize: "s8", color: "grey3", textAlign: "left" })}>
+          {isEdit ? `${lastName} ${firstName}` : "Uusi tekijä"}
+        </h2>
 
         <div
           className={css({
@@ -93,13 +106,21 @@ export function AddAuthorForm({
             data={data}
             name="lastName"
             label={"Sukunimi"}
-            validate={() => validateNewAuthorName(authorMap, { firstName, lastName })}
+            validate={() => {
+              if (!isEdit || `${lastName.trim()} ${firstName.trim()}` !== originalName) {
+                return validateNewAuthorName(authorMap, { firstName, lastName });
+              }
+            }}
           />
           <Input
             {...inputConsts}
             name="firstName"
             label={"Etunimi tai etunimet"}
-            validate={() => validateNewAuthorName(authorMap, { firstName, lastName })}
+            validate={() => {
+              if (!isEdit || `${lastName.trim()} ${firstName.trim()}` !== originalName) {
+                validateNewAuthorName(authorMap, { firstName, lastName });
+              }
+            }}
           />
           <Input {...inputConsts} name="otherNames" label={"Muut nimet"} />
           <Input {...inputConsts} name="pseudonyms" label={"Pseudonyymit"} />
@@ -128,7 +149,10 @@ export function AddAuthorForm({
           disabled={Boolean(validationErrors?.length)}
           onClick={(ev) => {
             ev.preventDefault();
-            const nameError = validateNewAuthorName(authorMap, { firstName, lastName });
+            const nameError =
+              !isEdit || `${lastName.trim()} ${firstName.trim()}` !== originalName
+                ? validateNewAuthorName(authorMap, { firstName, lastName })
+                : undefined;
             const nameErrors = nameError ? [nameError] : [];
             const yearOfBirth = data.yearOfBirth ? Number(data.yearOfBirth) : undefined;
             const yearOfDeath = data.yearOfDeath ? Number(data.yearOfDeath) : undefined;
