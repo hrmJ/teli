@@ -11,4 +11,5 @@ export type PublicationRepository = {
   create(publication: Omit<Publication, "id" | "author">, authorId: string): Promise<Publication>;
   updateReceptionsById: (originalId: string, receptionIdsByType: string[], receptionType: ReceptionType) => Promise<boolean>;
   updateReceptionsOfById: (originalId: string, receptionOf: string[]) => Promise<boolean>;
+  deleteById(id: string): Promise<boolean>;
 };

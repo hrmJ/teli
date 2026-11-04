@@ -3,6 +3,7 @@ import { ReceptionsByType } from "./ReceptionsByType";
 
 interface Props {
   parentId: string;
+  parentTitle?: string;
   translations?: PublicationDto[];
   reviews?: PublicationDto[];
   adaptations?: PublicationDto[];
@@ -11,15 +12,27 @@ interface Props {
   hidden: boolean;
 }
 
-export function Receptions({ translations, reviews, adaptations, articles, other, hidden, parentId }: Props) {
+export function Receptions({ translations, reviews, adaptations, articles, other, hidden, parentId, parentTitle }: Props) {
   if (hidden) return null;
   return (
     <article>
-      <ReceptionsByType items={translations} label="Käännökset" parentId={parentId} />
-      <ReceptionsByType items={reviews} label="Arvostelut" parentId={parentId} />
-      <ReceptionsByType items={adaptations} label="Adaptaatiot" parentId={parentId} />
-      <ReceptionsByType items={articles} label="Artikkelit" parentId={parentId} />
-      <ReceptionsByType items={other} label="Muut" parentId={parentId} />
+      <ReceptionsByType
+        parentTitle={parentTitle}
+        items={translations}
+        label="Käännökset"
+        parentId={parentId}
+        receptionType="translation"
+      />
+      <ReceptionsByType parentTitle={parentTitle} items={reviews} label="Arvostelut" parentId={parentId} receptionType="review" />
+      <ReceptionsByType
+        parentTitle={parentTitle}
+        items={adaptations}
+        label="Adaptaatiot"
+        parentId={parentId}
+        receptionType="adaptation"
+      />
+      <ReceptionsByType parentTitle={parentTitle} items={articles} label="Artikkelit" parentId={parentId} receptionType="article" />
+      <ReceptionsByType parentTitle={parentTitle} items={other} label="Muut" parentId={parentId} receptionType="other" />
     </article>
   );
 }

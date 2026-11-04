@@ -111,3 +111,19 @@ export async function updatePublication(data: { publication: NewPublicationDtoSc
     throw new Error(`Failed to create publication: ${response.status}`);
   }
 }
+
+export async function deletePublication(id: string) {
+  if (!keycloak.token) throw new Error("Unauthenticated");
+  await keycloak.updateToken(30);
+  const response = await fetch(`${config.apiUrl}/publications/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${keycloak.token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to delete publication: ${response.status}`);
+  }
+}

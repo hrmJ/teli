@@ -9,6 +9,7 @@ const {
   createPublicationHandler,
   updatePublicationHandler,
   unlinkReceptionsHandler,
+  deletePublicationHandler,
 } = publicationsController;
 
 export function composePublicationsRouter() {
@@ -18,5 +19,6 @@ export function composePublicationsRouter() {
     .put("/:id", authMiddleware, updatePublicationHandler)
     .get("/:id/receptions", viewReceptionsHandler)
     .delete("/:id/receptions/:receptionId", authMiddleware, unlinkReceptionsHandler)
+    .delete("/:id", authMiddleware, deletePublicationHandler)
     .put("/:id/receptions", authMiddleware, updateReceptionsHandler);
 }

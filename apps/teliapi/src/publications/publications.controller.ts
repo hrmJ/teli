@@ -2,6 +2,7 @@ import type { RequestHandler } from "express";
 import { presentPublication } from "./publications.presenter.ts";
 import type {
   AddPublicationReceptions,
+  DeletePublication,
   FilterPublications,
   GetPublicationById,
   GetPublications,
@@ -28,6 +29,7 @@ type PublicationsControllerDeps = {
   updatePublication: UpdatePublication;
   unlinkReception: UnlinkPublicationReceptions;
   filterPublications: FilterPublications;
+  deletePublication: DeletePublication;
 };
 
 export function composePublicationsController(deps: PublicationsControllerDeps) {
@@ -130,6 +132,17 @@ export function composePublicationsController(deps: PublicationsControllerDeps) 
     res.status(204).json({ publication: updatedPublication });
   };
 
+  const deletePublicationHandler: RequestHandler = async function (req, res) {
+    const { id } = req.params;
+    if (typeof id !== "string") {
+      res.status(400).json({ error: "Invalid publication id" });
+      return;
+    }
+    await deps.deletePublication(id);
+
+    res.status(200).json({ ok: true });
+  };
+
   return {
     viewReceptionsHandler,
     updateReceptionsHandler,
@@ -137,5 +150,6 @@ export function composePublicationsController(deps: PublicationsControllerDeps) 
     createPublicationHandler,
     updatePublicationHandler,
     unlinkReceptionsHandler,
+    deletePublicationHandler,
   };
 }

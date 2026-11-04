@@ -216,3 +216,35 @@ test("Unauthenticated users cannot update publication details", async () => {
   // Assert
   assert.equal(resp.status, 401);
 });
+
+test("Authenticated users can delete publications", async () => {
+  // Arrange
+  const tokens = await loginTestUser();
+  const publicationDetails = publicationFixture({ title: "Already existing", "document type": "book" });
+  const author = await AuthorModel.insertOne(
+    authorFixture({
+      name: "Original",
+      publications: [publicationDetails],
+    } as any),
+  );
+
+  const publication1 = author.publications.at(0);
+
+  try {
+    // Act
+    const resp = await fetch(`${testConfig.baseUrl}/publications/${publication1?._id.toString()}`, {
+      method: "DELETE",
+      body: JSON.stringify({}),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${tokens.access_token}`,
+      },
+    });
+    // Assert
+    assert.equal(resp.status, 200);
+    const updatedAuthor1 = await AuthorModel.findById(author._id.toString());
+    assert.equal(updatedAuthor1?.publications.length, 0);
+  } finally {
+    await logoutTestUser(tokens.refresh_token);
+  }
+});

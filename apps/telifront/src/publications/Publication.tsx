@@ -10,7 +10,7 @@ import { css } from "../../styled-system/css";
 import { PublicationType } from "./PublicationType";
 import { PublicationLink } from "./PublicationLink";
 import { PublicationAuthor } from "./PublicationAuthor";
-import { LinkSlashIcon, MinusIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import type { DisplayAs } from "../utils/sharedTypes";
 import { hasReceptions, numberOfReceptions } from "./receptionHelpers";
 import { iconBtn } from "../styles/button";
@@ -18,11 +18,16 @@ import { AddReceptionDialog } from "../receptions/ReceptionDialog/AddReceptionDi
 import { keycloak } from "../auth/keycloak";
 import { EditPublicationDialog } from "./PublicationDialog/EditPublicationDialog";
 import { AuthorContext } from "../authors/AuthorContext";
+import { RemovePublicationDialog } from "./PublicationDialog/RemovePublicationDialog";
+import { UnlinkReceptionDialog } from "../receptions/ReceptionDialog/UnlinkReceptionDialog";
+import { ReceptionType } from "@teli/contracts/receptions";
 
 interface Props {
   publication: PublicationDto;
   displayAs: DisplayAs;
   parentId?: string;
+  parentTitle?: string;
+  receptionType?: ReceptionType;
 }
 
 export function Publication(props: Props) {
@@ -95,15 +100,18 @@ export function Publication(props: Props) {
               {authorEntry ? (
                 <EditPublicationDialog author={authorEntry} publication={props.publication} parentId={props.parentId} />
               ) : null}
-              <button onClick={() => null} data-testid={`receptions__${title}`} className={css(iconBtn)}>
-                <TrashIcon className={css({ width: "s2", height: "s2" })} />
-                Poista teos
-              </button>
-              {props.displayAs === "reception" ? (
-                <button onClick={() => null} data-testid={`receptions__${title}`} className={css(iconBtn)}>
-                  <LinkSlashIcon className={css({ width: "s2", height: "s2" })} />
-                  Poista reseptioista
-                </button>
+              {authorEntry && props.publication ? (
+                <RemovePublicationDialog author={authorEntry} publication={props.publication} parentId={props.parentId} />
+              ) : null}
+
+              {props.displayAs === "reception" && authorEntry && props.parentId && props.receptionType ? (
+                <UnlinkReceptionDialog
+                  reception={props.publication}
+                  parentId={props.parentId}
+                  parentTitle={props.parentTitle}
+                  authorName={authorEntry.name}
+                  receptionType={props.receptionType}
+                />
               ) : null}
             </div>
           ) : null}
@@ -147,7 +155,12 @@ export function Publication(props: Props) {
                 )}
                 Reseptiot ({numberOfReceptions(receptions)})
               </button>
-              <Receptions {...receptions} hidden={!receptionsOpen} parentId={props.publication.id} />
+              <Receptions
+                {...receptions}
+                hidden={!receptionsOpen}
+                parentId={props.publication.id}
+                parentTitle={props.publication.title}
+              />
             </section>
           ) : null}
 

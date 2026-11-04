@@ -211,5 +211,18 @@ export function composeMongoosePublicationRepository(deps: Deps): PublicationRep
       const created = author.publications.at(-1)!;
       return publicationToDomain(created);
     },
+
+    async deleteById(id: string) {
+      const author = await deps.AuthorModel.findOne({
+        "publications._id": id,
+      });
+      if (!author) {
+        throw new Error("Invalid publication to delete: no author found");
+      }
+      const publication = author?.publications.id(id);
+      await publication?.deleteOne();
+      await author.save();
+      return true;
+    },
   };
 }

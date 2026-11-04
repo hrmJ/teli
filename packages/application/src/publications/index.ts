@@ -9,3 +9,4 @@ export { type UpdatePublication, composeUpdatePublication } from "./updatePublic
 export { type UnlinkPublicationReceptions, composeUnlinkPublicationReceptions } from "./unlinkPublicationReceptions.query.ts";
 
 export { type FilterPublications, composeFilterPublications } from "./filterPublications.query.ts";
+export { type DeletePublication, composeDeletePublication } from "./deletePublication.query.ts";

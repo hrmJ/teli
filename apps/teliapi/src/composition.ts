@@ -14,6 +14,7 @@ import { composeAuthorsController } from "./authors/authors.controller.ts";
 import { composePublicationsController } from "./publications/publications.controller.ts";
 import {
   composeAddPublicationReceptions,
+  composeDeletePublication,
   composeFilterPublications,
   composeGetPublicationById,
   composeGetPublications,
@@ -47,4 +48,5 @@ export const publicationsController = composePublicationsController({
   updatePublication: composeUpdatePublication({ publications: publicationRepository }),
   unlinkReception: composeUnlinkPublicationReceptions({ publications: publicationRepository }),
   filterPublications: composeFilterPublications({ publications: publicationRepository }),
+  deletePublication: composeDeletePublication({ publications: publicationRepository }),
 });
