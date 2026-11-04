@@ -17,7 +17,7 @@ export const PublicationDtoSchema = v.object({
   date: v.optional(
     v.pipe(
       v.string(),
-      v.isoTimestamp(),
+      v.isoDate(),
       v.transform((date) => date.slice(0, 10)),
     ),
   ),

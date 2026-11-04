@@ -16,7 +16,7 @@ export function publicationToDomain(doc: PublicationDocument, authorName?: strin
     receptions: nullToUndefined(doc.receptions),
     publisher: nullToUndefined(doc.publisher),
     receptionOf: doc.receptionOf,
-    date: nullToUndefined(doc.date?.toISOString()),
+    date: dateToString(doc.date),
     genre: nullToUndefined(doc.genre),
     language: nullToUndefined(doc.language),
     link: nullToUndefined(doc.link),
@@ -24,6 +24,18 @@ export function publicationToDomain(doc: PublicationDocument, authorName?: strin
     reference: nullToUndefined(doc.reference),
     source: nullToUndefined(doc.source),
   };
+}
+function dateToString(date: unknown): string | undefined {
+  if (date === undefined || date === null) return undefined;
+  if (date instanceof Date) {
+    const monthString = ("0" + (date.getMonth() + 1)).slice(-2);
+    const dateString = ("0" + date.getDate()).slice(-2);
+    return `${date.getFullYear()}-${monthString}-${dateString}`;
+  }
+  if (typeof date === "string") {
+    return date;
+  }
+  return "-";
 }
 
 export function publicationToPersistence(publication: Partial<Publication>) {

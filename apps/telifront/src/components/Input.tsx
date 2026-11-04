@@ -6,7 +6,6 @@ type DispatchFn = (fieldName: string, value: unknown) => void;
 
 function valueByTpe(e: ChangeEvent<HTMLInputElement, HTMLInputElement>, type?: React.InputHTMLAttributes<HTMLInputElement>["type"]) {
   if (type === "number") return e.target.valueAsNumber;
-  if (type === "date") return e.target.valueAsDate;
   return e.target.value;
 }
 
@@ -49,7 +48,6 @@ export function Input<T>({ data, label, dispatch, validate, ...attributes }: Pro
         type="text"
         className={css(baseInpt)}
         onChange={onChange}
-        value={value ?? ""}
         onBlur={() => {
           if (!validate) return;
           const error = validate(value);
@@ -60,6 +58,7 @@ export function Input<T>({ data, label, dispatch, validate, ...attributes }: Pro
           }
         }}
         {...attributes}
+        value={value ?? ""}
       />
       {error ? <div className={css({ color: "red.400" })}>{error}</div> : null}
     </div>
