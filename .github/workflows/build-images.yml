@@ -16,6 +16,10 @@ jobs:
       DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
       IMAGE_TAG: ${{ github.ref_name }}
       TELI_BASE_PATH: ${{ vars.TELI_BASE_PATH }}
+      TELI_API_URL: ${{ vars.TELI_API_URL }}
+      TELI_IDP_URL: ${{ vars.TELI_IDP_URL }}
+      TELI_IDP_REALM: ${{ vars.TELI_IDP_REALM }}
+      TELI_IDP_CLIENT_ID: ${{ vars.TELI_IDP_CLIENT_ID }}
 
     steps:
       - uses: actions/checkout@v4
