@@ -1,6 +1,6 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { css } from "../../styled-system/css";
-import { iconBtnPill } from "../styles/button";
+import { iconBtn, iconBtnPill } from "../styles/button";
 
 interface Props {
   searchVal: string;
@@ -22,7 +22,31 @@ export function SearchBar({ searchVal, setSearchVal, searchFunction }: Props) {
         })}
         value={searchVal}
         onChange={(ev) => setSearchVal(ev.target.value)}
+        onKeyUp={(ev) => {
+          if (ev.key === "Enter") {
+            searchFunction(searchVal);
+          }
+        }}
       />
+      {searchVal ? (
+        <button
+          className={css(iconBtn, {
+            width: "s4",
+            justifyContent: "center",
+          })}
+          onClick={(e) => {
+            e.preventDefault();
+            setSearchVal("");
+          }}
+        >
+          <XMarkIcon
+            className={css({
+              width: "s4",
+              height: "s4",
+            })}
+          />
+        </button>
+      ) : null}
 
       <button
         className={css(iconBtnPill, {

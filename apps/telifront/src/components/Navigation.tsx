@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, Route, useParams, useRouter } from "@tanstack/react-router";
 import { css } from "../../styled-system/css";
 import { keycloak } from "../auth/keycloak";
 import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/solid";
@@ -13,6 +13,8 @@ const activeProps = {
 };
 
 export function Navigation() {
+  const authorParam = useParams({ from: "/author/$author", shouldThrow: false });
+  const author = authorParam?.author;
   return (
     <nav
       className={css({
@@ -53,6 +55,11 @@ export function Navigation() {
         <Link activeProps={activeProps} to="/publications">
           Tekstit
         </Link>
+        {author ? (
+          <Link activeProps={activeProps} to="/author/$author" params={{ author }}>
+            {author}
+          </Link>
+        ) : null}
       </div>
       <div
         className={css({

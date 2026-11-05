@@ -3,7 +3,6 @@ import * as v from "valibot";
 
 function validatePublication(data: unknown) {
   const parsed = v.safeParse(NewPublicationDtoSchemaWithAuthor, data);
-  console.log({ parsed });
   if (!parsed.success) {
     throw new Error("Invalid reception data");
   }

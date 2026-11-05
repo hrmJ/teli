@@ -3,7 +3,7 @@ import { useState } from "react";
 import { css } from "../../styled-system/css";
 import { SearchBar } from "../components/SearchBar";
 import { useQuery } from "@tanstack/react-query";
-import { filterPublications, getPublications } from "../publications/api";
+import { filterPublications } from "../publications/api";
 import { Spinner } from "../components/Spinner";
 import { Publication } from "../publications/Publication";
 import { labelContainer } from "../styles/label";
@@ -16,6 +16,7 @@ export const Route = createFileRoute("/publications")({
 
 function RouteComponent() {
   const [searchVal, setSearchVal] = useState("");
+  const [showSearchResults, setShowSearchResults] = useState(false);
   const [filterByType, setFilterByType] = useState(false);
   const [receptionTypeFilter, setReceptionTypeFilter] = useState<Record<ReceptionType, boolean>>({
     adaptation: false,
@@ -73,9 +74,13 @@ function RouteComponent() {
         <SearchBar
           searchFunction={async () => {
             await refetch();
+            setShowSearchResults(true);
           }}
           searchVal={searchVal}
-          setSearchVal={setSearchVal}
+          setSearchVal={(val) => {
+            setSearchVal(val);
+            setShowSearchResults(false);
+          }}
         />
 
         <div className={css({ display: "flex", gap: "1rem", alignItems: "center", marginTop: "s5" })}>
@@ -153,11 +158,13 @@ function RouteComponent() {
           <div>Yhtään teosta ei löytynyt. Kokeile toista hakua</div>
         ) : null}
 
-        <div className={css({ marginTop: "s8" })}>
-          {publications?.map((publication) => (
-            <Publication key={publication.id} publication={publication} displayAs="searchResult" />
-          ))}
-        </div>
+        {showSearchResults ? (
+          <div className={css({ marginTop: "s8" })}>
+            {publications?.map((publication) => (
+              <Publication key={publication.id} publication={publication} displayAs="searchResult" />
+            ))}
+          </div>
+        ) : null}
       </section>
     </main>
   );

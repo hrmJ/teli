@@ -15,12 +15,7 @@ interface Props {
   newPublication?: Record<string, unknown>;
 }
 
-export function SelectPublication({
-  existingOrNew,
-  existingPublication,
-  newPublication,
-  dispatch,
-}: Props) {
+export function SelectPublication({ existingOrNew, existingPublication, newPublication, dispatch }: Props) {
   const [searchVal, setSearchVal] = useState(existingPublication?.title ?? "");
 
   const {
@@ -37,7 +32,6 @@ export function SelectPublication({
 
   useEffect(() => {
     if (existingPublication?.title && !publications && searchVal.length > 2) {
-      console.log("UE refe", { publications, isFetched });
       refetch();
     }
   }, [publications]);
@@ -140,9 +134,7 @@ export function SelectPublication({
           })}
         >
           <PublicationForm
-            dispatch={(field, value) =>
-              dispatch({ type: "updateNewPublicationField", field, value })
-            }
+            dispatch={(field, value) => dispatch({ type: "updateNewPublicationField", field, value })}
             publication={newPublication}
           />
         </div>

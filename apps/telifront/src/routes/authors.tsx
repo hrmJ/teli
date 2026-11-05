@@ -14,6 +14,7 @@ export const Route = createFileRoute("/authors")({
 
 function RouteComponent() {
   const [searchVal, setSearchVal] = useState("");
+  const [showSearchResults, setShowSearchResults] = useState(false);
 
   const { data, error, isPending } = useQuery({
     queryKey: ["authorIndex"],
@@ -28,7 +29,9 @@ function RouteComponent() {
     refetch: refetchSearch,
   } = useQuery({
     queryKey: ["authorSearch", searchVal],
-    queryFn: async () => searchAuthors(searchVal),
+    queryFn: async () => {
+      return searchAuthors(searchVal);
+    },
     enabled: false,
   });
 
@@ -79,15 +82,25 @@ function RouteComponent() {
           searchFunction={async () => {
             if (searchVal.length < 2) return;
             await refetchSearch();
+            setShowSearchResults(true);
           }}
           searchVal={searchVal}
-          setSearchVal={setSearchVal}
+          setSearchVal={(val) => {
+            setShowSearchResults(false);
+            setSearchVal(val);
+          }}
         />
       </section>
 
       {searchStatus === "fetching" ? <Spinner /> : null}
 
-      {!searchVal ? <Outlet /> : <AuthorList data={searchData} />}
+      {searchData && !searchData.length ? (
+        <p className={css({ color: "grey5", fontSize: "s5", marginTop: "s2", marginBottom: "s2" })}>
+          Ei tuloksia. Kokeile toista hakua
+        </p>
+      ) : null}
+
+      {!searchData || !showSearchResults ? <Outlet /> : <AuthorList data={searchData} />}
     </div>
   );
 }
