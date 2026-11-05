@@ -8,4 +8,4 @@ The basic deploy process goes as follows:
 4. github actions will create a new docker image and push it to dockerhub
 5. Start using the new image on the server
 
-More specific info defined on the server.
+More specific info defined on the server and on the private git repo  https://github.com/hrmJ/teli-ops.
