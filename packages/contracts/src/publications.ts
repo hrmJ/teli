@@ -16,8 +16,7 @@ export const PublicationDtoSchema = v.object({
   year: v.optional(v.number()),
   date: v.optional(
     v.pipe(
-      v.string(),
-      v.isoDate(),
+      v.union([v.pipe(v.string(), v.isoDate()), v.pipe(v.string(), v.isoTimestamp())]),
       v.transform((date) => date.slice(0, 10)),
     ),
   ),

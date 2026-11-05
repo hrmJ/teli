@@ -5,6 +5,7 @@ import type { PublicationRepository } from "@teli/application/publications";
 import type { Publication } from "@teli/domain/publications";
 import { receptionTypeAsCategory, type ReceptionType } from "@teli/domain/receptions";
 import type { PublicationDocument } from "./publication.schema.ts";
+import { Types } from "mongoose";
 
 type AuthorModelLike = {
   find: typeof AuthorModel.find;
@@ -12,6 +13,7 @@ type AuthorModelLike = {
   findById: typeof AuthorModel.findById;
   aggregate: typeof AuthorModel.aggregate;
   findByIdAndUpdate: typeof AuthorModel.findByIdAndUpdate;
+  collection: typeof AuthorModel.collection;
 };
 
 type Deps = {
@@ -169,12 +171,15 @@ export function composeMongoosePublicationRepository(deps: Deps): PublicationRep
 
       if (!types.length) return [];
 
-      const idSet = new Set(publicationIds);
+      const ids = [...publicationIds, ...publicationIds.filter((id) => Types.ObjectId.isValid(id)).map((id) => new Types.ObjectId(id))];
+
+      const idSet = new Set(ids);
       const categories = types.map(receptionTypeAsCategory);
+
       const authors = await deps.AuthorModel.find({
         $or: categories.map((category) => ({
           [`publications.receptions.${category}`]: {
-            $in: publicationIds,
+            $in: ids,
           },
         })),
       });
@@ -187,8 +192,8 @@ export function composeMongoosePublicationRepository(deps: Deps): PublicationRep
         for (const publication of author.publications) {
           for (const category of categories) {
             for (const id of publication.receptions?.[category] ?? []) {
-              if (idSet.has(id)) {
-                matchingIds.add(id);
+              if (idSet.has(id.toString())) {
+                matchingIds.add(id.toString());
               }
             }
           }

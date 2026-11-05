@@ -19,6 +19,7 @@ export function compileReceptionTypeQuery(receptionType?: Record<ReceptionType, 
     .filter(([_, value]) => value)
     .map(([key, _]) => key)
     .join(paramName);
+  if (!queryString) return "";
 
   return `${paramName}${queryString}`;
 }
