@@ -9,7 +9,11 @@ services:
       MONGO_HOST: mongo
       MONGO_PORT: 27017
       MONGO_DBNAME: teliapi2
-      KEYCLOAK_ISSUER: ${TELIAPI_KEYCLOAK_ISSUER:?Required}
+      KEYCLOAK_ISSUER: ${IDP_ISSUER:?Required}
+    ports:
+      - "127.0.0.1:5003:3000"
+    depends_on:
+      - mongo
 
   front:
     image: ${FRONTEND_IMAGE:?Required}
@@ -31,10 +35,10 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:26.7.4
+    restart: unless-stopped
     command:
       - start
       - --import-realm
-    restart: unless-stopped
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_ADMIN_USER:?Required}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD:?Required}
@@ -46,11 +50,10 @@ services:
 
       KC_HTTP_ENABLED: "true"
       KC_PROXY_HEADERS: xforwarded
-      KC_HOSTNAME: https://your-university-host.example/teli/auth
-      KC_HTTP_RELATIVE_PATH: /teli/auth
+      KC_HOSTNAME: ${IDP_URL:?Required}
+      KC_HTTP_RELATIVE_PATH: /tekstitliikkeessa-2/auth
 
       KC_HEALTH_ENABLED: "true"
-
     ports:
       - "127.0.0.1:8080:8080"
     volumes:
@@ -78,4 +81,3 @@ services:
 volumes:
   mongo_data:
   keycloak_db_data:
-

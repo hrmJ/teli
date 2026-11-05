@@ -13,3 +13,5 @@ mongodb_data
 styled-system
 styled-system-studio
 .env
+
+server_instructions.md

@@ -1,4 +1,5 @@
 services:
+services:
   api:
     image: "${DOCKERHUB_USERNAME}/teli-api:${IMAGE_TAG}"
     build:
@@ -11,5 +12,8 @@ services:
       context: ../
       dockerfile: apps/telifront/Dockerfile
       args:
-        VITE_API_URL: "${TELI_API_URL:?TELI_API_URL must be set}"
+        VITE_API_URL: "${TELI_API_URL:?Required}"
         VITE_BASE_PATH: "${TELI_BASE_PATH:?Required}"
+        VITE_IDP_URL: "${TELI_IDP_URL:?Required}"
+        VITE_IDP_REALM: "${TELI_IDP_REALM:?Required}"
+        VITE_IDP_CLIENT_ID: "${TELI_IDP_CLIENT_ID:?Required}"
