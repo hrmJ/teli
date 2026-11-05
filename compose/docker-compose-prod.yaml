@@ -51,7 +51,8 @@ services:
       KC_HTTP_ENABLED: "true"
       KC_PROXY_HEADERS: xforwarded
       KC_HOSTNAME: ${IDP_URL:?Required}
-      KC_HTTP_RELATIVE_PATH: /tekstitliikkeessa-2/auth
+      KC_HOSTNAME: ${IDP_URL:?Required}
+      KC_HTTP_RELATIVE_PATH: /teli-auth
 
       KC_HEALTH_ENABLED: "true"
     ports:

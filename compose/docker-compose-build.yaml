@@ -1,5 +1,4 @@
 services:
-services:
   api:
     image: "${DOCKERHUB_USERNAME}/teli-api:${IMAGE_TAG}"
     build:
