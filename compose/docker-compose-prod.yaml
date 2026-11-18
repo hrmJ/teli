@@ -10,6 +10,7 @@ services:
       MONGO_PORT: 27017
       MONGO_DBNAME: teliapi2
       KEYCLOAK_ISSUER: ${IDP_ISSUER:?Required}
+      IDP_JWKS_URL: ${IDP_JWKS_URL:?Required}
     ports:
       - "127.0.0.1:5003:3000"
     depends_on:

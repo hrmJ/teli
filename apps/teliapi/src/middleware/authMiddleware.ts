@@ -2,8 +2,15 @@ import { createRemoteJWKSet, jwtVerify } from "jose";
 import { type Request, type Response, type NextFunction } from "express";
 import { config } from "../config.ts";
 
-if (!config.issuer) throw new Error("Initialization error: missing issuer env");
-const jwks = createRemoteJWKSet(new URL(`${config.issuer}/protocol/openid-connect/certs`));
+if (!config.issuer) {
+  throw new Error("Initialization error: missing issuer env");
+}
+
+if (!config.jwksUrl) {
+  throw new Error("Initialization error: missing JWKS URL");
+}
+
+const jwks = createRemoteJWKSet(new URL(config.jwksUrl));
 
 /**
  * Simple authn check without authz check:

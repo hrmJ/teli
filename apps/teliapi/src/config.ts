@@ -3,4 +3,5 @@ export const config = {
   port: 3000,
   host: process.env.API_HOST ?? "127.0.0.1",
   issuer: process.env.KEYCLOAK_ISSUER,
+  jwksUrl: process.env.IDP_JWKS_URL,
 };
